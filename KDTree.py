@@ -816,6 +816,79 @@ def stat_graph(path=None,title=""):
     print("Completed Statistics Graphing\n")
 
 
+
+def L2norm(path=None, show=False):
+    if path == None:
+        return print("Need query folder path!")
+    #need to get data of SRC Depths and subtract it from the/a total distribution.
+
+    if path[len(path)-1] != "/":    #makes path accessable
+                path = path+"/"
+    os.makedirs(f"{path}L2 Norm", exist_ok=True)    #makes L2 Norm folder
+    files = os.listdir(path)
+    for csv_file in files:
+        if csv_file.__contains__("SRC"):        #only gets csv files that are SRC Query, then gets the SRC Query.csv file's Depth, and then graphs it
+            data = pd.read_csv((path+f"{csv_file}"))    #data will be equal to each original SRC file
+
+            i=0     #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
+            value_list = []
+            for item in range(data['Depth'].max()+1):
+                value_list.append(data['Depth'].value_counts().get(i, 0))
+                i+=1
+            for j in range(len(value_list)):
+                value_list[j] = value_list[j]/len(data['Depth'])
+            #value list has the original data from SRC file
+            columns_li = []
+            for i in range(len(value_list)):
+                columns_li.append(i)
+            stored_data = pd.DataFrame(columns=['L2 Norm'])
+
+            randomized_sample = data['Depth'].sample(n=len(data))   #randomized_sample fully randomly samples the entire data set
+            #need to make columns of the first 100 points, then again for the first and next 100 (200 total), then containue
+    
+            #this is going through the randomly sampled data (SRC Depth) and going through it for every 100 points
+            for i in range(int(len(randomized_sample)/100)):
+                temp = randomized_sample.head(100*(i+1))
+                temp_value_list = []
+                j=0
+                for item in range(randomized_sample.max()+1):   #this gets the depths of the nodes
+                    temp_value_list.append(temp.value_counts().get(j, 0))
+                    j+=1
+
+
+                #temp_value_list has the # of returned nodes of this random sample, want %
+                for j in range(len(temp_value_list)):
+                    temp_value_list[j] = temp_value_list[j]/(100*(i+1))
+                temp_row = []
+                temp_val = 0
+                for k in range(len(temp_value_list)):
+                    # for j in range(len(temp_value_list[k])):
+                    temp_val += ((temp_value_list[k]-value_list[k])**2)
+                    # temp_row.append(((temp_value_list[k]-value_list[k])**2)**0.5)       #this is the L2 norm as: ((sample - original)^2)^1/2
+                temp_row.append((temp_val)**0.5)
+                stored_data.loc[len(stored_data)] = temp_row
+            stored_data.to_csv(f"{path}/L2 Norm/{csv_file}")
+
+            #need to save figure (scatter)
+            stored_data = stored_data.values.tolist()
+
+            x=[]
+            for i in range(len(stored_data)):
+                x.append(i)
+            plt.figure(figsize=(16,10))
+            plt.scatter(x,stored_data,marker='*', color='grey')
+            plt.xlabel("Distribution")
+            plt.ylabel("L2 Norm Val")
+            plt.ylim(bottom=0)
+            plt.xlim(left=0)
+            plt.title(f"{csv_file.replace('.csv','')}")
+            plt.tight_layout()
+            os.makedirs(path+"L2 Norm/Pictures",exist_ok=True)
+            plt.savefig(path+f"L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
+            if show == True:
+                plt.show()
+
+
 # To increase recursive stack frame amount
 # import sys
 # sys.setrecursionlimit(2090000000) #originally is 1000
@@ -841,13 +914,13 @@ def stat_graph(path=None,title=""):
 
 # SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
 
-### Without Duplication ###
-path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-statistics(path, graph=True)
-path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/"
-statistics(path, graph=True)
-path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/"
-statistics(path, graph=True)
+# ### Without Duplication ###
+# path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/"
+# statistics(path, graph=True)
+# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/"
+# statistics(path, graph=True)
+# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/"
+# statistics(path, graph=True)
 
 
 
@@ -857,28 +930,37 @@ statistics(path, graph=True)
 
 ##### WITH DUPLICATES #####
 
-### CRAWDAD spitz/cellular Dataset ###
-path = r"Saved Datasets/VDS_MS_310809_27_0210.csv"
-points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=False)
+# ### CRAWDAD spitz/cellular Dataset ###
+# path = r"Saved Datasets/VDS_MS_310809_27_0210.csv"
+# points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=False)
+# #___________________________________________________________________________#
+
+
+### Spatial Database NO Duplication ###
+path = r"Saved Datasets/Spatial.xlsx"
+points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
 #___________________________________________________________________________#
 
 
 print(f"This is the length of points being inputed into the tree: {len(points)}")
 temp = KDTree(points)
 print("Done with making tree.")
-SRC_vs_BRC(tree=temp,num=100000,sprout=1,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/1 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/1 - 100,000/CRAWDAD_BRC.csv",show=False)
-SRC_vs_BRC(tree=temp,num=100000,sprout=2,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/CRAWDAD_BRC.csv",show=False)
-SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
+SRC_vs_BRC(tree=temp,num=100000,sprout=1,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_BRC.csv",show=False)
+
+# SRC_vs_BRC(tree=temp,num=100000,sprout=2,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/CRAWDAD_BRC.csv",show=False)
+# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
 
 
 
 ### With Duplication ###
 path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/1 - 100,000/"
 statistics(path, graph=True)
-path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/"
-statistics(path, graph=True)
-path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/"
-statistics(path, graph=True)
+stat_graph(path)
+L2norm(path)
+# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/"
+# statistics(path, graph=True)
+# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/"
+# statistics(path, graph=True)
 
 
 # ### Stats ###
