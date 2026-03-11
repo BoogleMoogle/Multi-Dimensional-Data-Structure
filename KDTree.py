@@ -12,7 +12,7 @@ import inspect
 
 
 class KDTree:
-    def __init__(self, points=[], depth=0, axis=0, split_value=None, bbox=[], left=None, right=None, parent=None):   #store data size
+    def __init__(self, points=[], depth=0, axis=0, split_value=None, bbox=[], left=None, right=None, parent=None, cuttoff=1):   #store data size
         self.left = left
         self.right = right
 
@@ -33,7 +33,7 @@ class KDTree:
         else:
             self.bbox = bbox
 
-        if self.data_size > 4:
+        if self.data_size > cuttoff:
             self.split()
 
 
@@ -46,7 +46,7 @@ class KDTree:
                 return f"Split Node: y = {self.split_value[self.axis]}, Level: {self.depth}"#, Left: {self.left}, Right: {self.right}"
         else:
             return f"{self.points}"
-    
+
 
     #Bbox Method
     def find_bbox(self,bbox):
@@ -112,8 +112,8 @@ class KDTree:
             else:
                 self.left = KDTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]], parent=self)
                 self.right = KDTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.split_value[self.axis], self.bbox[2], self.bbox[3]], parent=self)
-            
-    
+
+
     #Single Range Cover Search Method
     def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, graph=False):
         if q_xmin > q_xmax:
@@ -232,8 +232,8 @@ class KDTree:
 
 
         #Get Leaf Method - Just returns a list of leaf nodes (being the points)
-    
-    
+
+
     def get_leaf(self,boxes=[]):
         if self.left == None:
             boxes.append([self.axis,self.bbox,self.depth,self.points])
@@ -821,7 +821,7 @@ def L2norm(path=None, show=False):
     if path == None:
         return print("Need query folder path!")
     #need to get data of SRC Depths and subtract it from the/a total distribution.
-
+    print("Starting L2 Norm...")
     if path[len(path)-1] != "/":    #makes path accessable
                 path = path+"/"
     os.makedirs(f"{path}L2 Norm", exist_ok=True)    #makes L2 Norm folder
@@ -887,6 +887,9 @@ def L2norm(path=None, show=False):
             plt.savefig(path+f"L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
             if show == True:
                 plt.show()
+    print("Finished L2 Norm\n")
+
+
 
 
 # To increase recursive stack frame amount
@@ -896,71 +899,30 @@ def L2norm(path=None, show=False):
 
 
 
-##### WITH DUPLICATES #####
-
-# ### CRAWDAD spitz/cellular Dataset ###
-# path = r"Saved Datasets/VDS_MS_310809_27_0210.csv"
-# points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=True)
-# #___________________________________________________________________________#
-
-
-# print(f"This is the length of points being inputed into the tree: {len(points)}")
-# temp = KDTree(points)
-# print("Done with making tree.")
-# SRC_vs_BRC(tree=temp,num=100000,sprout=1,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/CRAWDAD_BRC.csv",show=False)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=2,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_BRC.csv",show=False)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
-
-
-# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
-
-# ### Without Duplication ###
-# path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/"
-# statistics(path, graph=True)
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/"
-# statistics(path, graph=True)
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/"
-# statistics(path, graph=True)
-
-
-
-
-
-
-
-##### WITH DUPLICATES #####
-
-# ### CRAWDAD spitz/cellular Dataset ###
-# path = r"Saved Datasets/VDS_MS_310809_27_0210.csv"
-# points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=False)
-# #___________________________________________________________________________#
-
-
-### Spatial Database NO Duplication ###
-path = r"Saved Datasets/Spatial.xlsx"
-points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+### SRFG-v1 ### --- DROPPING DUPLICATES
+path = r"Saved Datasets/Check/SRFG-v1.csv"
+points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
 #___________________________________________________________________________#
 
+for i in range(2):      #starts at 0
+    SRC_path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/Spatial_SRC.csv".format(i+2)
+    BRC_path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/Spatial_BRC.csv".format(i+2)
+    print(f"This is the length of points being inputed into the tree: {len(points)}")
+    temp = KDTree(points)
+    print("Done with making tree.")
+    SRC_vs_BRC(tree=temp,num=100000,sprout=i+2,one_file=False,SRC_path=SRC_path,BRC_path=BRC_path,show=False)
+    path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
+    statistics(path,graph=True)
+    stat_graph(path)
+    L2norm(path)
+    print(f"\n\n{i} Batch Done\n"+"_"*50+"\n\n")
 
-print(f"This is the length of points being inputed into the tree: {len(points)}")
-temp = KDTree(points)
-print("Done with making tree.")
-SRC_vs_BRC(tree=temp,num=100000,sprout=1,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_BRC.csv",show=False)
-
-# SRC_vs_BRC(tree=temp,num=100000,sprout=2,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/CRAWDAD_BRC.csv",show=False)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
+print("Finished With KD Tree!")
 
 
 
-### With Duplication ###
-path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/1 - 100,000/"
-statistics(path, graph=True)
-stat_graph(path)
-L2norm(path)
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/"
-# statistics(path, graph=True)
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/"
-# statistics(path, graph=True)
+
+
 
 
 # ### Stats ###

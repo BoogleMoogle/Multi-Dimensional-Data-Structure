@@ -4,6 +4,7 @@
 
 from types import NoneType
 
+from matplotlib.figure import figaspect
 from matplotlib.lines import lineStyles
 import matplotlib.pyplot as plt
 import random
@@ -71,7 +72,7 @@ class DAGTree:
                 return f"Split Node: y = {self.split_value[self.axis]}, Level: {self.depth}"#, Left: {self.left}, Right: {self.right}"
         else:
             return f"{self.points}"
-    
+
 
     #Bbox Method
     def find_bbox(self,bbox):
@@ -231,9 +232,9 @@ class DAGTree:
                 if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
                     return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
         return self
-        
 
-#BRC Linearly
+
+    #BRC Linearly
     def linear_BRC(self,q_xmin,q_ymin,q_xmax,q_ymax):
         nodes = self.get_leaf_linear(boxes=[])
         
@@ -249,7 +250,7 @@ class DAGTree:
         return returning_list
 
 
-#Return most top nodes as well
+    #Return most top nodes as well
     def BRC(self, q_xmin, q_ymin, q_xmax, q_ymax, result=[]):
         if self.bbox[0] >= q_xmin and self.bbox[1] >= q_ymin and self.bbox[2] <= q_xmax and self.bbox[3] <= q_ymax: #FULLY in range of query
             if self.left != None:
@@ -293,7 +294,7 @@ class DAGTree:
         #             if self.right != None:
         #                 self.right.BRC(q_xmin, q_ymin, q_xmax, q_ymax, result)
         # return result
-        
+
 
     #Graph Tree Function
     def graph_tree(self,plot_boxes=None, middle=True):
@@ -475,7 +476,7 @@ def save_query(tree, xmin=None, ymin=None, xmax=None, ymax=None, query_list=None
     """
     This intakes a Tree, runs it through a searching method with randomly made bbox values, then saves a csv file to path. If path is not given it will create a .csv file in Saved Query, if no folder exists then it will create it. Currently works for SRC and BRC method, if neither SRC or BRC are stated as true when this method is called it will default to SRC.
     
-    :param tree: The KD Tree
+    :param tree: The 3DAG Tree
     :param xmin: x minimum of search
     :param ymin: y minimum of search
     :param xmax: x maximum of search
@@ -636,16 +637,44 @@ def save_query(tree, xmin=None, ymin=None, xmax=None, ymax=None, query_list=None
     else:
         return print(temp)
     
-
-def SRC_vs_BRC(tree=None,num=1,sprout=None,SRC_path=None,BRC_path=None,show=False,one_file=False):
+#make so it will automatically create folder for query
+def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,duplicates=False):
+    '''
+    :param tree: The 3DAG Tree.
+    :param num: The number of queries that you want. Note that 1 query is 6 in total.
+    :param sprout: The seed for randomness. It is required.
+    :param path: This should be the local path to the Saved Query folder with the dataset query folder in it, it should look like: "Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/". This method makes the rest of the folders, based on sprout and num. In a perfect world, each query set should be located in a folder labeled: sprout - num, so it would look like 1 - 100,000.
+    :param show: Boolean, if set to true it will graph the 3DAG for each query and show you a graph. HIGHLY not advised if you have a large amount of queries or a large dataset.
+    :param one_file: Boolean, puts everything in 1 file. Not advised.
+    :param duplicates: Required Boolean, if True it will place these queries in the "With Duplicates" folder, else it will palce the queries in the "Without Duplicates" folder.
+    '''
     print("Saving Mass Query...")
+    #Error checking
     if tree == None:
         return print("Need a tree.")
-    if SRC_path == None or BRC_path == None:
-        return print("Need path for SRC or BRC.")
-    if sprout != None:
-        random.seed(sprout)
-    
+    if path == None:
+        return print("Need path to query folder!")
+    if sprout == None:
+        return print("Need a sprout!")
+    random.seed(sprout)
+    if duplicates == None:
+        return print("Need to state whether or not this tree was made with duplicate points!")
+    #these make sure BRC and SRC path have a '/' at the end, it lets us access what ever is in the file
+    if path[len(path)-1] != "/":
+        path = path+"/"
+
+    #Making/checking path folder for the duplicates folder
+    if duplicates == True:
+        duplicates = 'With Duplicates/'
+    else:
+        duplicates = 'Without Duplicates/'
+    os.makedirs(path+duplicates,exist_ok=True)
+
+    BRC_path = path+duplicates+f"{sprout} - {num:,}/BRC.csv"
+    SRC_path = path+duplicates+f"{sprout} - {num:,}/SRC.csv"
+
+
+    #Setting Coeffs
     small_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.04
     medium_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.2
     large_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.3
@@ -767,7 +796,7 @@ def statistics(file_path=None,graph=False):
             large.append(item)
     
     #makes report folder if it doesn't exist
-    os.makedirs(f"{file_path}Report", exist_ok=True)
+    os.makedirs(f"{file_path}_Report", exist_ok=True)
     #reading from lists made earlier
     small_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','SRC Depth','Diff','F/P %','Error %'])
     small_dataframe['BRC Size'] = pd.read_csv(file_path+'/'+small[0])['Data Size']
@@ -784,7 +813,7 @@ def statistics(file_path=None,graph=False):
     small_total_inf = np.isinf(small_dataframe['F/P %']).values.sum()
     
     # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    small_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"Report/small4%"+file_path[file_path.rfind('/')+1:]+".csv")
+    small_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/small4%"+file_path[file_path.rfind('/')+1:]+".csv")
 
 
     medium_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','Diff','F/P %', 'Error %'])
@@ -803,7 +832,7 @@ def statistics(file_path=None,graph=False):
     
     
     # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    medium_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"Report/medium"+file_path[file_path.rfind('/')+1:]+".csv")
+    medium_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/medium"+file_path[file_path.rfind('/')+1:]+".csv")
 
     large_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','Diff','F/P %'])
     large_dataframe['BRC Size'] = pd.read_csv(file_path+'/'+large[0])['Data Size']
@@ -820,7 +849,7 @@ def statistics(file_path=None,graph=False):
     large_total_inf = np.isinf(large_dataframe['F/P %']).values.sum()
 
     # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    large_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"Report/large"+file_path[file_path.rfind('/')+1:]+".csv")
+    large_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/large"+file_path[file_path.rfind('/')+1:]+".csv")
     
 
 
@@ -864,7 +893,7 @@ def statistics(file_path=None,graph=False):
 
 
     #writing all average info to txt file
-    with open((file_path + "/Report/Summary.txt"),'w') as file:
+    with open((file_path + "/_Report/Summary.txt"),'w') as file:
         file.write("Averages\n")
         file.write(f"Small4%\n\tBRC Size:\t{small_avg_BRC_size:,}\n\tSRC Size:\t{small_avg_SRC_size:,}\n\tSRC Depth:\t{small_avg_SRC_depth:,}\n\tDiff:\t\t{small_avg_diff:,}\n\tF/P %:\t\t{small_avg_fp:,}%\n\tError %:\t\t{small_avg_error:,}%\n\tTot # of Inf: {small_total_inf:,}\n\n\n")
         file.write(f"Medium\n\tBRC Size:\t{medium_avg_BRC_size:,}\n\tSRC Size:\t{medium_avg_SRC_size:,}\n\tSRC Depth:\t{medium_avg_SRC_depth:,}\n\tDiff:\t\t{medium_avg_diff:,}\n\tF/P %:\t\t{medium_avg_fp:,}%\n\tError %:\t\t{medium_avg_error:,}%\n\tTot # of Inf: {medium_total_inf:,}\n\n\n")
@@ -898,8 +927,9 @@ def save_tree(tree,path=None):      #in future store additional information
 def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=False):        #Need to make it where it can split the csv file with delimeter = ' ' or ','. Also make method to work with .txt
     """
     Reads csv file and returns data in a list (which can straight forward be used in making a KD Tree). Uses Pandas lib.
-    
+
     :param path: Need path (also needs r before path string)
+    :param drop_duplicates: Boolean, if True it will remove all duplicate points and return a list.
     """
     if path == None:
         return print("Need path!")
@@ -934,7 +964,7 @@ def stat_graph(path=None,title=""):
         return print("Need path!")
     if path[len(path)-1] != "/":
         path = path+"/"
-    os.makedirs(f"{path}Graphs", exist_ok=True)     #makes Graphs folder if one isn't already made
+    os.makedirs(f"{path}_Graphs", exist_ok=True)     #makes Graphs folder if one isn't already made
     
     if title != "":
         title = f": {title}"
@@ -978,79 +1008,76 @@ def stat_graph(path=None,title=""):
                 i+=1
             
             plt.tight_layout()
-            plt.savefig(f'{path}/Graphs/{str(csv_file).replace('.csv','.png')}')
+            plt.savefig(f'{path}/_Graphs/{str(csv_file).replace('.csv','.png')}')
     print("Completed Statistics Graphing\n")
 
 
-def return_lvl_diff_graph(DAGpath=None, KDpath=None):
+def lvl_diff_graph(DAGpath=None, KDpath=None):
     if DAGpath == None or KDpath == None:
         return print("We need path to query folder for both DAG and KD!")
     if DAGpath[len(DAGpath)-1] != "/":
         DAGpath = DAGpath+"/"
     if KDpath[len(KDpath)-1] != "/":
         KDpath = KDpath+"/"
+    print("Starting Level Diff...")
     
     DAGfiles = []
-    for item in os.listdir(DAGpath+"Report/"):
+    for item in os.listdir(DAGpath+"_Report/"):
         if item.__contains__('.csv'):
             DAGfiles.append(item)
     KDfiles = []
-    for item in os.listdir(KDpath+"Report/"):
+    for item in os.listdir(KDpath+"_Report/"):
         if item.__contains__('.csv'):
             KDfiles.append(item)
 
-    os.makedirs(DAGpath+"Graphs/Diff/",exist_ok=True)
-    for k in range(len(DAGfiles)):
-        DAG_data = pd.read_csv(DAGpath+"Report/"+DAGfiles[k])['SRC Depth']
-        KD_data = pd.read_csv(KDpath+"Report/"+KDfiles[k])['SRC Depth']
-        
-        stored_val = DAG_data - KD_data
-            # src_depth = src_data['Depth']
-        total_num = len(stored_val)  #normally should be 100,0000
-        val_max = stored_val.max()
-        val_min = stored_val.min()
+    os.makedirs(DAGpath+"_Graphs/Diff/",exist_ok=True)       #makes 'Diff' folder in 3DAGs 'Graph' folder if one isn't already there
+    os.makedirs(KDpath+"_Graphs/Diff/",exist_ok=True)
+    for k in range(len(DAGfiles)):                          #gets SRC csv files information. First it /SHOULD/ do large, then medium, then small
+        DAG_data = pd.read_csv(DAGpath+"_Report/"+DAGfiles[k])['SRC Depth']
+        KD_data = pd.read_csv(KDpath+"_Report/"+KDfiles[k])['SRC Depth']
 
-        a_diff = 0
-        while val_min < 0:
-            val_min+=1
-            val_max+=1
-            a_diff+=1
-
-        stored_val = stored_val.tolist()
+       #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
+        value_list = []
+        for i in range(DAG_data.max()+1):
+            value_list.append(DAG_data.value_counts().get(i, 0))
+        #this gets the depth of nodes returned 
         x_cord = []
-        y_cord = []
-        for i in range(a_diff):
-            x_cord.append(stored_val.count((val_min-a_diff)+i))
-            y_cord.append((val_min-a_diff)+i)
-        #making graph
-            plt.figure(figsize=(8,8))
-            bar = plt.bar(y_cord,x_cord,width=0.6)
-            plt.title(f"{DAGfiles[k].replace('.csv','')} Diff")
-            # ax.bar(x_cord,value_list,width=0.6)
-
-            # #putting percentages on bars
-            # i=0
-            # for p in bar:
-            #     width = p.get_width()
-            #     height = p.get_height()
-            #     x, y = p.get_xy()
-
-            #     plt.text(x+width/2, y+height*1.01,percent_list[i],ha='center',weight='bold')
-            #     i+=1
-            
-            plt.tight_layout()
-            plt.show()
-    
+        for j in range(len(value_list)):
+            x_cord.append(j)
+        #in this it's going to be easier if we actually make a pandas dataframe then just subtract correct columns together
+        DAG_df = pd.DataFrame([value_list],columns=x_cord)
+        
+        #Now fo KD Tree
+        KD_data = pd.read_csv(KDpath+"_Report/"+KDfiles[k])['SRC Depth']
+        #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
+        value_list = []
+        for i in range(KD_data.max()+1):
+            value_list.append(KD_data.value_counts().get(i, 0))
+        #this gets the depth of nodes returned 
+        x_cord = []
+        for j in range(len(value_list)):
+            x_cord.append(j)
+        KD_df = pd.DataFrame([value_list],columns=x_cord)
+        diff_df = DAG_df-KD_df          #this will subtract correctly, as if 3DAG has values in 9 but KD doesn't it will place a NaN value there
+        
+        #Now to plot it
+        diff_df.plot.bar(figsize=(8,6),position=0,table=True,xlim=0)
+        
+        plt.tight_layout()
+        plt.savefig(f'{DAGpath}/_Graphs/Diff/{str(DAGfiles[k]).replace('.csv','.png')}')
+        plt.savefig(f'{KDpath}/_Graphs/Diff/{str(KDfiles[k]).replace('.csv','.png')}')
+    print("Finished Level Diff\n")
 
 
 def L2norm(path=None, show=False):
     if path == None:
         return print("Need query folder path!")
     #need to get data of SRC Depths and subtract it from the/a total distribution.
+    print("Starting L2 Norm...")
 
     if path[len(path)-1] != "/":    #makes path accessable
                 path = path+"/"
-    os.makedirs(f"{path}L2 Norm", exist_ok=True)    #makes L2 Norm folder
+    os.makedirs(f"{path}_L2 Norm", exist_ok=True)    #makes L2 Norm folder
     files = os.listdir(path)
     for csv_file in files:
         if csv_file.__contains__("SRC"):        #only gets csv files that are SRC Query, then gets the SRC Query.csv file's Depth, and then graphs it
@@ -1093,7 +1120,7 @@ def L2norm(path=None, show=False):
                     # temp_row.append(((temp_value_list[k]-value_list[k])**2)**0.5)       #this is the L2 norm as: ((sample - original)^2)^1/2
                 temp_row.append((temp_val)**0.5)
                 stored_data.loc[len(stored_data)] = temp_row
-            stored_data.to_csv(f"{path}/L2 Norm/{csv_file}")
+            stored_data.to_csv(f"{path}/_L2 Norm/{csv_file}")
 
             #need to save figure (scatter)
             stored_data = stored_data.values.tolist()
@@ -1109,10 +1136,11 @@ def L2norm(path=None, show=False):
             plt.xlim(left=0)
             plt.title(f"{csv_file.replace('.csv','')}")
             plt.tight_layout()
-            os.makedirs(path+"L2 Norm/Pictures",exist_ok=True)
-            plt.savefig(path+f"L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
+            os.makedirs(path+"_L2 Norm/Pictures",exist_ok=True)
+            plt.savefig(path+f"_L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
             if show == True:
                 plt.show()
+    print("Finished L2 Norm Diff\n")
 
              
 def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
@@ -1122,29 +1150,35 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
         DAGpath = DAGpath+"/"
     if KDpath[len(KDpath)-1] != "/":
         KDpath = KDpath+"/"
+    print("Starting L2 Norm Diff...")
 
     DAGfiles = []
-    for item in os.listdir(DAGpath+"L2 Norm"):
-        DAGfiles.append(item)
+    for item in os.listdir(DAGpath+"_L2 Norm"):
+        if item.__contains__('.csv'):
+            DAGfiles.append(item)
     KDfiles = []
-    for item in os.listdir(KDpath+"L2 Norm"):
-        KDfiles.append(item)
+    for item in os.listdir(KDpath+"_L2 Norm"):
+        if item.__contains__('.csv'):
+            KDfiles.append(item)
 
-    os.makedirs(f"{DAGpath}L2 Norm/Diff", exist_ok=True)
+    os.makedirs(f"{DAGpath}_L2 Norm/Diff", exist_ok=True)
+    os.makedirs(f"{KDpath}_L2 Norm/Diff", exist_ok=True)
     #now need to find diff
     for i in range(len(DAGfiles)):
         #need to make dataframe based on columns of DAG file
-        DAGdf = pd.read_csv(DAGpath+"L2 Norm/"+DAGfiles[i])
+        DAGdf = pd.read_csv(DAGpath+"_L2 Norm/"+DAGfiles[i])
         
-        KDdf = pd.read_csv(KDpath+"L2 Norm/"+KDfiles[i])
+        KDdf = pd.read_csv(KDpath+"_L2 Norm/"+KDfiles[i])
 
         diff_df = DAGdf - KDdf
         diff_df = diff_df['L2 Norm']        
-        diff_df.to_csv(DAGpath+"L2 Norm/Diff/"+DAGfiles[i][:len(DAGfiles[i])-4]+"_diff.csv")
+        diff_df.to_csv(DAGpath+"_L2 Norm/Diff/"+DAGfiles[i][:len(DAGfiles[i])-4]+"_diff.csv")
+        diff_df.to_csv(KDpath+"_L2 Norm/Diff/"+KDfiles[i][:len(KDfiles[i])-4]+"_diff.csv")
         # diff_df = None
 
         if graph == True:
-            os.makedirs(f"{DAGpath}L2 Norm/Diff/Pictures", exist_ok=True)
+            os.makedirs(f"{DAGpath}_L2 Norm/Diff/Pictures", exist_ok=True)
+            os.makedirs(f"{KDpath}_L2 Norm/Diff/Pictures", exist_ok=True)
             x = []
             for j in range(len(diff_df)):
                 x.append(j)
@@ -1157,25 +1191,9 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
             plt.xlim(left=0)
             plt.title(f"{DAGfiles[i].replace('.csv','')}")
             plt.tight_layout()
-            os.makedirs(DAGpath+"L2 Norm/Diff/Pictures",exist_ok=True)
-            plt.savefig(DAGpath+f"L2 Norm/Diff/Pictures/{DAGfiles[i].replace('.csv','.png')}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            plt.savefig(DAGpath+f"_L2 Norm/Diff/Pictures/{DAGfiles[i].replace('.csv','.png')}")
+            plt.savefig(KDpath+f"_L2 Norm/Diff/Pictures/{KDfiles[i].replace('.csv','.png')}")
+    print("Finished L2 Norm Diff\n")
 
 
 
@@ -1183,7 +1201,75 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
 # import sys
 # sys.setrecursionlimit(1000) #originally is 1000
 
+### Note ###
+    #When making mass queries use SRC_vs_BRC method, just make a folder 
+    #in Saved Query -> 3DAG SRC vs BRC if you are making queries on a dataset that hasn't
+    #been used before. Else, just put the Saved Query -> 3DAG SRC vs BRC -> dataset folder.
 
+    #If you use any of the extra methods, (statistics, stat_graph, lvl_diff_graph, L2norm,
+    #L2norm_diff) you will need to insert the path to the specific query folder you want to run
+    #this on, it would go something like: Saved Query -> 3DAG SRC vs BRC -> CRAWDAD spitz and Cali
+    #-> Without Duplicates -> 1 - 100,000. 
+
+    #If you use any of the diff methods, you will have to give the specific query folder for both
+    #the 3DAG and KD Tree.
+
+
+
+### TEST THIS ###
+
+### SRFG-v1 ### --- DROPPING DUPLICATES
+path = r"Saved Datasets/Check/SRFG-v1.csv"
+points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
+#___________________________________________________________________________#
+
+for i in range(2):      #starts at 0
+    SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/".format(i+2)
+    BRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/".format(i+2)
+    print(f"This is the length of points being inputed into the tree: {len(points)}")
+    temp = DAGTree(points, cuttoff=4)
+    print("Done with making tree.")
+    SRC_vs_BRC(tree=temp,num=100000,sprout=i+2,one_file=False,SRC_path=SRC_path,BRC_path=BRC_path,show=False)
+    path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
+    statistics(path,graph=True)
+    stat_graph(path)
+    L2norm(path)
+    print(f"\n\n{i} Batch Done\n"+"_"*50+"\n\n")
+
+
+
+
+
+input("Press enter whenever ready to continue")
+
+for i in range(2):  #starts at 0
+    DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
+    KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
+    lvl_diff_graph(DAGpath=DAGpath,KDpath=KDpath)
+    L2norm_diff(DAGpath=DAGpath,KDpath=KDpath)
+    print(f"\n\n{i} Batch Done For Diffs\n"+"_"*50+"\n\n")
+
+print("Finished With 3DAG Tree!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### DATASETS #####
+    #All /SHOULD/ automatically be set to drop duplicates
 
 # ### CRAWDAD spitz/cellular Dataset Dropping Duplicates ###
 # path = r"Saved Datasets/DT-mobile-data.csv/VDS_MS_310809_27_0210.csv"
@@ -1196,179 +1282,23 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
 # points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
 # #___________________________________________________________________________#
 
-# # ### Inventory of Owned & Leased Properties (IOLP) ###
-# # building_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-buildings.xlsx"
-# # lease_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-leases.xlsx"
+# ### Inventory of Owned & Leased Properties (IOLP) ###
+# building_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-buildings.xlsx"
+# lease_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-leases.xlsx"
 
-# # points = points_from_file(lease_path,columns=['Latitude','Longitude'],file_extension='excel')
-# # building_points = points_from_file(building_path,columns=['Latitude','Longitude'],file_extension='excel')
-# # #_____________________________________________________________________________#
-
-
-
-### Spatial Database NO Duplication ###
-path = r"Saved Datasets/Spatial.xlsx"
-points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
-#___________________________________________________________________________#
+# points = points_from_file(lease_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
+# building_points = points_from_file(building_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
+# #_____________________________________________________________________________#
 
 
 
-
-
-SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_SRC.csv"
-BRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_BRC.csv"
-
-
-
-# ### Making Tree and Query Testing ###
-# print(f"This is the length of points being inputed into the tree: {len(points)}")
-# temp = DAGTree(points, cuttoff=4)
-# print("Done with making tree.")
-# # temp.graph_tree()
-# SRC_vs_BRC(tree=temp,num=100000,sprout=1,one_file=False,SRC_path=SRC_path,BRC_path=BRC_path,show=False)
-path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/"
-statistics(path,graph=True)
-stat_graph(path)
-L2norm(path)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=2,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_BRC.csv",show=False)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/"
-# statistics(path,graph=True)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/"
-# statistics(path,graph=True)
-print("_"*50)
-print("Without Duplicates Finished\n\n\n")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ### Making Tree and Query Testing ###
-# print(f"This is the length of points being inputed into the tree: {len(points)}")
-# temp = DAGTree(points, cuttoff=4)
-# print("Done with making tree.")
-# # temp.graph_tree()
-# SRC_vs_BRC(tree=temp,num=100000,sprout=1,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/CRAWDAD_BRC.csv",show=False)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-# statistics(path,graph=True)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=2,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/CRAWDAD_BRC.csv",show=False)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/"
-# statistics(path,graph=True)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/"
-# statistics(path,graph=True)
-# print("_"*50)
-# print("Without Duplicates Finished\n\n\n")
-
-
-
-# temp = None
-
-
-# ### CRAWDAD spitz/cellular Dataset With Duplicates ###
-# path = r"Saved Datasets/VDS_MS_310809_27_0210.csv"
-# points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=False)
+# ### Spatial Database NO Duplication ###
+# path = r"Saved Datasets/Spatial.xlsx"
+# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
 # #___________________________________________________________________________#
-# print(f"This is the length of points being inputed into the tree: {len(points)}")
-# temp = DAGTree(points, cuttoff=4)
-# print("Done with making tree.")
-
-# SRC_vs_BRC(tree=temp,num=100000,sprout=2,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/CRAWDAD_BRC.csv",show=False)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/"
-# statistics(path,graph=True)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/CRAWDAD_BRC.csv",show=False)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/"
-# statistics(path,graph=True)
-# print("_"*50)
-# print("With Duplicates Finished\n\n")
-# print("_"*50)
-
-
-# ### Without Duplicates ###
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-# statistics(path,graph=True)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/2 - 100,000/"
-# statistics(path,graph=True)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/3 - 100,000/"
-# statistics(path,graph=True)
-
-
-# ### With Duplicates ###
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/1 - 100,000/"
-# statistics(path,graph=True)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/"
-# statistics(path,graph=True)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/"
-# statistics(path,graph=True)
 
 
 
-
-### TEST THIS ###
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-# L2norm(path,show=False)
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-# L2norm(path,show=False)
-
-# DAGpath = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-# KDpath = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-# # L2norm_diff(DAGpath=DAGpath, KDpath=KDpath, graph=True)
-# return_lvl_diff_graph(DAGpath, KDpath)
-
-
-### Stats ###
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/Without Duplicates/1 - 100,000/"
-# statistics(path)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/"
-# statistics(path)
-# path = r"Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/3 - 100,000/"
-# statistics(path)
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/1 - 100,000/"
-# statistics(path)
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/With Duplicates/2 - 100,000/"
-# statistics(path)
-
-
-# print(temp.linear_BRC(24.74, 29.0, 35.06, 35.53))
-
-
-# print(temp.left.bbox)
-# print(temp.SRC(23,1,26,45).data_size)
-# print(len(temp.linear_BRC(23,1,26,45)))
-
-# temp.print_tree()
-
-
-# x,y=[],[]
-# for item in points:
-#     x.append(item[0])
-#     y.append(item[1])
-# plt.scatter(x,y,color='grey',marker='o')
-# plt.show()
-
-
-        #For Building dataset
-# print(f"\n\n\nThis is the length of points being inputed into the tree: {len(building_points)}")
-# temp = DAGTree(building_points, cuttoff=4)
-# print("Done with making tree.")
-# SRC_vs_BRC(tree=temp,num=100000,sprout=1,one_file=False,SRC_path=r"Saved Query/3DAG SRC vs BRC/BUILDING_SRC.csv",BRC_path=r"Saved Query/3DAG SRC vs BRC/BUILDING_BRC.csv",show=False)
-
-
-
-
-
-
-
-
-
-
+### Template for SRC path and BRC path ###
+# SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_SRC.csv"
+# BRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_BRC.csv"
