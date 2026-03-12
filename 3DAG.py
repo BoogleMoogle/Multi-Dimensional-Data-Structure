@@ -1016,63 +1016,6 @@ def stat_graph(path=None,title=""):
 
 def lvl_diff_graph(DAGpath=None, KDpath=None):
     if DAGpath == None or KDpath == None:
-        return print("We need path to query folder for both DAG and KD!")
-    if DAGpath[len(DAGpath)-1] != "/":
-        DAGpath = DAGpath+"/"
-    if KDpath[len(KDpath)-1] != "/":
-        KDpath = KDpath+"/"
-    print("Starting Level Diff...")
-    
-    DAGfiles = []
-    for item in os.listdir(DAGpath+"_Report/"):
-        if item.__contains__('.csv'):
-            DAGfiles.append(item)
-    KDfiles = []
-    for item in os.listdir(KDpath+"_Report/"):
-        if item.__contains__('.csv'):
-            KDfiles.append(item)
-
-    os.makedirs(DAGpath+"_Graphs/Diff/",exist_ok=True)       #makes 'Diff' folder in 3DAGs 'Graph' folder if one isn't already there
-    os.makedirs(KDpath+"_Graphs/Diff/",exist_ok=True)
-    for k in range(len(DAGfiles)):                          #gets SRC csv files information. First it /SHOULD/ do large, then medium, then small
-        DAG_data = pd.read_csv(DAGpath+"_Report/"+DAGfiles[k])['SRC Depth']
-        KD_data = pd.read_csv(KDpath+"_Report/"+KDfiles[k])['SRC Depth']
-
-       #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
-        value_list = []
-        for i in range(DAG_data.max()+1):
-            value_list.append(DAG_data.value_counts().get(i, 0))
-        #this gets the depth of nodes returned 
-        x_cord = []
-        for j in range(len(value_list)):
-            x_cord.append(j)
-        #in this it's going to be easier if we actually make a pandas dataframe then just subtract correct columns together
-        DAG_df = pd.DataFrame([value_list],columns=x_cord)
-        
-        #Now fo KD Tree
-        KD_data = pd.read_csv(KDpath+"_Report/"+KDfiles[k])['SRC Depth']
-        #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
-        value_list = []
-        for i in range(KD_data.max()+1):
-            value_list.append(KD_data.value_counts().get(i, 0))
-        #this gets the depth of nodes returned 
-        x_cord = []
-        for j in range(len(value_list)):
-            x_cord.append(j)
-        KD_df = pd.DataFrame([value_list],columns=x_cord)
-        diff_df = DAG_df-KD_df          #this will subtract correctly, as if 3DAG has values in 9 but KD doesn't it will place a NaN value there
-        
-        #Now to plot it
-        diff_df.plot.bar(figsize=(8,6),position=0,table=True,xlim=0)
-        
-        plt.tight_layout()
-        plt.savefig(f'{DAGpath}/_Graphs/Diff/{str(DAGfiles[k]).replace('.csv','.png')}')
-        plt.savefig(f'{KDpath}/_Graphs/Diff/{str(KDfiles[k]).replace('.csv','.png')}')
-    print("Finished Level Diff\n")
-
-
-def nlvl_diff_graph(DAGpath=None, KDpath=None):
-    if DAGpath == None or KDpath == None:
         return print("Need path for DAG and KD!")
     #makes sure that there is a slash at the end of the paths
     if DAGpath[len(DAGpath)-1] != '/':
