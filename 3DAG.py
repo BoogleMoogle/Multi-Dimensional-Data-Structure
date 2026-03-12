@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import random
 # from narwhals import col
 from narwhals import col
+from networkx import dag_longest_path
 import pandas as pd
 import os
 from math import ceil
@@ -637,7 +638,7 @@ def save_query(tree, xmin=None, ymin=None, xmax=None, ymax=None, query_list=None
     else:
         return print(temp)
     
-#make so it will automatically create folder for query
+
 def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,duplicates=False):
     '''
     :param tree: The 3DAG Tree.
@@ -668,7 +669,8 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,d
         duplicates = 'With Duplicates/'
     else:
         duplicates = 'Without Duplicates/'
-    os.makedirs(path+duplicates,exist_ok=True)
+    os.makedirs(path+duplicates,exist_ok=True)                          #makes duplicate folder
+    os.makedirs(path+duplicates+f"{sprout} - {num:,}",exist_ok=True)    #makes the specific query folder
 
     BRC_path = path+duplicates+f"{sprout} - {num:,}/BRC.csv"
     SRC_path = path+duplicates+f"{sprout} - {num:,}/SRC.csv"
@@ -1069,6 +1071,60 @@ def lvl_diff_graph(DAGpath=None, KDpath=None):
     print("Finished Level Diff\n")
 
 
+def nlvl_diff_graph(DAGpath=None, KDpath=None):
+    if DAGpath == None or KDpath == None:
+        return print("Need path for DAG and KD!")
+    #makes sure that there is a slash at the end of the paths
+    if DAGpath[len(DAGpath)-1] != '/':
+        DAGpath = DAGpath + "/"
+    if KDpath[len(KDpath)-1] != '/':
+        KDpath = KDpath + "/"
+
+    #gets the _Reports csv files paths, these will be read then processed for graphing
+    DAGitems = []
+    for item in os.listdir(DAGpath+"_Report/"):
+        if item.__contains__('.csv'):
+            DAGitems.append(item)
+    KDitems = []
+    for item in os.listdir(KDpath+"_Report/"):
+        if item.__contains__('.csv'):
+            KDitems.append(item)
+    #these will always store the files: large - medium - small
+
+    #need to get the number of items that show up
+    for i in range(len(DAGitems)):
+        DAG_df = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth']
+        KD_df = pd.read_csv(KDpath+"_Report/"+KDitems[i])['SRC Depth']
+
+        DAG_df = DAG_df.value_counts().sort_index()
+        KD_df = KD_df.value_counts().sort_index()
+
+        diff_df = DAG_df - KD_df
+        x_cord = diff_df.index[:].tolist()
+        value_list = diff_df.values[:]
+        #got the values and x_cordinates ^^^
+
+        os.makedirs(DAGpath+"_Graphs/Diff/",exist_ok=True)
+        os.makedirs(KDpath+"_Graphs/Diff/",exist_ok=True)
+        #gotta make sure the fodlers are actually made
+
+        #making graph
+        plt.figure(figsize=(8,8))
+        plt.bar(x_cord,value_list,width=0.6)
+        
+        plt.title(f"{DAGpath}{str(DAGitems[i]).replace('.csv','')}")
+        plt.tight_layout()
+        # plt.legend()
+        plt.xlim(right=x_cord[len(x_cord)-1])
+        
+        
+        plt.savefig(f'{DAGpath}_Graphs/Diff/{str(DAGitems[i]).replace('.csv','')}_diff.png')
+        plt.savefig(f'{KDpath}_Graphs/Diff/{str(KDitems[i]).replace('.csv','')}_diff.png')
+       
+
+    
+
+
 def L2norm(path=None, show=False):
     if path == None:
         return print("Need query folder path!")
@@ -1140,7 +1196,7 @@ def L2norm(path=None, show=False):
             plt.savefig(path+f"_L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
             if show == True:
                 plt.show()
-    print("Finished L2 Norm Diff\n")
+    print("Finished L2 Norm\n")
 
              
 def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
@@ -1217,39 +1273,45 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
 
 
 ### TEST THIS ###
+DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
+KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
+nlvl_diff_graph(DAGpath=DAGpath, KDpath=KDpath)
 
-### SRFG-v1 ### --- DROPPING DUPLICATES
-path = r"Saved Datasets/Check/SRFG-v1.csv"
-points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
-#___________________________________________________________________________#
 
-for i in range(2):      #starts at 0
-    SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/".format(i+2)
-    BRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/".format(i+2)
-    print(f"This is the length of points being inputed into the tree: {len(points)}")
-    temp = DAGTree(points, cuttoff=4)
-    print("Done with making tree.")
-    SRC_vs_BRC(tree=temp,num=100000,sprout=i+2,one_file=False,SRC_path=SRC_path,BRC_path=BRC_path,show=False)
-    path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
-    statistics(path,graph=True)
-    stat_graph(path)
-    L2norm(path)
-    print(f"\n\n{i} Batch Done\n"+"_"*50+"\n\n")
+# ### Spatial Database NO Duplication ###
+# path = r"Saved Datasets/Spatial.xlsx"
+# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+# #___________________________________________________________________________#
 
 
 
 
+# path = r"Saved Query/3DAG SRC vs BRC/Spatial/"
+# print(f"This is the length of points being inputed into the tree: {len(points)}")
+# temp = DAGTree(points, cuttoff=4)
+# print("Done with making tree.")
 
-input("Press enter whenever ready to continue")
+# # SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/".format(i+2)
+# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,path=path,show=False,duplicates=False)
+# path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(3)
+# statistics(path,graph=True)
+# stat_graph(path)
+# L2norm(path)
+# print(f"\n\n3 Batch Done\n"+"_"*50+"\n\n")
 
-for i in range(2):  #starts at 0
-    DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
-    KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
-    lvl_diff_graph(DAGpath=DAGpath,KDpath=KDpath)
-    L2norm_diff(DAGpath=DAGpath,KDpath=KDpath)
-    print(f"\n\n{i} Batch Done For Diffs\n"+"_"*50+"\n\n")
 
-print("Finished With 3DAG Tree!")
+
+
+
+# input("Press enter whenever ready to continue")
+
+# DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(3)
+# KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(3)
+# lvl_diff_graph(DAGpath=DAGpath,KDpath=KDpath)
+# L2norm_diff(DAGpath=DAGpath,KDpath=KDpath)
+# print(f"\n\n3 Batch Done For Diffs\n"+"_"*50+"\n\n")
+
+# print("Finished With 3DAG Tree!")
 
 
 

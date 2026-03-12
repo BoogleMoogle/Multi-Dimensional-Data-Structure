@@ -526,15 +526,44 @@ def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=
     return points
 
 
-def SRC_vs_BRC(tree=None,num=1,sprout=None,SRC_path=None,BRC_path=None,show=False,one_file=False):
+def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,duplicates=False):
+    '''
+    :param tree: The 3DAG Tree.
+    :param num: The number of queries that you want. Note that 1 query is 6 in total.
+    :param sprout: The seed for randomness. It is required.
+    :param path: This should be the local path to the Saved Query folder with the dataset query folder in it, it should look like: "Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/". This method makes the rest of the folders, based on sprout and num. In a perfect world, each query set should be located in a folder labeled: sprout - num, so it would look like 1 - 100,000.
+    :param show: Boolean, if set to true it will graph the 3DAG for each query and show you a graph. HIGHLY not advised if you have a large amount of queries or a large dataset.
+    :param one_file: Boolean, puts everything in 1 file. Not advised.
+    :param duplicates: Required Boolean, if True it will place these queries in the "With Duplicates" folder, else it will palce the queries in the "Without Duplicates" folder.
+    '''
     print("Saving Mass Query...")
+    #Error checking
     if tree == None:
         return print("Need a tree.")
-    if SRC_path == None or BRC_path == None:
-        return print("Need path for SRC or BRC.")
-    if sprout != None:
-        random.seed(sprout)
-    
+    if path == None:
+        return print("Need path to query folder!")
+    if sprout == None:
+        return print("Need a sprout!")
+    random.seed(sprout)
+    if duplicates == None:
+        return print("Need to state whether or not this tree was made with duplicate points!")
+    #these make sure BRC and SRC path have a '/' at the end, it lets us access what ever is in the file
+    if path[len(path)-1] != "/":
+        path = path+"/"
+
+    #Making/checking path folder for the duplicates folder
+    if duplicates == True:
+        duplicates = 'With Duplicates/'
+    else:
+        duplicates = 'Without Duplicates/'
+    os.makedirs(path+duplicates,exist_ok=True)                          #makes duplicate folder
+    os.makedirs(path+duplicates+f"{sprout} - {num:,}",exist_ok=True)    #makes the specific query folder
+
+    BRC_path = path+duplicates+f"{sprout} - {num:,}/BRC.csv"
+    SRC_path = path+duplicates+f"{sprout} - {num:,}/SRC.csv"
+
+
+    #Setting Coeffs
     small_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.04
     medium_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.2
     large_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.3
@@ -579,6 +608,15 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,SRC_path=None,BRC_path=None,show=Fals
             # points_list.append([xmin,ymin,xmax,ymax])
         i+=1
     print("Finished Collecting Random Samples.")
+    # if SRC_path != None and BRC_path == None:
+    #     save_query(tree=tree,num=1,path=SRC_path,SRC=True,save=True,show=show,query_list=points_list)
+    #     save_query(tree=tree,num=1,path=SRC_path,BRC=True,save=True,show=show,query_list=points_list)
+    # elif BRC_path != None and SRC_path == None:
+    #     save_query(tree=tree,num=1,path=BRC_path,SRC=True,save=True,show=show,query_list=points_list)
+    #     save_query(tree=tree,num=1,path=BRC_path,BRC=True,save=True,show=show,query_list=points_list)
+    # else:
+    #     save_query(tree=tree,num=1,path=SRC_path,SRC=True,save=True,show=show,query_list=points_list)
+    #     save_query(tree=tree,num=1,path=BRC_path,BRC=True,save=True,show=show,query_list=points_list)
     if one_file == False:
         print("Starting SRC Files:")
         small_SRC_path = SRC_path[:len(SRC_path)-4] + "_small4%" + SRC_path[len(SRC_path)-4:]
@@ -647,7 +685,7 @@ def statistics(file_path=None,graph=False):
             large.append(item)
     
     #makes report folder if it doesn't exist
-    os.makedirs(f"{path}Report", exist_ok=True)
+    os.makedirs(f"{file_path}_Report", exist_ok=True)
     #reading from lists made earlier
     small_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','SRC Depth','Diff','F/P %','Error %'])
     small_dataframe['BRC Size'] = pd.read_csv(file_path+'/'+small[0])['Data Size']
@@ -664,7 +702,7 @@ def statistics(file_path=None,graph=False):
     small_total_inf = np.isinf(small_dataframe['F/P %']).values.sum()
     
     # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    small_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"Report/small4%"+file_path[file_path.rfind('/')+1:]+".csv")
+    small_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/small4%"+file_path[file_path.rfind('/')+1:]+".csv")
 
 
     medium_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','Diff','F/P %', 'Error %'])
@@ -683,7 +721,7 @@ def statistics(file_path=None,graph=False):
     
     
     # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    medium_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"Report/medium"+file_path[file_path.rfind('/')+1:]+".csv")
+    medium_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/medium"+file_path[file_path.rfind('/')+1:]+".csv")
 
     large_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','Diff','F/P %'])
     large_dataframe['BRC Size'] = pd.read_csv(file_path+'/'+large[0])['Data Size']
@@ -700,7 +738,7 @@ def statistics(file_path=None,graph=False):
     large_total_inf = np.isinf(large_dataframe['F/P %']).values.sum()
 
     # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    large_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"Report/large"+file_path[file_path.rfind('/')+1:]+".csv")
+    large_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/large"+file_path[file_path.rfind('/')+1:]+".csv")
     
 
 
@@ -744,7 +782,7 @@ def statistics(file_path=None,graph=False):
 
 
     #writing all average info to txt file
-    with open((path + "/Report/Summary.txt"),'w') as file:
+    with open((file_path + "/_Report/Summary.txt"),'w') as file:
         file.write("Averages\n")
         file.write(f"Small4%\n\tBRC Size:\t{small_avg_BRC_size:,}\n\tSRC Size:\t{small_avg_SRC_size:,}\n\tSRC Depth:\t{small_avg_SRC_depth:,}\n\tDiff:\t\t{small_avg_diff:,}\n\tF/P %:\t\t{small_avg_fp:,}%\n\tError %:\t\t{small_avg_error:,}%\n\tTot # of Inf: {small_total_inf:,}\n\n\n")
         file.write(f"Medium\n\tBRC Size:\t{medium_avg_BRC_size:,}\n\tSRC Size:\t{medium_avg_SRC_size:,}\n\tSRC Depth:\t{medium_avg_SRC_depth:,}\n\tDiff:\t\t{medium_avg_diff:,}\n\tF/P %:\t\t{medium_avg_fp:,}%\n\tError %:\t\t{medium_avg_error:,}%\n\tTot # of Inf: {medium_total_inf:,}\n\n\n")
@@ -768,7 +806,7 @@ def stat_graph(path=None,title=""):
         return print("Need path!")
     if path[len(path)-1] != "/":
         path = path+"/"
-    os.makedirs(f"{path}Graphs", exist_ok=True)     #makes Graphs folder if one isn't already made
+    os.makedirs(f"{path}_Graphs", exist_ok=True)     #makes Graphs folder if one isn't already made
     
     if title != "":
         title = f": {title}"
@@ -812,7 +850,7 @@ def stat_graph(path=None,title=""):
                 i+=1
             
             plt.tight_layout()
-            plt.savefig(f'{path}/Graphs/{str(csv_file).replace('.csv','.png')}')
+            plt.savefig(f'{path}/_Graphs/{str(csv_file).replace('.csv','.png')}')
     print("Completed Statistics Graphing\n")
 
 
@@ -822,9 +860,10 @@ def L2norm(path=None, show=False):
         return print("Need query folder path!")
     #need to get data of SRC Depths and subtract it from the/a total distribution.
     print("Starting L2 Norm...")
+
     if path[len(path)-1] != "/":    #makes path accessable
                 path = path+"/"
-    os.makedirs(f"{path}L2 Norm", exist_ok=True)    #makes L2 Norm folder
+    os.makedirs(f"{path}_L2 Norm", exist_ok=True)    #makes L2 Norm folder
     files = os.listdir(path)
     for csv_file in files:
         if csv_file.__contains__("SRC"):        #only gets csv files that are SRC Query, then gets the SRC Query.csv file's Depth, and then graphs it
@@ -867,7 +906,7 @@ def L2norm(path=None, show=False):
                     # temp_row.append(((temp_value_list[k]-value_list[k])**2)**0.5)       #this is the L2 norm as: ((sample - original)^2)^1/2
                 temp_row.append((temp_val)**0.5)
                 stored_data.loc[len(stored_data)] = temp_row
-            stored_data.to_csv(f"{path}/L2 Norm/{csv_file}")
+            stored_data.to_csv(f"{path}/_L2 Norm/{csv_file}")
 
             #need to save figure (scatter)
             stored_data = stored_data.values.tolist()
@@ -883,8 +922,8 @@ def L2norm(path=None, show=False):
             plt.xlim(left=0)
             plt.title(f"{csv_file.replace('.csv','')}")
             plt.tight_layout()
-            os.makedirs(path+"L2 Norm/Pictures",exist_ok=True)
-            plt.savefig(path+f"L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
+            os.makedirs(path+"_L2 Norm/Pictures",exist_ok=True)
+            plt.savefig(path+f"_L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
             if show == True:
                 plt.show()
     print("Finished L2 Norm\n")
@@ -896,21 +935,20 @@ def L2norm(path=None, show=False):
 # import sys
 # sys.setrecursionlimit(2090000000) #originally is 1000
 
-
-
-
-### SRFG-v1 ### --- DROPPING DUPLICATES
-path = r"Saved Datasets/Check/SRFG-v1.csv"
-points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
+### Spatial Database NO Duplication ###
+path = r"Saved Datasets/Spatial.xlsx"
+points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
 #___________________________________________________________________________#
 
+
+
+print(f"This is the length of points being inputed into the tree: {len(points)}")
+temp = KDTree(points)
+print("Done with making tree.")
+
 for i in range(2):      #starts at 0
-    SRC_path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/Spatial_SRC.csv".format(i+2)
-    BRC_path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/Spatial_BRC.csv".format(i+2)
-    print(f"This is the length of points being inputed into the tree: {len(points)}")
-    temp = KDTree(points)
-    print("Done with making tree.")
-    SRC_vs_BRC(tree=temp,num=100000,sprout=i+2,one_file=False,SRC_path=SRC_path,BRC_path=BRC_path,show=False)
+    path = r"Saved Query/KD SRC vs BRC/Spatial/"
+    SRC_vs_BRC(tree=temp,num=100000,sprout=i+2,one_file=False,path=path,show=False,duplicates=False)
     path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
     statistics(path,graph=True)
     stat_graph(path)
@@ -922,100 +960,40 @@ print("Finished With KD Tree!")
 
 
 
+##### DATASETS #####
+    #All /SHOULD/ automatically be set to drop duplicates
+
+# ### CRAWDAD spitz/cellular Dataset Dropping Duplicates ###
+# path = r"Saved Datasets/DT-mobile-data.csv/VDS_MS_310809_27_0210.csv"
+# points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=True)
+# #___________________________________________________________________________#
+
+
+# ### SRFG-v1 ###
+# path = r"Saved Datasets/Check/SRFG-v1.csv"
+# points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
+# #___________________________________________________________________________#
+
+# ### Inventory of Owned & Leased Properties (IOLP) ###
+# building_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-buildings.xlsx"
+# lease_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-leases.xlsx"
+
+# points = points_from_file(lease_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
+# building_points = points_from_file(building_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
+# #_____________________________________________________________________________#
 
 
 
-# ### Stats ###
-# path = r"Saved Query/KD SRC vs BRC/CRAWDAD spitz and Cali/2 - 100,000/"
-# statistics(path)
+# ### Spatial Database NO Duplication ###
+# path = r"Saved Datasets/Spatial.xlsx"
+# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+# #___________________________________________________________________________#
 
 
 
-# x,y=[],[]
-# for item in points:
-#     x.append(item[0])
-#     y.append(item[1])
-# plt.scatter(x,y,color='grey',marker='o')
-# plt.show()
+### Template for SRC path and BRC path ###
+# SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/"
+# BRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/"
 
 
 
-# temp.print_tree()
-# temp.graph_tree()
-# print(len(temp.BRC(7.2,51.93,8.23,53.42)))
-
-# print(temp.left.right.points)
-
-
-
-
-
-
-
-
-
-
-
-# path=r"C:\Users\cvinc\Desktop\College\Internship\WarmUp\Saved Query\2-2-26.csv"
-# save_query(temp,num=20,small=True,sprout=6,path=path,save=True,show=False)
-# save_query(temp,num=20,medium=True,sprout=6,path=path,save=True,show=False)
-# save_query(temp,num=20,large=True,sprout=6,path=path,save=True,show=False)
-# print(temp.BRC(20,20,40,25))
-
-
-
-########    General Test    ########
-
-### Making Points ###
-# points = make_points(num=50,sprout=5,aRang=0,bRang=100)
-# print(points)
-
-# temp = KDTree(points)
-# temp.print_tree()
-
-### Points From .csv ###
-# path = r"C:\Users\cvinc\Desktop\College\Internship\WarmUp\Saved KD Trees\Tests\archive\2d_data.csv"
-# points = points_from_file(path)
-# temp = KDTree(points)
-
-
-
-### Graphing Function ###
-# temp.graph_tree()
-
-
-
-### Saving Query ###
-# save_query(temp,num=1,small=True,sprout=6,save=False,show=True)         #Q: 68, 74, 73, 79
-
-
-
-
-# path=r"C:\Users\cvinc\Desktop\College\Internship\WarmUp\Saved Query\Show This One.csv"
-# save_query(temp,num=10,small=True,save=True,show=False)
-# save_query(temp,num=10,medium=True,save=True,show=False)
-# save_query(temp,num=10,large=True,save=True,show=False)
-
-
-
-
-# plot_boxes = [[0.05,0.1,0.15,0.2],
-#               [0.1,0.15,0.3,0.4]]
-# plot_boxes = [[46, 43, 83, 79],[83, 53, 100, 97],[0, 0, 20, 32]]
-# plot_boxes =[[8, -28, 13, 43]]
-# temp.graph_tree(plot_boxes)
-
-
-
-# print(temp.left.left.left.points)
-
-
-
-# [6, 8, 12, 12,
-# 12, 12, 12, 25, 30]
-
-
-
-
-### Good Reading ###
-#https://www.math.umd.edu/~immortal/CMSC420/notes/kdtrees.pdf
