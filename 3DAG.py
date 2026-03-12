@@ -1218,7 +1218,7 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
 ### TEST THIS ###
 DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
 KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
-nlvl_diff_graph(DAGpath=DAGpath, KDpath=KDpath)
+lvl_diff_graph(DAGpath=DAGpath, KDpath=KDpath)
 
 
 # ### Spatial Database NO Duplication ###
