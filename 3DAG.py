@@ -4,6 +4,7 @@
 
 from types import NoneType
 
+from matplotlib import lines
 from matplotlib.figure import figaspect
 from matplotlib.lines import lineStyles
 import matplotlib.pyplot as plt
@@ -64,6 +65,7 @@ class DAGTree:
             self.split()
 
 
+
     #To String Method    
     def __str__(self):
         if self.split_value != None:
@@ -73,6 +75,7 @@ class DAGTree:
                 return f"Split Node: y = {self.split_value[self.axis]}, Level: {self.depth}"#, Left: {self.left}, Right: {self.right}"
         else:
             return f"{self.points}"
+
 
 
     #Bbox Method
@@ -90,6 +93,7 @@ class DAGTree:
                 if bbox[3] < item[1]:       #ymax
                     bbox[3] = item[1]
         return bbox
+
 
 
     #Split Method
@@ -195,6 +199,7 @@ class DAGTree:
                 self.middle.split()
 
 
+
     #Single Range Cover Search Method
     def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
         if q_xmin > q_xmax:
@@ -235,6 +240,7 @@ class DAGTree:
         return self
 
 
+
     #BRC Linearly
     def linear_BRC(self,q_xmin,q_ymin,q_xmax,q_ymax):
         nodes = self.get_leaf_linear(boxes=[])
@@ -249,6 +255,7 @@ class DAGTree:
             if item[0] >= q_xmin and item[0] <= q_xmax and item[1] >= q_ymin and item[1] <= q_ymax:
                 returning_list.append(item)
         return returning_list
+
 
 
     #Return most top nodes as well
@@ -297,59 +304,78 @@ class DAGTree:
         # return result
 
 
-    #Graph Tree Function
-    def graph_tree(self,plot_boxes=None, middle=True):
-        boxes = pd.DataFrame(self.itterate_through(),index=None,columns=['Axis','BBOX','Split Val','Depth','Points','Middle'])     #[self.axis,self.bbox,self.split_value[self.axis],self.depth,self.points,self.middle_child]
-        middle_nodes = boxes.loc[boxes['Middle'] == True]
-        leaf_points = pd.DataFrame(self.get_leaf_linear(),index=None,columns=['Axis','BBOX','Depth','Points'])['Points']           #[self.axis,self.bbox,self.depth,self.points]
-        nodes = boxes.loc[boxes['Middle'] == False]
-        
-        print(f"Num of Nodes Made: {len(boxes)}")
-        print("Graphing...")
 
-        # leaf_points have the points, nodes have the normal bboxes, middle_nodes have the middle nodes
-        points = leaf_points.dropna().values.tolist()
-        x,y = [], []
-        for item in points:
+    #Graph Tree Method
+    def graph_tree(self, ins_points=None, plot_boxes=None, middle=True, save=False, path=r"Pictures/Graph/", title=None, xtitle=None, ytitle=None):
+        if ins_points == None:
+            return print("Need points!")
+        print("Graphing...")
+        plt.figure(figsize=(15.8,8.8))  #about the full size of monitor
+    
+        #first need to get the points in x and y lists
+        print("\tGetting Points...")
+        x,y=[],[]
+        for item in ins_points:
             x.append(item[0])
             y.append(item[1])
-            
-        plt.scatter(x, y, c='grey', marker='o')
- 
+        plt.scatter(x=x,y=y,c='grey',marker='o')
+        #getting and setting mins and maxs
+        xmin, xmax = min(x), max(x)
+        ymin, ymax = min(y), max(y)
+        plt.xlim(left=xmin,right=xmax)
+        plt.ylim(bottom=ymin,top=ymax)
+
+        #now need to plot the first bbox
         plt.vlines(x=self.bbox[2],ymin=self.bbox[1],ymax=self.bbox[3],color='black',linestyles=':')
         plt.vlines(x=self.bbox[0],ymin=self.bbox[1],ymax=self.bbox[3],color='black',linestyles=':')
         plt.hlines(y=self.bbox[3],xmin=self.bbox[0],xmax=self.bbox[2],color='black',linestyles=':')
         plt.hlines(y=self.bbox[1],xmin=self.bbox[0],xmax=self.bbox[2],color='black',linestyles=':')
 
-        if type(middle) == str or middle == True:
-            middle_bboxes = middle_nodes[['Axis','BBOX','Split Val']]
-            middle_bboxes = middle_bboxes.dropna().values.tolist()
-            for item in middle_bboxes:
-                if item[0] == 1:   #x axis
-                    plt.vlines(x=item[1][0],ymin=item[1][1],ymax=item[1][3],color='purple',linestyles='-.', alpha=0.2)
-                    plt.vlines(x=item[1][2],ymin=item[1][1],ymax=item[1][3],color='purple',linestyles='-.', alpha=0.2)
-                else:
-                    plt.hlines(y=item[1][1],xmin=item[1][0],xmax=item[1][2],color='purple',linestyles='-.', alpha=0.2)
-                    plt.hlines(y=item[1][3],xmin=item[1][0],xmax=item[1][2],color='purple',linestyles='-.', alpha=0.2)
+        print("\tGetting Data...")
+        #now need to get the bboxes of all nodes, and seperate the nodes that are middle children
+        boxes = pd.DataFrame(self.itterate_through(),index=None,columns=['Axis','BBOX','Split Val','Depth','Points','Middle Child'])        #will return: axis, bbox, split_value, depth, points, and middle_child. In that order
+        if middle == True:
+            middle_nodes = boxes.loc[boxes['Middle Child'] == True][['BBOX']].values.tolist()               #gets middle children
+        boxes = boxes.loc[boxes['Middle Child'] == False][['Axis','Split Val','BBOX']].values.tolist()      #gets not middle children
+        
+        print("\tPlotting Nodes...")
+        #now need to plot the nodes that are not middle children
+        # boxes = boxes[['Axis','Split Val','BBOX']].values.tolist()      #gets values from pd dataframe and stores them into a list as tuples
+        for item in boxes:
+            if item[0] == 0:        #x axis (blue)
+                plt.vlines(x=item[1],ymin=item[2][1],ymax=item[2][3],color='blue',linestyles=':')
+            else:                   #y axis (red)
+                plt.hlines(y=item[1],xmin=item[2][0],xmax=item[2][2],color='red',linestyles=':')
 
-        if type(middle) != str:
-            nodes = nodes[['Axis','BBOX','Split Val']].dropna().values.tolist()
-            for item in nodes:
-                if item[0] == 0:
-                    plt.vlines(x=item[2],ymin=item[1][1],ymax=item[1][3],color='blue',linestyles=':')
-                else:
-                    plt.hlines(y=item[2],xmin=item[1][0],xmax=item[1][2],color='red',linestyles=':')
+        print("\tPlotting Middle Nodes...")
+        #now need to plot middle children (pruple)
+        if middle == True:
+            # middle_nodes = middle_nodes[['BBOX']]
+            for item in middle_nodes:
+                #for x values
+                plt.vlines(item[0][0],ymin=item[0][1],ymax=item[0][3],color='purple',linestyles=':',alpha=0.2)
+                plt.vlines(item[0][2],ymin=item[0][1],ymax=item[0][3],color='purple',linestyles=':',alpha=0.2)
+                #for y values
+                plt.hlines(y=item[0][1],xmin=item[0][0],xmax=item[0][2],color='purple',linestyles=':',alpha=0.2)
+                plt.hlines(y=item[0][3],xmin=item[0][0],xmax=item[0][2],color='purple',linestyles=':',alpha=0.2)
 
-        if plot_boxes != None:
-            for item in plot_boxes:
-                plt.hlines(y=item[1], xmin=item[0], xmax=item[2], color='green')
-                plt.hlines(y=item[3], xmin=item[0], xmax=item[2], color='green')
+        #extras
+        if title != None:
+            plt.title(title)
 
-                plt.vlines(x=item[0], ymin=item[1], ymax=item[3], color='green')
-                plt.vlines(x=item[2], ymin=item[1], ymax=item[3], color='green')
-
+        if xtitle != None:
+            plt.xlabel(xtitle)
+        if ytitle != None:
+            plt.ylabel(ytitle)
+        
+        #plot the graph
         plt.tight_layout()
-        return plt.show()
+        if save==True:
+            plt.savefig(path)
+        else:
+            plt.show()
+        return print("Finished Graphing")
+
 
 
     #Get Leaf Method - Just returns a list of leaf nodes (being the points)
@@ -361,6 +387,7 @@ class DAGTree:
         if self.right != None:
             self.right.get_leaf_linear(boxes)
         return boxes
+
 
 
     #Itteratting Through Function
@@ -385,6 +412,7 @@ class DAGTree:
             self.middle.itterate_through(boxes,leaf=leaf)
 
         return boxes
+
 
 
     #Print Tree Function
@@ -421,6 +449,7 @@ class DAGTree:
             temp.to_csv(file)
 
 
+
     #Connect Method - Checks if 2 nodes can be connected
     def connect(self, pTmp=None):
         if self.parent != [] and self.parent[0] != None and self != []:
@@ -454,10 +483,12 @@ class DAGTree:
                 # with open("temp.txt",'a') as file:
                 #     file.write("Connect\n")
                 #     file.close()
-                        
+
 
 
                 
+
+
 
 ###### General Use Methods ######
 def make_points(num=1, sprout=None, aRang=0, bRang=100, sort=False):
@@ -1014,7 +1045,58 @@ def stat_graph(path=None,title=""):
     print("Completed Statistics Graphing\n")
 
 
-def lvl_diff_graph(DAGpath=None, KDpath=None):
+# def lvl_diff_graph(DAGpath=None, KDpath=None):
+#     if DAGpath == None or KDpath == None:
+#         return print("Need path for DAG and KD!")
+#     #makes sure that there is a slash at the end of the paths
+#     if DAGpath[len(DAGpath)-1] != '/':
+#         DAGpath = DAGpath + "/"
+#     if KDpath[len(KDpath)-1] != '/':
+#         KDpath = KDpath + "/"
+
+#     #gets the _Reports csv files paths, these will be read then processed for graphing
+#     DAGitems = []
+#     for item in os.listdir(DAGpath+"_Report/"):
+#         if item.__contains__('.csv'):
+#             DAGitems.append(item)
+#     KDitems = []
+#     for item in os.listdir(KDpath+"_Report/"):
+#         if item.__contains__('.csv'):
+#             KDitems.append(item)
+#     #these will always store the files: large - medium - small
+
+#     #need to get the number of items that show up
+#     for i in range(len(DAGitems)):
+#         DAG_df = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth']
+#         KD_df = pd.read_csv(KDpath+"_Report/"+KDitems[i])['SRC Depth']
+
+#         DAG_df = DAG_df.value_counts().sort_index()
+#         KD_df = KD_df.value_counts().sort_index()
+
+#         diff_df = DAG_df - KD_df
+#         x_cord = diff_df.index[:].tolist()
+#         value_list = diff_df.values[:]
+#         #got the values and x_cordinates ^^^
+
+#         os.makedirs(DAGpath+"_Graphs/Diff/",exist_ok=True)
+#         os.makedirs(KDpath+"_Graphs/Diff/",exist_ok=True)
+#         #gotta make sure the fodlers are actually made
+
+#         #making graph
+#         plt.figure(figsize=(8,8))
+#         plt.bar(x_cord,value_list,width=0.6)
+        
+#         plt.title(f"{DAGpath}{str(DAGitems[i]).replace('.csv','')}")
+#         plt.tight_layout()
+#         # plt.legend()
+#         plt.xlim(right=x_cord[len(x_cord)-1])
+        
+        
+#         plt.savefig(f'{DAGpath}_Graphs/Diff/{str(DAGitems[i]).replace('.csv','')}_diff.png')
+#         plt.savefig(f'{KDpath}_Graphs/Diff/{str(KDitems[i]).replace('.csv','')}_diff.png')
+
+
+def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
     if DAGpath == None or KDpath == None:
         return print("Need path for DAG and KD!")
     #makes sure that there is a slash at the end of the paths
@@ -1022,48 +1104,49 @@ def lvl_diff_graph(DAGpath=None, KDpath=None):
         DAGpath = DAGpath + "/"
     if KDpath[len(KDpath)-1] != '/':
         KDpath = KDpath + "/"
-
+    
     #gets the _Reports csv files paths, these will be read then processed for graphing
     DAGitems = []
     for item in os.listdir(DAGpath+"_Report/"):
         if item.__contains__('.csv'):
             DAGitems.append(item)
-    KDitems = []
-    for item in os.listdir(KDpath+"_Report/"):
-        if item.__contains__('.csv'):
-            KDitems.append(item)
     #these will always store the files: large - medium - small
 
-    #need to get the number of items that show up
+    #need to itterate through all csv files in _Report/ folder
     for i in range(len(DAGitems)):
-        DAG_df = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth']
-        KD_df = pd.read_csv(KDpath+"_Report/"+KDitems[i])['SRC Depth']
-
-        DAG_df = DAG_df.value_counts().sort_index()
-        KD_df = KD_df.value_counts().sort_index()
-
-        diff_df = DAG_df - KD_df
-        x_cord = diff_df.index[:].tolist()
-        value_list = diff_df.values[:]
-        #got the values and x_cordinates ^^^
-
-        os.makedirs(DAGpath+"_Graphs/Diff/",exist_ok=True)
-        os.makedirs(KDpath+"_Graphs/Diff/",exist_ok=True)
-        #gotta make sure the fodlers are actually made
-
-        #making graph
-        plt.figure(figsize=(8,8))
-        plt.bar(x_cord,value_list,width=0.6)
+        DAG_list,KD_list=None,None
+        DAG_list = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth'].values.tolist()
+        KD_list = pd.read_csv(KDpath+"_Report/"+DAGitems[i])['SRC Depth'].values.tolist()
+        #DAG_list and KD_list have the depths of returned nodes through SRC search
         
-        plt.title(f"{DAGpath}{str(DAGitems[i]).replace('.csv','')}")
+        #now finding the difference: DAG - SRC          DAG will always be bigger, so if a negative value occurs something is terribly wrong
+        diff_list=[]
+        for j in range(len(DAG_list)):
+            diff_list.append(DAG_list[j]-KD_list[j])
+        #its easier to manipulate data into a dataframe
+        diff_list = pd.DataFrame(diff_list)
+        diff_list = diff_list.value_counts().sort_index()
+        diff_ind = diff_list.index.tolist()
+        #this gets the indecies of the diff_list
+        for j in range(len(diff_ind)):
+            diff_ind[j] = int(str(diff_ind[j]).replace('(','').replace(')','').replace(',',''))
+
+        plt.bar(x=diff_ind,height=diff_list)
+        plt.xticks(diff_ind)
+        if title != None:
+            plt.title(title)
+        plt.xlabel("Diff Size")
         plt.tight_layout()
-        # plt.legend()
-        plt.xlim(right=x_cord[len(x_cord)-1])
-        
-        
-        plt.savefig(f'{DAGpath}_Graphs/Diff/{str(DAGitems[i]).replace('.csv','')}_diff.png')
-        plt.savefig(f'{KDpath}_Graphs/Diff/{str(KDitems[i]).replace('.csv','')}_diff.png')
-       
+        os.makedirs(DAGpath+"_Graphs/Diff",exist_ok=True)
+        os.makedirs(KDpath+"_Graphs/Diff",exist_ok=True)
+        plt.savefig(DAGpath+"_Graphs/Diff/"+str(DAGitems[i]).replace('.csv','.png'))
+        plt.savefig(KDpath+"_Graphs/Diff/"+str(DAGitems[i]).replace('.csv','.png'))
+        if show == True:
+            plt.show()
+        else:
+            plt.close('all')
+
+    
 
     
 
@@ -1216,9 +1299,9 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
 
 
 ### TEST THIS ###
-DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
-KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
-lvl_diff_graph(DAGpath=DAGpath, KDpath=KDpath)
+# DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
+# KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
+# lvl_diff(DAGpath=DAGpath, KDpath=KDpath)
 
 
 # ### Spatial Database NO Duplication ###
@@ -1227,12 +1310,13 @@ lvl_diff_graph(DAGpath=DAGpath, KDpath=KDpath)
 # #___________________________________________________________________________#
 
 
-
-
-# path = r"Saved Query/3DAG SRC vs BRC/Spatial/"
 # print(f"This is the length of points being inputed into the tree: {len(points)}")
 # temp = DAGTree(points, cuttoff=4)
 # print("Done with making tree.")
+
+DAGpath = r'Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/'
+KDpath = r'Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/'
+lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title="Spatial 1 - 100,000",show=False)
 
 # # SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/".format(i+2)
 # SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,path=path,show=False,duplicates=False)
