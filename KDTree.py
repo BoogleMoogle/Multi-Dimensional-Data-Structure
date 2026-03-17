@@ -27,13 +27,14 @@ class KDTree:
         self.depth=depth
         self.axis=axis
         self.split_value=split_value
+        self.cuttoff = cuttoff
 
         if len(bbox) == 0:      #only need to find bbox for first time
             self.bbox = self.find_bbox(bbox)
         else:
             self.bbox = bbox
 
-        if self.data_size > cuttoff:
+        if self.data_size > self.cuttoff:
             self.split()
 
 
@@ -74,12 +75,13 @@ class KDTree:
 
         # print(len(inspect.stack()))
         
-        self.split_value = self.points[len(self.points)//2]
+        
 
         if self.axis == 0:
             self.points.sort()
         else:
             self.points.sort(key=lambda x: x[1])
+        self.split_value = self.points[len(self.points)//2]
 
         #Hard Splitting Method          (not ideal, but easier)
         # right = self.points[(len(self.points)//2):]
@@ -104,18 +106,19 @@ class KDTree:
         if self.parent != None and self.parent.data_size == self.data_size:     #this checks if the parent's data size is the same as this nodes, if so then we need to stop. All poitns were inherited to either the left or right child (probably right)
             pass
         else:
+            self.points = None
             if self.parent != None:
                 self.parent.points=None
             if self.axis == 0:
-                self.left = KDTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]], parent=self)
-                self.right = KDTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=self)
+                self.left = KDTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]], parent=self, cuttoff=self.cuttoff)
+                self.right = KDTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=self, cuttoff=self.cuttoff)
             else:
-                self.left = KDTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]], parent=self)
-                self.right = KDTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.split_value[self.axis], self.bbox[2], self.bbox[3]], parent=self)
+                self.left = KDTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]], parent=self, cuttoff=self.cuttoff)
+                self.right = KDTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.split_value[self.axis], self.bbox[2], self.bbox[3]], parent=self, cuttoff=self.cuttoff)
 
 
     #Single Range Cover Search Method
-    def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, graph=False):
+    def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, graph=False, best=None):
         if q_xmin > q_xmax:
             temp = q_xmax
             q_xmax = q_xmin
@@ -125,22 +128,99 @@ class KDTree:
             q_ymax = q_ymin
             q_ymin = temp
             
-        if self.split_value == None:
-            return self
+        # if best == None:
+        #     best = self
+
         if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
-            if self.axis == 1:
-                if self.left != None and self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-                elif self.right != None and self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-            else:
-                if self.left != None and self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-                elif self.right != None and self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+            if best == None or best.depth < self.depth:
+                best = self
+            if self.left != None:
+                if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
+                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if self.right != None:
+                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
         else:
-            return self
-        return self
+            if self.left != None:
+                if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
+                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if self.right != None:
+                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        return best
+
+
+
+
+
+
+
+
+
+
+
+
+        # # if self.split_value == None:
+        # #     return self
+        # if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
+        #     if best == None or best.depth < self.depth:
+        #         best = self
+        #     if self.axis == 1:
+        #         if self.left != None and self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
+        #             return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #         if self.right != None and self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+        #             return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #     else:
+        #         if self.left != None:
+        #             if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
+        #                 return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #         if self.right != None:
+        #             if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+        #                 return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #     return best
+        
+        # else:
+        #     if self.left != None:
+        #         if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
+        #             return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #     if self.right != None:
+        #         if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+        #             return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        # return best
+
+
+
+
+    # def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
+    #     if q_xmin > q_xmax:
+    #         temp = q_xmax
+    #         q_xmax = q_xmin
+    #         q_xmin = temp
+    #     if q_ymin > q_ymax:
+    #         temp = q_ymax
+    #         q_ymax = q_ymin
+    #         q_ymin = temp
+
+    #     # if self.split_value == None:
+    #     #     return self
+    #     if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
+    #         # if self.axis == 1:
+    #         if self.left != None:
+    #             if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
+    #                 return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+    #         if self.right != None:
+    #             if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+    #                 return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+
+                
+    #     else:
+    #         if self.left != None:
+    #             if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
+    #                 return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+    #         if self.right != None:
+    #             if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+    #                 return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+    #     return self
 
 
     #BRC Searching Method
@@ -322,15 +402,15 @@ def make_points(num=1, sprout=None, aRang=0, bRang=100):
     return temp
     
 
-def save_query(tree, xmin=None,ymin=None,xmax=None,ymax=None, num=1, sprout=None, path=None, small=False, medium=False, large=False, save=True, show=False, SRC=False, BRC=False, query_list=None):
+def save_query(tree, xmin=None, ymin=None, xmax=None, ymax=None, query_list=None, num=1, sprout=None, path=None, small=False, medium=False, large=False, save=True, show=False, SRC=False, BRC=False):
     """
-    This intakes a KDTree, runs it through a SRC method with randomly made bbox values, then saves a csv file to path. If path is not given it will create a .csv file in Saved Query, if no folder exists then it will create it.
+    This intakes a Tree, runs it through a searching method with randomly made bbox values, then saves a csv file to path. If path is not given it will create a .csv file in Saved Query, if no folder exists then it will create it. Currently works for SRC and BRC method, if neither SRC or BRC are stated as true when this method is called it will default to SRC.
     
-    :param tree: The KD Tree
-    :param xmin: x minimum of SRC search
-    :param ymin: y minimum of SRC search
-    :param xmax: x maximum of SRC search
-    :param ymax: y maximum of SRC search
+    :param tree: The 3DAG Tree
+    :param xmin: x minimum of search
+    :param ymin: y minimum of search
+    :param xmax: x maximum of search
+    :param ymax: y maximum of search
     :param num: The amount of queries repeated
     :param sprout: Seed for random xmin, ymin, xmax, and y max
     :param path: Optional, need r before path string
@@ -338,6 +418,9 @@ def save_query(tree, xmin=None,ymin=None,xmax=None,ymax=None, num=1, sprout=None
     :param medium: Generates random xmin and y min, then xmax and ymax are 20 points either above or below it (sorted later)
     :param large: Generates random xmin and y min, then xmax and ymax are 40 points either above or below it (sorted later)
     :param save: If False, will not save to file
+    :param show: Calls graphing method for the boundry box either given or generated
+    :param SRC: If True, will call SRC method for search
+    :param BRC: If True, will call BRC method for search
     """
     if sprout != None:
         random.seed(sprout)
@@ -552,15 +635,10 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,d
         path = path+"/"
 
     #Making/checking path folder for the duplicates folder
-    if duplicates == True:
-        duplicates = 'With Duplicates/'
-    else:
-        duplicates = 'Without Duplicates/'
-    os.makedirs(path+duplicates,exist_ok=True)                          #makes duplicate folder
-    os.makedirs(path+duplicates+f"{sprout} - {num:,}",exist_ok=True)    #makes the specific query folder
+    os.makedirs(path,exist_ok=True)                          #makes duplicate folder
 
-    BRC_path = path+duplicates+f"{sprout} - {num:,}/BRC.csv"
-    SRC_path = path+duplicates+f"{sprout} - {num:,}/SRC.csv"
+    BRC_path = path+"/BRC.csv"
+    SRC_path = path+"/SRC.csv"
 
 
     #Setting Coeffs
@@ -854,7 +932,6 @@ def stat_graph(path=None,title=""):
     print("Completed Statistics Graphing\n")
 
 
-
 def L2norm(path=None, show=False):
     if path == None:
         return print("Need query folder path!")
@@ -886,14 +963,12 @@ def L2norm(path=None, show=False):
             #need to make columns of the first 100 points, then again for the first and next 100 (200 total), then containue
     
             #this is going through the randomly sampled data (SRC Depth) and going through it for every 100 points
-            for i in range(int(len(randomized_sample)/100)):
+            for i in range(int(randomized_sample.shape[0]/100)):
                 temp = randomized_sample.head(100*(i+1))
                 temp_value_list = []
-                j=0
-                for item in range(randomized_sample.max()+1):   #this gets the depths of the nodes
-                    temp_value_list.append(temp.value_counts().get(j, 0))
-                    j+=1
 
+                for j in range(randomized_sample.max()+1):   #this gets the depths of the nodes
+                    temp_value_list.append(temp.value_counts().get(j, 0))
 
                 #temp_value_list has the # of returned nodes of this random sample, want %
                 for j in range(len(temp_value_list)):
@@ -935,27 +1010,65 @@ def L2norm(path=None, show=False):
 # import sys
 # sys.setrecursionlimit(2090000000) #originally is 1000
 
+
+### TEST THIS ###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### TEMPLATE TO DO EVERYTHING ###
+
 ### Spatial Database NO Duplication ###
 path = r"Saved Datasets/Spatial.xlsx"
 points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
 #___________________________________________________________________________#
 
 
-
 print(f"This is the length of points being inputed into the tree: {len(points)}")
-temp = KDTree(points)
+temp = KDTree(points, cuttoff=4)
 print("Done with making tree.")
 
-for i in range(2):      #starts at 0
-    path = r"Saved Query/KD SRC vs BRC/Spatial/"
-    SRC_vs_BRC(tree=temp,num=100000,sprout=i+2,one_file=False,path=path,show=False,duplicates=False)
-    path = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(i+2)
-    statistics(path,graph=True)
-    stat_graph(path)
-    L2norm(path)
-    print(f"\n\n{i} Batch Done\n"+"_"*50+"\n\n")
+num = 100000
+sprout = 1
+dataset ="Spatial"
+dup = False
 
-print("Finished With KD Tree!")
+if dup == False:
+    dup = "Without Duplicates/"
+else:
+    dup = "With Duplicates/"
+
+for i in range(1):
+    os.makedirs(r"Saved Query/KD SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
+    path = r"Saved Query/KD SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
+    SRC_vs_BRC(tree=temp,path=path,num=num,sprout=sprout+i,show=False,one_file=False,duplicates=False)
+    try:
+        statistics(path,graph=True)
+    except Exception:
+        print("Error with statistics!!!")
+        continue
+    L2norm(path)
+print("KDTree done!!\n"+"_"*50)
+
+###############################################################################
+
+
+
+
+
 
 
 

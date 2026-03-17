@@ -1,21 +1,10 @@
-# from copyreg import add_extension
-# from textwrap import indent
-# from typing import Self
-
-from types import NoneType
-
-from matplotlib import lines
-from matplotlib.figure import figaspect
-from matplotlib.lines import lineStyles
+# from matplotlib.figure import figaspect
+# from matplotlib.lines import lineStyles
 import matplotlib.pyplot as plt
 import random
 # from narwhals import col
-from narwhals import col
-from networkx import dag_longest_path
 import pandas as pd
 import os
-from math import ceil
-import matplotlib.style as mplstyle
 import numpy as np
 
 #to see stack
@@ -60,9 +49,8 @@ class DAGTree:
             self.bbox = bbox
 
         if self.parent == []:
-            self.root = True
-            # self.split_value = self.points[len(self.points)//2][0]
             self.split()
+            
 
 
 
@@ -98,81 +86,60 @@ class DAGTree:
 
     #Split Method
     def split(self):
-        if self.points != None:
-            # print("Split!!!")
-            # print(len(inspect.stack()))
-            # with open(r"temp.txt", 'a') as file:
-            #     file.write(f"{len(inspect.stack())}\n")
-            #     file.close()
+        # print(len(inspect.stack()))   #This is to see how many stack frames are open every time split is called
 
-            #Points need to be sorted before being put in the left or right or middle child
-            if self.axis == 0:
-                self.points.sort()
-            else:
-                self.points.sort(key=lambda x: x[1])
-            
-            self.split_value = self.points[len(self.points)//2]
-
-            # print(self.points)
-
-            # self.connect()
-            #Hard Splitting Method
-            # right = self.points[(len(self.points)//2):]
-            # left=self.points[:(len(self.points)//2)]
-            
-            #Soft Splitting Method          (ideal, but need more error checking)
-            right, left = [], []
-            for item in self.points:
-                if item[self.axis] >= self.split_value[self.axis]:          #items with bigger value (right/up)
-                    if item[self.axis] == self.split_value[self.axis]:              #need to check y values still
-                        if item[(self.axis + 1) % 2] >= self.split_value[(self.axis + 1) % 2]:
-                            right.append(item)
-                        else:
-                            left.append(item)
-                    else:
+        #Points need to be sorted before being put in the left or right or middle child
+        if self.axis == 0:
+            self.points.sort()
+        else:
+            self.points.sort(key=lambda x: x[1])
+        
+        self.split_value = self.points[len(self.points)//2]
+        
+        #Soft Splitting Method          (ideal, but need more error checking)
+        right, left = [], []
+        for item in self.points:
+            if item[self.axis] >= self.split_value[self.axis]:          #items with bigger value (right/up)
+                if item[self.axis] == self.split_value[self.axis]:              #need to check y values still
+                    if item[(self.axis + 1) % 2] >= self.split_value[(self.axis + 1) % 2]:
                         right.append(item)
-                else:                                                   #items with lesser value (left/down)
-                    left.append(item)
-
-            #for middle child
-            middle = []
-            # for i in range(ceil(len(left)/2)):   #rounded up left median posistion
-                # middle.append(left[((len(left)//2))+i])       #hard splitting >:(
-            
-            # for i in range(ceil(len(right)//2)):
-            #     middle.append(right[i])                       #hard splitting >:(
-
-            for item in left:
-                if item[self.axis] >= left[len(left)//2][self.axis]:                #checks on primary value
-                    if item[self.axis] == left[len(left)//2][self.axis]:            #need to check secondary values still
-                        if item[(self.axis + 1) % 2] >= left[len(left)//2][(self.axis + 1) % 2]:
-                            middle.append(item)
                     else:
-                        middle.append(item)
-            
-        
-            for item in right:
-                if item[self.axis] <= right[(len(right)//2)-1][self.axis]:
-                    if item[self.axis] == right[(len(right)//2)-1][self.axis]:              #need to check secondary values still
-                        if item[(self.axis + 1) % 2] <= right[(len(right)//2)-1][(self.axis + 1) % 2]:
-                            middle.append(item)
-                    else:
-                        middle.append(item)
+                        left.append(item)
+                else:
+                    right.append(item)
+            else:                                                   #items with lesser value (left/down)
+                left.append(item)
 
-            # print(left)
-            # print(right)
-            # print(middle)
-            # print("_"*50)
+        #for middle child
+        middle = []
+        for item in left:
+            if item[self.axis] >= left[len(left)//2][self.axis]:                #checks on primary value
+                if item[self.axis] == left[len(left)//2][self.axis]:            #need to check secondary values still
+                    if item[(self.axis + 1) % 2] >= left[len(left)//2][(self.axis + 1) % 2]:
+                        middle.append(item)
+                else:
+                    middle.append(item)
         
-            if self.parent != [] and self.parent[0].data_size == self.data_size:
-                # print(f"{self.parent[0].data_size}\t{self.data_size}")
-                    return
+    
+        for item in right:
+            if item[self.axis] <= right[(len(right)//2)-1][self.axis]:
+                if item[self.axis] == right[(len(right)//2)-1][self.axis]:              #need to check secondary values still
+                    if item[(self.axis + 1) % 2] <= right[(len(right)//2)-1][(self.axis + 1) % 2]:
+                        middle.append(item)
+                else:
+                    middle.append(item)
+    
+        if self.parent != [] and self.parent[0].data_size == self.data_size:
+            # print(f"{self.parent[0].data_size}\t{self.data_size}")
+                pass
+        else:
             self.points = None
             if self.axis == 0:  #this is on the x axis
                 # print(f"left, {self.axis}, {self.depth}")
                 self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
                 # print(f"right, {self.axis}, {self.depth}")
                 self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                
                 if middle != []:
                     # print(f"middle, {self.axis}, {self.depth}")
                     self.middle = DAGTree(middle, depth=self.depth+1, axis=1, bbox=[middle[0][0],self.bbox[1],middle[len(middle)-1][0],self.bbox[3]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
@@ -181,16 +148,19 @@ class DAGTree:
                 self.left = DAGTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
                 # print(f"right, {self.axis}, {self.depth}")
                 self.right = DAGTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.split_value[self.axis], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                
                 if middle != []:
                     # print(f"middle, {self.axis}, {self.depth}")
                     self.middle = DAGTree(middle, depth=self.depth+1, axis=0, bbox=[self.bbox[0],middle[0][1],self.bbox[2],middle[len(middle)-1][1]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
             
             if self.middle_child == True:
+                self.connect()
                 self.left.connect()
                 self.right.connect()
-                if self.middle != None:
-                    self.middle.connect()
-            #the recursive call
+                self.middle.connect()
+
+
+            # #the recursive call
             if self.left.data_size > self.cuttoff:
                 self.left.split()
             if self.right.data_size > self.cuttoff:
@@ -201,7 +171,7 @@ class DAGTree:
 
 
     #Single Range Cover Search Method
-    def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
+    def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
         if q_xmin > q_xmax:
             temp = q_xmax
             q_xmax = q_xmin
@@ -211,33 +181,34 @@ class DAGTree:
             q_ymax = q_ymin
             q_ymin = temp
 
-        # if self.split_value == None:
-        #     return self
+        #if/when we are in the range
         if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
-            # if self.axis == 1:
+            if best == None or best.depth < self.depth:
+                best = self
             if self.left != None:
                 if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if self.right != None:
                 if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if self.middle != None:
                 if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
-                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-            # else:
-            #     return None
-                
+                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            # return best
+            
+        #if we don't start in range
         else:
+            if self.left != None:
+                if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
+                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if self.right != None:
+                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if self.middle != None:
                 if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:
-                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-            elif self.left != None:
-                if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-            elif self.right != None:
-                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-        return self
+                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        return best
+
 
 
 
@@ -451,7 +422,7 @@ class DAGTree:
 
 
     #Connect Method - Checks if 2 nodes can be connected
-    def connect(self, pTmp=None):
+    def connect(self):
         if self.parent != [] and self.parent[0] != None and self != []:
             pTmp = self
             while pTmp.parent != []:            
@@ -460,7 +431,7 @@ class DAGTree:
             points = self.points
             split_val = self.split_value
             important_node = pTmp.SRC(self.bbox[0], self.bbox[1], self.bbox[2], self.bbox[3])
-            if important_node != None and important_node.bbox == self.bbox and important_node.data_size == self.data_size:
+            if important_node != None and important_node.bbox == self.bbox and important_node.data_size == self.data_size and important_node.depth == self.depth:
                 # print(f"SRC Node: {important_node.bbox}\tSelf: {self.bbox}")
                 if important_node.parent[0].left == important_node:
                     important_node.parent[0].left = self
@@ -476,6 +447,7 @@ class DAGTree:
                 important_node = None
                 self.points = points
                 self.split_value = split_val
+        return
                 # self.split()
                 # print("Connect!")
                 
@@ -695,17 +667,10 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,d
     if path[len(path)-1] != "/":
         path = path+"/"
 
-    #Making/checking path folder for the duplicates folder
-    if duplicates == True:
-        duplicates = 'With Duplicates/'
-    else:
-        duplicates = 'Without Duplicates/'
-    os.makedirs(path+duplicates,exist_ok=True)                          #makes duplicate folder
-    os.makedirs(path+duplicates+f"{sprout} - {num:,}",exist_ok=True)    #makes the specific query folder
+    # os.makedirs(path,exist_ok=True)                          #makes duplicate folder
 
-    BRC_path = path+duplicates+f"{sprout} - {num:,}/BRC.csv"
-    SRC_path = path+duplicates+f"{sprout} - {num:,}/SRC.csv"
-
+    BRC_path = path+"BRC.csv"
+    SRC_path = path+"SRC.csv"
 
     #Setting Coeffs
     small_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.04
@@ -1045,60 +1010,10 @@ def stat_graph(path=None,title=""):
     print("Completed Statistics Graphing\n")
 
 
-# def lvl_diff_graph(DAGpath=None, KDpath=None):
-#     if DAGpath == None or KDpath == None:
-#         return print("Need path for DAG and KD!")
-#     #makes sure that there is a slash at the end of the paths
-#     if DAGpath[len(DAGpath)-1] != '/':
-#         DAGpath = DAGpath + "/"
-#     if KDpath[len(KDpath)-1] != '/':
-#         KDpath = KDpath + "/"
-
-#     #gets the _Reports csv files paths, these will be read then processed for graphing
-#     DAGitems = []
-#     for item in os.listdir(DAGpath+"_Report/"):
-#         if item.__contains__('.csv'):
-#             DAGitems.append(item)
-#     KDitems = []
-#     for item in os.listdir(KDpath+"_Report/"):
-#         if item.__contains__('.csv'):
-#             KDitems.append(item)
-#     #these will always store the files: large - medium - small
-
-#     #need to get the number of items that show up
-#     for i in range(len(DAGitems)):
-#         DAG_df = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth']
-#         KD_df = pd.read_csv(KDpath+"_Report/"+KDitems[i])['SRC Depth']
-
-#         DAG_df = DAG_df.value_counts().sort_index()
-#         KD_df = KD_df.value_counts().sort_index()
-
-#         diff_df = DAG_df - KD_df
-#         x_cord = diff_df.index[:].tolist()
-#         value_list = diff_df.values[:]
-#         #got the values and x_cordinates ^^^
-
-#         os.makedirs(DAGpath+"_Graphs/Diff/",exist_ok=True)
-#         os.makedirs(KDpath+"_Graphs/Diff/",exist_ok=True)
-#         #gotta make sure the fodlers are actually made
-
-#         #making graph
-#         plt.figure(figsize=(8,8))
-#         plt.bar(x_cord,value_list,width=0.6)
-        
-#         plt.title(f"{DAGpath}{str(DAGitems[i]).replace('.csv','')}")
-#         plt.tight_layout()
-#         # plt.legend()
-#         plt.xlim(right=x_cord[len(x_cord)-1])
-        
-        
-#         plt.savefig(f'{DAGpath}_Graphs/Diff/{str(DAGitems[i]).replace('.csv','')}_diff.png')
-#         plt.savefig(f'{KDpath}_Graphs/Diff/{str(KDitems[i]).replace('.csv','')}_diff.png')
-
-
 def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
     if DAGpath == None or KDpath == None:
         return print("Need path for DAG and KD!")
+    print("Starting Level Diff...")
     #makes sure that there is a slash at the end of the paths
     if DAGpath[len(DAGpath)-1] != '/':
         DAGpath = DAGpath + "/"
@@ -1115,22 +1030,19 @@ def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
     #need to itterate through all csv files in _Report/ folder
     for i in range(len(DAGitems)):
         DAG_list,KD_list=None,None
-        DAG_list = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth'].values.tolist()
-        KD_list = pd.read_csv(KDpath+"_Report/"+DAGitems[i])['SRC Depth'].values.tolist()
+        DAG_list = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth']
+        KD_list = pd.read_csv(KDpath+"_Report/"+DAGitems[i])['SRC Depth']
         #DAG_list and KD_list have the depths of returned nodes through SRC search
-        
         #now finding the difference: DAG - SRC          DAG will always be bigger, so if a negative value occurs something is terribly wrong
-        diff_list=[]
-        for j in range(len(DAG_list)):
-            diff_list.append(DAG_list[j]-KD_list[j])
-        #its easier to manipulate data into a dataframe
-        diff_list = pd.DataFrame(diff_list)
-        diff_list = diff_list.value_counts().sort_index()
-        diff_ind = diff_list.index.tolist()
+
+        diff_list = DAG_list - KD_list
+        diff_list = diff_list.value_counts().sort_index()   #gets the # of times a # shows up in this series and sorts the final result
+        diff_ind = diff_list.index.tolist()                 #gets index values from series
         #this gets the indecies of the diff_list
         for j in range(len(diff_ind)):
-            diff_ind[j] = int(str(diff_ind[j]).replace('(','').replace(')','').replace(',',''))
+            diff_ind[j] = int(str(diff_ind[j]).replace('(','').replace(')','').replace(',',''))     #because of weird formatting, need to do this
 
+        #plotting
         plt.bar(x=diff_ind,height=diff_list)
         plt.xticks(diff_ind)
         if title != None:
@@ -1140,15 +1052,12 @@ def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
         os.makedirs(DAGpath+"_Graphs/Diff",exist_ok=True)
         os.makedirs(KDpath+"_Graphs/Diff",exist_ok=True)
         plt.savefig(DAGpath+"_Graphs/Diff/"+str(DAGitems[i]).replace('.csv','.png'))
-        plt.savefig(KDpath+"_Graphs/Diff/"+str(DAGitems[i]).replace('.csv','.png'))
+        # plt.savefig(KDpath+"_Graphs/Diff/"+str(DAGitems[i]).replace('.csv','.png'))
         if show == True:
             plt.show()
         else:
             plt.close('all')
-
-    
-
-    
+    print("Finished Level Diff")
 
 
 def L2norm(path=None, show=False):
@@ -1157,8 +1066,8 @@ def L2norm(path=None, show=False):
     #need to get data of SRC Depths and subtract it from the/a total distribution.
     print("Starting L2 Norm...")
 
-    if path[len(path)-1] != "/":    #makes path accessable
-                path = path+"/"
+    # if path[len(path)-1] != "/":    #makes path accessable
+    #             path = path+"/"
     os.makedirs(f"{path}_L2 Norm", exist_ok=True)    #makes L2 Norm folder
     files = os.listdir(path)
     for csv_file in files:
@@ -1167,9 +1076,9 @@ def L2norm(path=None, show=False):
 
             i=0     #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
             value_list = []
-            for item in range(data['Depth'].max()+1):
+            for i in range(data['Depth'].max()+1):
                 value_list.append(data['Depth'].value_counts().get(i, 0))
-                i+=1
+                # i+=1
             for j in range(len(value_list)):
                 value_list[j] = value_list[j]/len(data['Depth'])
             #value list has the original data from SRC file
@@ -1182,13 +1091,12 @@ def L2norm(path=None, show=False):
             #need to make columns of the first 100 points, then again for the first and next 100 (200 total), then containue
     
             #this is going through the randomly sampled data (SRC Depth) and going through it for every 100 points
-            for i in range(int(len(randomized_sample)/100)):
+            for i in range(int(randomized_sample.shape[0]/100)):
                 temp = randomized_sample.head(100*(i+1))
                 temp_value_list = []
                 j=0
-                for item in range(randomized_sample.max()+1):   #this gets the depths of the nodes
+                for j in range(randomized_sample.max()+1):   #this gets the depths of the nodes
                     temp_value_list.append(temp.value_counts().get(j, 0))
-                    j+=1
 
 
                 #temp_value_list has the # of returned nodes of this random sample, want %
@@ -1222,6 +1130,8 @@ def L2norm(path=None, show=False):
             plt.savefig(path+f"_L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
             if show == True:
                 plt.show()
+            else:
+                plt.close('all')
     print("Finished L2 Norm\n")
 
              
@@ -1299,46 +1209,90 @@ def L2norm_diff(DAGpath=None, KDpath=None, graph=False):
 
 
 ### TEST THIS ###
-# DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
-# KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000"
-# lvl_diff(DAGpath=DAGpath, KDpath=KDpath)
-
-
 # ### Spatial Database NO Duplication ###
 # path = r"Saved Datasets/Spatial.xlsx"
 # points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
 # #___________________________________________________________________________#
 
 
-# print(f"This is the length of points being inputed into the tree: {len(points)}")
-# temp = DAGTree(points, cuttoff=4)
-# print("Done with making tree.")
-
-DAGpath = r'Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/'
-KDpath = r'Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/'
-lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title="Spatial 1 - 100,000",show=False)
-
-# # SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/".format(i+2)
-# SRC_vs_BRC(tree=temp,num=100000,sprout=3,one_file=False,path=path,show=False,duplicates=False)
-# path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(3)
-# statistics(path,graph=True)
-# stat_graph(path)
-# L2norm(path)
-# print(f"\n\n3 Batch Done\n"+"_"*50+"\n\n")
 
 
 
 
 
-# input("Press enter whenever ready to continue")
 
-# DAGpath = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(3)
-# KDpath = r"Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/{} - 100,000/".format(3)
-# lvl_diff_graph(DAGpath=DAGpath,KDpath=KDpath)
-# L2norm_diff(DAGpath=DAGpath,KDpath=KDpath)
-# print(f"\n\n3 Batch Done For Diffs\n"+"_"*50+"\n\n")
 
-# print("Finished With 3DAG Tree!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### TEMPLATE TO DO EVERYTHING ###
+
+### Spatial Database NO Duplication ###
+path = r"Saved Datasets/Spatial.xlsx"
+points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+#___________________________________________________________________________#
+
+
+print(f"This is the length of points being inputed into the tree: {len(points)}")
+temp = DAGTree(points, cuttoff=4)
+print("Done with making tree.")
+
+num = 100000
+sprout = 1
+dataset ="Spatial"
+os.makedirs(f"Saved Query/{dataset}/", exist_ok=True)
+dup = False
+
+if dup == False:
+    dup = "Without Duplicates"
+else:
+    dup = "With Duplicates"
+
+for i in range(1):
+    os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
+    path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
+    os.makedirs(path,exist_ok=True)
+    SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,one_file=False,duplicates=False)
+    try:
+        statistics(path,graph=True)
+    except Exception:
+        print("Error with statistics!!!")
+        continue
+    L2norm(path)
+    
+
+
+input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
+
+for i in range(1):
+    DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+    KDpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+
+    lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False)
+    L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
+
+#################################################################################################################
+
 
 
 

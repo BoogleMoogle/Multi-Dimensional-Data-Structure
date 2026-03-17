@@ -1,31 +1,31 @@
 Averages
 Small4%
-	BRC Size:	214.36
-	SRC Size:	3,682.6
-	SRC Depth:	4.53
-	Diff:		3,468.24
-	F/P %:		36.0%
-	Error %:		13.44%
+	BRC Size:	107.18
+	SRC Size:	3,969.85
+	SRC Depth:	4.42
+	Diff:		3,862.67
+	F/P %:		84.5%
+	Error %:		6.65%
 	Tot # of Inf: 44,710
 
 
 Medium
-	BRC Size:	1,117.81
+	BRC Size:	558.91
 	SRC Size:	7,652.21
 	SRC Depth:	2.4
-	Diff:		6,534.4
-	F/P %:		39.31%
-	Error %:		22.97%
+	Diff:		7,093.31
+	F/P %:		78.61%
+	Error %:		11.48%
 	Tot # of Inf: 26,609
 
 
 Large
-	BRC Size:	2,138.21
+	BRC Size:	1,069.1
 	SRC Size:	10,090.8
 	SRC Depth:	1.72
-	Diff:		7,952.59
-	F/P %:		26.29%
-	Error %:		28.76%
+	Diff:		9,021.7
+	F/P %:		52.59%
+	Error %:		14.38%
 	Tot # of Inf: 15,548
 
 
