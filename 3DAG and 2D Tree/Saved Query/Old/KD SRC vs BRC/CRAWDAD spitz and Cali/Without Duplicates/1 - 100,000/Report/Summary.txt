@@ -1,0 +1,33 @@
+Averages
+Small
+	BRC Size:	48.65
+	SRC Size:	456.91
+	SRC Depth:	3.19
+	Diff:		408.25
+	F/P %:		20.27%
+	Error %:		19.47%
+	Tot # of Inf: 30,854
+
+
+Medium
+	BRC Size:	99.7
+	SRC Size:	651.51
+	SRC Depth:	2.16
+	Diff:		551.8
+	F/P %:		12.81%
+	Error %:		24.37%
+	Tot # of Inf: 14,422
+
+
+Large
+	BRC Size:	182.35
+	SRC Size:	854.65
+	SRC Depth:	1.37
+	Diff:		672.29
+	F/P %:		7.97%
+	Error %:		29.81%
+	Tot # of Inf: 4,142
+
+
+Note: Calculating the F/P% we removed queries that resulted in an inf value, we did not do this to the average BRC or SRC size.
+Note 2: Tot # of Inf is the number of BRC searches that returned 0.

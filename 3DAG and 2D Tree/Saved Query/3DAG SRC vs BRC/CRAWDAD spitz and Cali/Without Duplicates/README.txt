@@ -1,0 +1,1 @@
+Apparently of the 30,347 points most of them were duplicates, so we are left with 1,642 points.
