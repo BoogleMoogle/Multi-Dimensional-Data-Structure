@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import random
 # from narwhals import col
+from narwhals import col
 import pandas as pd
 import os
 import numpy as np
@@ -172,6 +173,38 @@ class DAGTree:
 
     #Single Range Cover Search Method
     def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
+
+        #if/when we are in the range
+        # if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
+        if best == None or best.depth < self.depth:
+            best = self
+        if self.left != None:
+            if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
+                return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        if self.right != None:
+            if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        if self.middle != None:
+            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
+                return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        return best
+            
+            
+        # #if we don't start in range
+        # else:
+        #     if self.left != None:
+        #         if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
+        #             self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #     if self.right != None:
+        #         if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+        #             self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #     if self.middle != None:
+        #         if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:
+        #             self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        # return best
+
+
+    def SRC_helper(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
         if q_xmin > q_xmax:
             temp = q_xmax
             q_xmax = q_xmin
@@ -181,34 +214,29 @@ class DAGTree:
             q_ymax = q_ymin
             q_ymin = temp
 
-        #if/when we are in the range
+        alist = []
         if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
-            if best == None or best.depth < self.depth:
-                best = self
-            if self.left != None:
-                if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-            if self.right != None:
-                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-            if self.middle != None:
-                if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
-                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-            # return best
-            
-        #if we don't start in range
+            alist.append(self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
+            alist.append(self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
+            alist.append(self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
+            node = None
+            for item in alist:
+                if node == None or node.depth < item.depth:
+                    node = item
+            return node
+        #need to find node that is in range
         else:
             if self.left != None:
                 if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+                    return self.left.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if self.right != None:
                 if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+                    return self.right.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if self.middle != None:
                 if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:
-                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-        return best
+                    return self.middle.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
 
+            
 
 
 
@@ -1257,18 +1285,19 @@ print(f"This is the length of points being inputed into the tree: {len(points)}"
 temp = DAGTree(points, cuttoff=4)
 print("Done with making tree.")
 
-num = 100000
+num = 10000
 sprout = 1
 dataset ="Spatial"
 os.makedirs(f"Saved Query/{dataset}/", exist_ok=True)
 dup = False
+itterations = 5
 
 if dup == False:
     dup = "Without Duplicates"
 else:
     dup = "With Duplicates"
 
-for i in range(1):
+for i in range(itterations):
     os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
     path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
     os.makedirs(path,exist_ok=True)
@@ -1284,13 +1313,14 @@ for i in range(1):
 
 input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
 
-for i in range(1):
+for i in range(itterations):
     DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
-    KDpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+    KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
 
     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False)
     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
 
+print("Done with 3DAG Tree!!\n" + "_"*50)
 #################################################################################################################
 
 

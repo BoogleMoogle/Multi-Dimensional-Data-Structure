@@ -119,15 +119,6 @@ class KDTree:
 
     #Single Range Cover Search Method
     def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, graph=False, best=None):
-        if q_xmin > q_xmax:
-            temp = q_xmax
-            q_xmax = q_xmin
-            q_xmin = temp
-        if q_ymin > q_ymax:
-            temp = q_ymax
-            q_ymax = q_ymin
-            q_ymin = temp
-            
         # if best == None:
         #     best = self
 
@@ -137,21 +128,43 @@ class KDTree:
             if self.left != None:
                 if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
                     return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+
             if self.right != None:
                 if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
                     return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            return best
+
+
+    
+
+
+    def SRC_helper(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
+        if q_xmin > q_xmax:
+            temp = q_xmax
+            q_xmax = q_xmin
+            q_xmin = temp
+        if q_ymin > q_ymax:
+            temp = q_ymax
+            q_ymax = q_ymin
+            q_ymin = temp
+
+        alist = []
+        if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
+            alist.append(self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
+            alist.append(self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
+            node = None
+            for item in alist:
+                if node == None or node.depth < item.depth:
+                    node = item
+            return node
+        #need to find node that is in range
         else:
             if self.left != None:
                 if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+                    return self.left.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if self.right != None:
                 if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-        return best
-
-
-
-
+                    return self.right.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
 
 
 
@@ -188,39 +201,6 @@ class KDTree:
         #             return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
         # return best
 
-
-
-
-    # def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
-    #     if q_xmin > q_xmax:
-    #         temp = q_xmax
-    #         q_xmax = q_xmin
-    #         q_xmin = temp
-    #     if q_ymin > q_ymax:
-    #         temp = q_ymax
-    #         q_ymax = q_ymin
-    #         q_ymin = temp
-
-    #     # if self.split_value == None:
-    #     #     return self
-    #     if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
-    #         # if self.axis == 1:
-    #         if self.left != None:
-    #             if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
-    #                 return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-    #         if self.right != None:
-    #             if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-    #                 return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-
-                
-    #     else:
-    #         if self.left != None:
-    #             if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
-    #                 return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-    #         if self.right != None:
-    #             if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-    #                 return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
-    #     return self
 
 
     #BRC Searching Method
@@ -1041,17 +1021,18 @@ print(f"This is the length of points being inputed into the tree: {len(points)}"
 temp = KDTree(points, cuttoff=4)
 print("Done with making tree.")
 
-num = 100000
+num = 10000
 sprout = 1
 dataset ="Spatial"
 dup = False
+itterations = 5
 
 if dup == False:
     dup = "Without Duplicates/"
 else:
     dup = "With Duplicates/"
 
-for i in range(1):
+for i in range(itterations):
     os.makedirs(r"Saved Query/KD SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
     path = r"Saved Query/KD SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
     SRC_vs_BRC(tree=temp,path=path,num=num,sprout=sprout+i,show=False,one_file=False,duplicates=False)
