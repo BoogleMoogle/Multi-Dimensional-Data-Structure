@@ -1,0 +1,24 @@
+KDTree(SRC Size)/3DAG(SRC Size)
+	0.02.csv:	[0.74237803]
+	0.06.csv:	[0.71511167]
+	0.10.csv:	[0.70706857]
+	0.14.csv:	[0.69996833]
+	0.18.csv:	[0.70639]
+	0.22.csv:	[0.69808167]
+	0.26.csv:	[0.682345]
+	0.30.csv:	[0.658545]
+
+3DAG(Level)/KDTree(Level)
+	0.02.csv:	[1.3558]
+	0.06.csv:	[1.3152]
+	0.10.csv:	[1.2184]
+	0.14.csv:	[1.1221]
+	0.18.csv:	[1.0154]
+	0.22.csv:	[0.943]
+	0.26.csv:	[0.8903]
+	0.30.csv:	[0.8288]
+
+
+This data is from:
+Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/3 - 10,000/_Report/
+Saved Query/KD SRC vs BRC/Spatial/Without Duplicates/3 - 10,000/_Report/

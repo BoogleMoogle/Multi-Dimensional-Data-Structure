@@ -1,12 +1,18 @@
-from matplotlib.lines import lineStyles
 import matplotlib.pyplot as plt
 import random
 import pandas as pd
-import numpy as np
 import os
-from math import ceil
+import numpy as np
+
 #to see stack
 import inspect
+
+#to turn off future warnings
+import warnings
+
+# from pygame import SCRAP_CLIPBOARD
+warnings.simplefilter(action='ignore',category=FutureWarning)
+
 
 
 
@@ -135,9 +141,6 @@ class KDTree:
             return best
 
 
-    
-
-
     def SRC_helper(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
         if q_xmin > q_xmax:
             temp = q_xmax
@@ -200,7 +203,6 @@ class KDTree:
         #         if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
         #             return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
         # return best
-
 
 
     #BRC Searching Method
@@ -370,8 +372,9 @@ class KDTree:
                     print(f"| Depth: {item[0]}\t| Y = {item[1]}\t\t| Range: [{item[3][0]}, {item[3][2]}] [{item[3][1]}, {item[3][3]}]")
 
 
-        
-        
+
+
+
 ###### General Use Methods ######
 def make_points(num=1, sprout=None, aRang=0, bRang=100):
     temp = []
@@ -546,23 +549,6 @@ def save_query(tree, xmin=None, ymin=None, xmax=None, ymax=None, query_list=None
             temp.to_csv(path,mode='a',columns=None,index=None)
     else:
         return print(temp)
-    
-
-#does not work as of right now
-def save_tree(tree,path=None):      #in future store additional information
-    """
-    Saves KD Tree data points in 2 columns. Data is saved in a csv file in Saved KD Trees, if no folder exists it will make one. Uses Pandas lib.
-    
-    :param tree: The KD Tree
-    :param path: Optional path, need r before path string
-    """
-    if path == None:
-        if os.listdir('.').__contains__("Saved KD Trees") == False and os.listdir('.').__contains__("Saved KD Tree") == False:
-            os.mkdir("Saved KD Trees")
-        path = f"Saved KD Trees/temp {len(os.listdir('Saved KD Trees'))+1}.csv"
-
-    df = pd.DataFrame((tree.points),index=None)
-    df.to_csv(path,index=False,header=False)
 
 
 def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=False):        #Need to make it where it can split the csv file with delimeter = ' ' or ','. Also make method to work with .txt
@@ -589,14 +575,13 @@ def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=
     return points
 
 
-def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,duplicates=False):
+def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,duplicates=False,starting_per=.30,interval=None):
     '''
     :param tree: The 3DAG Tree.
     :param num: The number of queries that you want. Note that 1 query is 6 in total.
     :param sprout: The seed for randomness. It is required.
     :param path: This should be the local path to the Saved Query folder with the dataset query folder in it, it should look like: "Saved Query/3DAG SRC vs BRC/CRAWDAD spitz and Cali/". This method makes the rest of the folders, based on sprout and num. In a perfect world, each query set should be located in a folder labeled: sprout - num, so it would look like 1 - 100,000.
     :param show: Boolean, if set to true it will graph the 3DAG for each query and show you a graph. HIGHLY not advised if you have a large amount of queries or a large dataset.
-    :param one_file: Boolean, puts everything in 1 file. Not advised.
     :param duplicates: Required Boolean, if True it will place these queries in the "With Duplicates" folder, else it will palce the queries in the "Without Duplicates" folder.
     '''
     print("Saving Mass Query...")
@@ -614,37 +599,28 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,d
     if path[len(path)-1] != "/":
         path = path+"/"
 
-    #Making/checking path folder for the duplicates folder
-    os.makedirs(path,exist_ok=True)                          #makes duplicate folder
-
-    BRC_path = path+"/BRC.csv"
-    SRC_path = path+"/SRC.csv"
-
-
+    coeffs_list = []
     #Setting Coeffs
-    small_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.04
-    medium_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.2
-    large_coeff_num = (tree.bbox[2]-tree.bbox[0])*0.3
+    for j in range(int(round((starting_per*100) / interval,0))+1):
+        coeffs_list.append(((starting_per*100) -(interval*(j)))/100)
+    #we have coefficents list, now we need to make a csv file for every item in it
 
-    smallQ_list=[]
-    mediumQ_list = []
-    largeQ_list = []
-    i=0
-    while i < num:      #could change with while num != 0
-        for j in range(3):
-            if j == 0:
-                coeff_num = small_coeff_num
-            elif j == 1:
-                coeff_num = medium_coeff_num
-            elif j == 2:
-                coeff_num = large_coeff_num
-            
+    for i in range(len(coeffs_list)):
+        if coeffs_list[i] <= 0:
+            coeffs_list.remove(coeffs_list[i])
+            break
+        coeff_num = (tree.bbox[2]-tree.bbox[0])*coeffs_list[i]
+        points_list = []
+        # BRC_path = path+"BRC.csv"
+        # SRC_path = path+"SRC.csv"
+        j=0
+        while j != num:
             xmin = round(random.uniform(tree.bbox[0],tree.bbox[2]-coeff_num),2)
             xmax = round(random.uniform(xmin+1,xmin+coeff_num),2)
             ymin = round(random.uniform(tree.bbox[1],tree.bbox[3]-coeff_num),2)
             ymax = round(random.uniform(ymin+1,ymin+coeff_num),2)
-            
-            #This limits the possible query ranges to the actual boundery box of the data set
+
+            #checking for incorrect mins and maxs
             if xmin < tree.bbox[0]:
                 xmin = tree.bbox[0]
             if xmax > tree.bbox[2]:
@@ -656,66 +632,25 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,one_file=False,d
             if ymax < tree.bbox[1]:
                 ymax = tree.bbox[1]
             
-            if j == 0:
-                smallQ_list.append([xmin,ymin,xmax,ymax])
-            elif j == 1:
-                mediumQ_list.append([xmin,ymin,xmax,ymax])
-            elif j == 2:
-                largeQ_list.append([xmin,ymin,xmax,ymax])
-
-            # points_list.append([xmin,ymin,xmax,ymax])
-        i+=1
-    print("Finished Collecting Random Samples.")
-    # if SRC_path != None and BRC_path == None:
-    #     save_query(tree=tree,num=1,path=SRC_path,SRC=True,save=True,show=show,query_list=points_list)
-    #     save_query(tree=tree,num=1,path=SRC_path,BRC=True,save=True,show=show,query_list=points_list)
-    # elif BRC_path != None and SRC_path == None:
-    #     save_query(tree=tree,num=1,path=BRC_path,SRC=True,save=True,show=show,query_list=points_list)
-    #     save_query(tree=tree,num=1,path=BRC_path,BRC=True,save=True,show=show,query_list=points_list)
-    # else:
-    #     save_query(tree=tree,num=1,path=SRC_path,SRC=True,save=True,show=show,query_list=points_list)
-    #     save_query(tree=tree,num=1,path=BRC_path,BRC=True,save=True,show=show,query_list=points_list)
-    if one_file == False:
-        print("Starting SRC Files:")
-        small_SRC_path = SRC_path[:len(SRC_path)-4] + "_small4%" + SRC_path[len(SRC_path)-4:]
-        medium_SRC_path = SRC_path[:len(SRC_path)-4] + "_medium" + SRC_path[len(SRC_path)-4:]
-        large_SRC_path = SRC_path[:len(SRC_path)-4] + "_large" + SRC_path[len(SRC_path)-4:]
-        save_query(tree=tree,num=1,path=small_SRC_path,SRC=True,BRC=False,save=True,show=show,query_list=smallQ_list)
-        print("\tSmall - Complete")
-        save_query(tree=tree,num=1,path=medium_SRC_path,SRC=True,BRC=False,save=True,show=show,query_list=mediumQ_list)
-        print("\tMedium - Complete")
-        save_query(tree=tree,num=1,path=large_SRC_path,SRC=True,BRC=False,save=True,show=show,query_list=largeQ_list)
-        print("\tLarge - Complete")
-        print("Finished SRC File.")
-
-        print("Starting BRC Files:")
-        small_BRC_path = BRC_path[:len(BRC_path)-4] + "_small4%" + BRC_path[len(BRC_path)-4:]
-        medium_BRC_path = BRC_path[:len(BRC_path)-4] + "_medium" + BRC_path[len(BRC_path)-4:]
-        large_BRC_path = BRC_path[:len(BRC_path)-4] + "_large" + BRC_path[len(BRC_path)-4:]
-        save_query(tree=tree,num=1,path=small_BRC_path,BRC=True,SRC=False,save=True,show=show,query_list=smallQ_list)
-        print("\tSmall - Complete")
-        save_query(tree=tree,num=1,path=medium_BRC_path,BRC=True,SRC=False,save=True,show=show,query_list=mediumQ_list)
-        print("\tMedium - Complete")
-        save_query(tree=tree,num=1,path=large_BRC_path,BRC=True,SRC=False,save=True,show=show,query_list=largeQ_list)
-        print("\tLarge - Complete")
-        print("Finished BRC File.")
-    else:
-        Q_list = []
-        i=0
-        for item in smallQ_list:
-            Q_list.append(item)
-            Q_list.append(mediumQ_list[i])
-            Q_list.append(largeQ_list[i])
-            i+=1
-
-        print("Starting SRC File:")
-        save_query(tree=tree,num=1,path=SRC_path,SRC=True,save=True,show=show,query_list=Q_list)
-        print("\tSRC File - Completed\nStarting BRC File:")
-        save_query(tree=tree,num=1,path=BRC_path,BRC=True,save=True,show=show,query_list=Q_list)
-        print("\tBRC File - Completed")
+            # print(f"{xmin},{ymin},{xmax},{ymax}")
+            points_list.append([xmin,ymin,xmax,ymax])
+            j+=1
+        
+        # for j in range(len(points_list)):
+        print("Starting SRC Files...")
+        SRC_path = f"{path}SRC_{coeffs_list[i]:.2f}.csv"
+        print(f"Starting SRC at {coeffs_list[i]:.2f}...")
+        save_query(tree=tree,num=1,path=SRC_path,SRC=True,BRC=False,save=True,show=show,query_list=points_list)
+        print(f"Finished SRC at {coeffs_list[i]:.2f}")
+            
+        BRC_path = f"{path}BRC_{coeffs_list[i]:.2f}.csv"
+        print(f"\nStarting BRC at {coeffs_list[i]:.2f}...")
+        save_query(tree=tree,num=1,path=BRC_path,SRC=False,BRC=True,save=True,show=show,query_list=points_list)
+        print(f"Finished BRC at {coeffs_list[i]:.2f}\n")
+    print("\nFinished SRC and BRC Queries\n")
 
 
-def statistics(file_path=None,graph=False):
+def statistics(file_path=None,graph=False,show=False):
     '''
     F/P% is found by (SRC Size/BRC Size)
     Error % is found by (BRC Size / SRC Size)*100
@@ -730,131 +665,39 @@ def statistics(file_path=None,graph=False):
     if file_path[len(file_path)-1] != "/":
         file_path = file_path+"/"
 
-    small = []
-    medium = []
-    large = []
-    #this gets all csv files of BRC and SRC, the first listed file every time will be BRC and the second will be SRC
-    for item in os.listdir(file_path):
-        if item.__contains__("small4%"):
-            small.append(item)
-        elif item.__contains__("medium"):
-            medium.append(item)
-        elif item.__contains__("large"):
-            large.append(item)
-    
-    #makes report folder if it doesn't exist
-    os.makedirs(f"{file_path}_Report", exist_ok=True)
-    #reading from lists made earlier
-    small_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','SRC Depth','Diff','F/P %','Error %'])
-    small_dataframe['BRC Size'] = pd.read_csv(file_path+'/'+small[0])['Data Size']
-    small_dataframe['SRC Size'] = pd.read_csv(file_path+'/'+small[1])['Data Size']
-    small_dataframe['SRC Depth']=pd.read_csv(file_path+'/'+small[1])['Depth']
-    small_dataframe['Error %'] = ((small_dataframe['BRC Size']/ small_dataframe['SRC Size']))*100
-    small_dataframe['F/P %'] = (small_dataframe['SRC Size'] / small_dataframe['BRC Size'])
-    # small_dataframe['F/P %'] = ((small_dataframe['SRC Size'] - small_dataframe['BRC Size'])/ small_dataframe['BRC Size'])*100
-    small_dataframe['Diff'] = small_dataframe['SRC Size'] - small_dataframe['BRC Size']
+    os.makedirs(file_path+"_Report/", exist_ok=True)
 
-    #change inf values to 100% for Error %
-    small_dataframe['Error %'] = small_dataframe['Error %'].replace([np.inf,-np.inf],100)
-    #get num of inf in F/P %
-    small_total_inf = np.isinf(small_dataframe['F/P %']).values.sum()
-    
-    # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    small_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/small4%"+file_path[file_path.rfind('/')+1:]+".csv")
+    for item  in os.listdir(file_path):
+        df = pd.DataFrame(columns=['BRC Size','SRC Size','SRC Depth','Diff','F/P %','Error %'])
+        if item.__contains__('.csv') and item.__contains__('BRC'):
+            df['BRC Size'] = pd.read_csv(file_path + item)['Data Size']
+            df['SRC Size'] = pd.read_csv(file_path + item.replace('BRC','SRC'))['Data Size']
+            df['SRC Depth'] = pd.read_csv(file_path + item.replace('BRC','SRC'))['Depth']
+            df['Error %'] = ((df['BRC Size']/df['SRC Size']))*100
+            df['F/P %'] = (df['SRC Size']/df['BRC Size'])
+            df['Diff'] = df['SRC Size'] - df['BRC Size']
+            #change inf values to 100% for Error %
+            df['Error %'] = df['Error %'].replace([np.inf,-np.inf],100)
+            #get num of inf in F/P %
+            df_total_inf = np.isinf(df['F/P %']).values.sum()
+            df.to_csv(file_path+f"_Report/{item.replace('BRC_','')}")
 
+            #this is for summary
+            df_avg_BRC_size = round(df['BRC Size'].mean(),2)
+            df_avg_SRC_size = round(df['SRC Size'].mean(),2)
+            df_avg_SRC_depth = round(df['SRC Depth'].mean(),2)
+            df_avg_diff = round(df['Diff'].mean(),2)
+            df_avg_fp = round(df.replace([np.inf, -np.inf],np.nan).dropna()['F/P %'].mean(),2)
+            df_avg_error = round(df['Error %'].mean(),2)
 
-    medium_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','Diff','F/P %', 'Error %'])
-    medium_dataframe['BRC Size'] = pd.read_csv(file_path+'/'+medium[0])['Data Size']
-    medium_dataframe['SRC Size'] = pd.read_csv(file_path+'/'+medium[1])['Data Size']
-    medium_dataframe['SRC Depth']=pd.read_csv(file_path+'/'+medium[1])['Depth']
-    medium_dataframe['Error %'] =  ((medium_dataframe['BRC Size'] / medium_dataframe['SRC Size']))*100
-    medium_dataframe['F/P %'] = (medium_dataframe['SRC Size'] / medium_dataframe['BRC Size'])
-    # medium_dataframe['F/P %'] = ((medium_dataframe['SRC Size'] - medium_dataframe['BRC Size'])/ medium_dataframe['BRC Size'])*100
-    medium_dataframe['Diff'] = medium_dataframe['SRC Size'] - medium_dataframe['BRC Size']
-
-    #change inf values to 100% for Error %
-    medium_dataframe['Error %'] = medium_dataframe['Error %'].replace([np.inf,-np.inf],100)
-    #get num of inf in F/P %
-    medium_total_inf = np.isinf(medium_dataframe['F/P %']).values.sum()
-    
-    
-    # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    medium_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/medium"+file_path[file_path.rfind('/')+1:]+".csv")
-
-    large_dataframe = pd.DataFrame(columns=['BRC Size','SRC Size','Diff','F/P %'])
-    large_dataframe['BRC Size'] = pd.read_csv(file_path+'/'+large[0])['Data Size']
-    large_dataframe['SRC Size'] = pd.read_csv(file_path+'/'+large[1])['Data Size']
-    large_dataframe['SRC Depth']=pd.read_csv(file_path+'/'+large[1])['Depth']
-    large_dataframe['Error %'] = ((large_dataframe['BRC Size'] / large_dataframe['SRC Size']))*100
-    large_dataframe['F/P %'] = (large_dataframe['SRC Size'] / large_dataframe['BRC Size'])
-    # large_dataframe['F/P %'] = ((large_dataframe['SRC Size'] - large_dataframe['BRC Size'])/ large_dataframe['BRC Size'])*100
-    large_dataframe['Diff'] = large_dataframe['SRC Size'] - large_dataframe['BRC Size']
-
-    #change inf values to 100% for Error %
-    large_dataframe['Error %'] = large_dataframe['Error %'].replace([np.inf,-np.inf],100)
-    #get num of inf in F/P %
-    large_total_inf = np.isinf(large_dataframe['F/P %']).values.sum()
-
-    # output_path = path[:path.rfind('/')+1]+"Report small "+path[path.rfind('/')+1:]+".txt"
-    large_dataframe.to_csv(file_path[:file_path.rfind('/')+1]+"_Report/large"+file_path[file_path.rfind('/')+1:]+".csv")
-    
-
-
-    ### This is for summary ###
-    #for avg BRC Size
-    small_avg_BRC_size = round(small_dataframe['BRC Size'].mean(),2)
-    medium_avg_BRC_size = round(medium_dataframe['BRC Size'].mean(),2)
-    large_avg_BRC_size = round(large_dataframe['BRC Size'].mean(),2)
-
-    #for avg SRC Size
-    small_avg_SRC_size = round(small_dataframe['SRC Size'].mean(),2)
-    medium_avg_SRC_size = round(medium_dataframe['SRC Size'].mean(),2)
-    large_avg_SRC_size = round(large_dataframe['SRC Size'].mean(),2)
-
-    #for avg SRC Depth
-    small_avg_SRC_depth = round(small_dataframe['SRC Depth'].mean(),2)
-    medium_avg_SRC_depth = round(medium_dataframe['SRC Depth'].mean(),2)
-    large_avg_SRC_depth = round(large_dataframe['SRC Depth'].mean(),2)
-
-    #for avg diff SRC
-    small_avg_diff = round(small_dataframe['Diff'].mean(),2)
-    medium_avg_diff = round(medium_dataframe['Diff'].mean(),2)
-    large_avg_diff = round(large_dataframe['Diff'].mean(),2)
-
-    #for avg F/P% (false positive rate (in percentage))
-    small_avg_fp = round(small_dataframe.replace([np.inf, -np.inf],np.nan).dropna()['F/P %'].mean(),2)
-    medium_avg_fp = round(medium_dataframe.replace([np.inf, -np.inf],np.nan).dropna()['F/P %'].mean(),2)
-    large_avg_fp = round(large_dataframe.replace([np.inf, -np.inf],np.nan).dropna()['F/P %'].mean(),2)
-
-    #for avg Error %
-    small_avg_error = round(small_dataframe['Error %'].mean(),2)
-    medium_avg_error = round(medium_dataframe['Error %'].mean(),2)
-    large_avg_error = round(large_dataframe['Error %'].mean(),2)
-
-    #for avg L2 distance (Euclidean Distance), L2 Norm
-    #Question, what exactly are we applying this to? All resources I've seen are about 2 points, my guess is
-    #that you would want me to apply this is every point against every point? Almost like a PCA??
-
-    #Question 2, would this only entail me taking the L2 norm of my data?
-
-
-
-    #writing all average info to txt file
-    with open((file_path + "/_Report/Summary.txt"),'w') as file:
-        file.write("Averages\n")
-        file.write(f"Small4%\n\tBRC Size:\t{small_avg_BRC_size:,}\n\tSRC Size:\t{small_avg_SRC_size:,}\n\tSRC Depth:\t{small_avg_SRC_depth:,}\n\tDiff:\t\t{small_avg_diff:,}\n\tF/P %:\t\t{small_avg_fp:,}%\n\tError %:\t\t{small_avg_error:,}%\n\tTot # of Inf: {small_total_inf:,}\n\n\n")
-        file.write(f"Medium\n\tBRC Size:\t{medium_avg_BRC_size:,}\n\tSRC Size:\t{medium_avg_SRC_size:,}\n\tSRC Depth:\t{medium_avg_SRC_depth:,}\n\tDiff:\t\t{medium_avg_diff:,}\n\tF/P %:\t\t{medium_avg_fp:,}%\n\tError %:\t\t{medium_avg_error:,}%\n\tTot # of Inf: {medium_total_inf:,}\n\n\n")
-        file.write(f"Large\n\tBRC Size:\t{large_avg_BRC_size:,}\n\tSRC Size:\t{large_avg_SRC_size:,}\n\tSRC Depth:\t{large_avg_SRC_depth:,}\n\tDiff:\t\t{large_avg_diff:,}\n\tF/P %:\t\t{large_avg_fp:,}%\n\tError %:\t\t{large_avg_error:,}%\n\tTot # of Inf: {large_total_inf:,}\n\n\n")
-        file.write("Note: Calculating the F/P% we removed queries that resulted in an inf value, we did not do this to the average BRC or SRC size.\nNote 2: Tot # of Inf is the number of BRC searches that returned 0.")
-        file.close()
-    
-    if graph == True:
-        stat_graph(file_path)
-
+            with open(file_path+"_Report/_Summary.txt", 'a') as file:
+                file.write(f"{item.replace('BRC_','').replace('.csv','')}\n\tBRC Size:\t{df_avg_BRC_size:,}\n\tSRC Size:\t{df_avg_SRC_size:,}\n\tSRC Depth:\t{df_avg_SRC_depth:,}\n\tDiff:\t\t{df_avg_diff:,}\n\tF/P %:\t\t{df_avg_fp:,}%\n\tError %:\t\t{df_avg_error:,}%\n\tTot # of Inf: {df_total_inf:,}\n\n\n")
+            if graph == True:
+                stat_graph(file_path,show=show)
     print("Finished Statistics\n")
-    
 
-def stat_graph(path=None,title=""):
+
+def stat_graph(path=None,title="",show=False):
     '''
     Need to input folder path, this will graph the SRC Depth files in the folder.
     This will look at the SRC_large.csv, then SRC_medium.csv, then SRC_small.csv.
@@ -909,6 +752,10 @@ def stat_graph(path=None,title=""):
             
             plt.tight_layout()
             plt.savefig(f'{path}/_Graphs/{str(csv_file).replace('.csv','.png')}')
+            if show == False:
+                plt.close()
+            else:
+                plt.show()
     print("Completed Statistics Graphing\n")
 
 
@@ -1011,6 +858,7 @@ def L2norm(path=None, show=False):
 
 ### TEMPLATE TO DO EVERYTHING ###
 
+
 ### Spatial Database NO Duplication ###
 path = r"Saved Datasets/Spatial.xlsx"
 points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
@@ -1021,26 +869,27 @@ print(f"This is the length of points being inputed into the tree: {len(points)}"
 temp = KDTree(points, cuttoff=4)
 print("Done with making tree.")
 
-num = 100000
+num = 10000
 sprout = 1
 dataset ="Spatial"
+os.makedirs(f"Saved Query/{dataset}/", exist_ok=True)
 dup = False
-itterations = 1
+itterations = 3
+interval = 4
+starting_per = 0.30
 
 if dup == False:
-    dup = "Without Duplicates/"
+    dup = "Without Duplicates"
 else:
-    dup = "With Duplicates/"
+    dup = "With Duplicates"
 
 for i in range(itterations):
     os.makedirs(r"Saved Query/KD SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
     path = r"Saved Query/KD SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
-    SRC_vs_BRC(tree=temp,path=path,num=num,sprout=sprout+i,show=False,one_file=False,duplicates=False)
-    try:
-        statistics(path,graph=True)
-    except Exception:
-        print("Error with statistics!!!")
-        continue
+    os.makedirs(path,exist_ok=True)
+    SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
+
+    statistics(path,graph=True)
     L2norm(path)
 print("KDTree done!!\n"+"_"*50)
 
