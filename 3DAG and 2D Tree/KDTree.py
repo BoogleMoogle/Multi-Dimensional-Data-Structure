@@ -108,13 +108,11 @@ class KDTree:
                 left.append(item)
 
 
-        # self.points = None    #best place for memory useage
         if self.parent != None and self.parent.data_size == self.data_size:     #this checks if the parent's data size is the same as this nodes, if so then we need to stop. All poitns were inherited to either the left or right child (probably right)
             pass
         else:
-            self.points = None
-            if self.parent != None:
-                self.parent.points=None
+            # if self.parent != None:
+                # self.parent.points=None
             if self.axis == 0:
                 self.left = KDTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]], parent=self, cuttoff=self.cuttoff)
                 self.right = KDTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=self, cuttoff=self.cuttoff)
@@ -139,6 +137,15 @@ class KDTree:
                 if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
                     return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
             return best
+        
+        # else:
+        #     if self.left != None:
+        #         if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
+        #             return self.left.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        #     if self.right != None:
+        #         if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+        #             return self.right.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        
 
 
     def SRC_helper(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
@@ -869,14 +876,14 @@ print(f"This is the length of points being inputed into the tree: {len(points)}"
 temp = KDTree(points, cuttoff=4)
 print("Done with making tree.")
 
-num = 10000
+num = 500000
 sprout = 1
 dataset ="Spatial"
 os.makedirs(f"Saved Query/{dataset}/", exist_ok=True)
 dup = False
-itterations = 3
+itterations = 1
 interval = 4
-starting_per = 0.30
+starting_per = 0.06
 
 if dup == False:
     dup = "Without Duplicates"

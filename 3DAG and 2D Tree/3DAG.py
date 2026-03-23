@@ -1170,13 +1170,13 @@ print(f"This is the length of points being inputed into the tree: {len(points)}"
 temp = DAGTree(points, cuttoff=4)
 print("Done with making tree.")
 
-num = 10000
+num = 500000
 sprout = 1
 dataset ="Spatial"
 os.makedirs(f"Saved Query/{dataset}/", exist_ok=True)
 dup = False
-itterations = 3
-starting_per = .30
+itterations = 1
+starting_per = .40
 interval = 4
 
 if dup == False:
