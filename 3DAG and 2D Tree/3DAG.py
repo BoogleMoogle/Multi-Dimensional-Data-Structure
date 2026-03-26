@@ -1,3 +1,4 @@
+from cv2 import GSHAPE_GSCALAR
 import matplotlib.pyplot as plt
 import random
 import pandas as pd
@@ -164,20 +165,19 @@ class DAGTree:
 
     #Single Range Cover Search Method
     def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
-
         #if/when we are in the range
-        # if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
-        if best == None or best.depth < self.depth:
-            best = self
-        if self.left != None:
-            if self.left.bbox[2] >= q_xmax and self.left.bbox[3] > q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
-                return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-        if self.right != None:
-            if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-        if self.middle != None:
-            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
-                return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+        if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
+            if best == None or best.depth < self.depth:
+                best = self
+            if self.left != None:
+                if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
+                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if self.right != None:
+                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if self.middle != None:
+                if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
+                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
         return best
             
             
@@ -195,39 +195,6 @@ class DAGTree:
         # return best
 
 
-    def SRC_helper(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
-        if q_xmin > q_xmax:
-            temp = q_xmax
-            q_xmax = q_xmin
-            q_xmin = temp
-        if q_ymin > q_ymax:
-            temp = q_ymax
-            q_ymax = q_ymin
-            q_ymin = temp
-
-        alist = []
-        if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
-            alist.append(self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
-            alist.append(self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
-            alist.append(self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best))
-            node = None
-            for item in alist:
-                if node == None or node.depth < item.depth:
-                    node = item
-            return node
-        #need to find node that is in range
-        else:
-            if self.left != None:
-                if self.left.bbox[2] > q_xmax and self.left.bbox[3] >= q_ymax:
-                    return self.left.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
-            if self.right != None:
-                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
-            if self.middle != None:
-                if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:
-                    return self.middle.SRC_helper(q_xmin, q_ymin, q_xmax, q_ymax, best)
-
-
     #BRC Linearly
     def linear_BRC(self,q_xmin,q_ymin,q_xmax,q_ymax):
         nodes = self.get_leaf_linear(boxes=[])
@@ -239,7 +206,7 @@ class DAGTree:
 
         returning_list = []
         for item in temp:
-            if item[0] >= q_xmin and item[0] <= q_xmax and item[1] >= q_ymin and item[1] <= q_ymax:
+            if q_xmin <= item[0] and q_xmax >= item[0] and q_ymin <= item[1] and q_ymax >= item[1]:
                 returning_list.append(item)
         return returning_list
 
@@ -667,7 +634,9 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,duplicates=False
         return print("Need path to query folder!")
     if sprout == None:
         return print("Need a sprout!")
+    
     random.seed(sprout)
+
     if duplicates == None:
         return print("Need to state whether or not this tree was made with duplicate points!")
     #these make sure BRC and SRC path have a '/' at the end, it lets us access what ever is in the file
@@ -689,10 +658,10 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,duplicates=False
 
         j=0
         while j != num:
-            xmin = round(random.uniform(tree.bbox[0],tree.bbox[2]-coeff_num),2)
-            xmax = round(random.uniform(xmin+1,xmin+coeff_num),2)
-            ymin = round(random.uniform(tree.bbox[1],tree.bbox[3]-coeff_num),2)
-            ymax = round(random.uniform(ymin+1,ymin+coeff_num),2)
+            xmin = random.uniform(tree.bbox[0],tree.bbox[2]-coeff_num)
+            xmax = random.uniform(xmin+1,xmin+coeff_num)
+            ymin = random.uniform(tree.bbox[1],tree.bbox[3]-coeff_num)
+            ymax = random.uniform(ymin+1,ymin+coeff_num)
 
             #checking for incorrect mins and maxs
             if xmin < tree.bbox[0]:
@@ -878,7 +847,6 @@ def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
     for item in os.listdir(DAGpath+"_Report/"):
         if item.__contains__('.csv'):
             DAGitems.append(item)
-    #these will always store the files: large - medium - small
 
     #need to itterate through all csv files in _Report/ folder
     for i in range(len(DAGitems)):
@@ -886,14 +854,11 @@ def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
         DAG_list = pd.read_csv(DAGpath+"_Report/"+DAGitems[i])['SRC Depth']
         KD_list = pd.read_csv(KDpath+"_Report/"+DAGitems[i])['SRC Depth']
         #DAG_list and KD_list have the depths of returned nodes through SRC search
-        #now finding the difference: DAG - SRC          DAG will always be bigger, so if a negative value occurs something is terribly wrong
+        #now finding the difference: DAG - KD          DAG will always be bigger, so if a negative value occurs something is terribly wrong
 
         diff_list = DAG_list - KD_list
         diff_list = diff_list.value_counts().sort_index()   #gets the # of times a # shows up in this series and sorts the final result
         diff_ind = diff_list.index.tolist()                 #gets index values from series
-        #this gets the indecies of the diff_list
-        for j in range(len(diff_ind)):
-            diff_ind[j] = int(str(diff_ind[j]).replace('(','').replace(')','').replace(',',''))     #because of weird formatting, need to do this
 
         #percentages
         percent_list = []
@@ -907,8 +872,11 @@ def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
         bar = plt.bar(x=diff_ind,height=diff_list)
         plt.xticks(diff_ind)
         if title != None:
-            plt.title(title)
+            plt.title(f"{title} ({DAGitems[i]})")
+        else:
+            plt.title(f"{DAGitems[i]}")
         plt.xlabel("Diff Size")
+
         #percentages
         j=0
         for p in bar:
@@ -918,9 +886,10 @@ def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True):
 
             plt.text(x+width/2, y+height*1.01,percent_list[j],ha='center',weight='bold')
             j+=1
+
         plt.tight_layout()
         os.makedirs(DAGpath+"_Graphs/Diff",exist_ok=True)
-        os.makedirs(KDpath+"_Graphs/Diff",exist_ok=True)
+        # os.makedirs(KDpath+"_Graphs/Diff",exist_ok=True)
         plt.savefig(DAGpath+"_Graphs/Diff/"+str(DAGitems[i]).replace('.csv','.png'))
         # plt.savefig(KDpath+"_Graphs/Diff/"+str(DAGitems[i]).replace('.csv','.png'))
         if show == True:
@@ -1067,6 +1036,7 @@ def competitive(DAGpath=None, KDpath=None):
         return print("Need path!")
     if KDpath[len(KDpath)-1] != "/":
         KDpath = KDpath+"/"
+    print("Starting Comp...")
     #calculated for all sizes individually
 
     #get into report folder
@@ -1085,26 +1055,21 @@ def competitive(DAGpath=None, KDpath=None):
     div_data = pd.DataFrame(columns=csv_items)
     diff_data = pd.DataFrame(columns=csv_items)
 
+    os.makedirs(DAGpath+"_Competitive Graphs/",exist_ok=True)
     #need to get all SRC depths of 3DAG and KD, again calculate queries individual of size
     for i in range(len(csv_items)): #itterates through large, medium, then small
         DAGdata['SRC Depth'] = pd.read_csv(DAGpath+csv_items[i])['SRC Depth']
         KDdata['SRC Depth'] = pd.read_csv(KDpath+csv_items[i])['SRC Depth']
-        # DAGdata.to_csv(f'DAGdata{i}.csv')
-        # KDdata.to_csv(f'KDdata{i}.csv')
 
-        #KD/3DAG
-        #need to write to txt file
- 
-        div_data[csv_items[i]] = (((KDdata / DAGdata).sum())/len(DAGdata)).values
+        #F/P
+        div_data[csv_items[i]] = (((KDdata/DAGdata).sum())/len(DAGdata)).values
         #this is the competative value for KDTree(SRC Size)/3DAG(SRC Size)
         #in the end, we should see long(N/s)        s being # of data points
 
-
-    # #now for lvl diff
-    # for i in range(len(csv_items)):
+        #lvl. diff
         diff_data[csv_items[i]] = ((DAGdata-KDdata).sum())/len(DAGdata)
-        
-
+        #this is the competative value for (3DAG(Level) - KDTree(Level))
+    
     #write it all
     with open(DAGpath+'_Competitive.txt', 'w') as file:
         file.write("KDTree(SRC Size)/3DAG(SRC Size)")
@@ -1117,14 +1082,47 @@ def competitive(DAGpath=None, KDpath=None):
         file.close()
 
     with open(KDpath+'_Competitive.txt', 'w') as file:
-        file.write("KDTree(SRC Size)/3DAG(SRC Size)")
+        file.write("sum(KDTree(SRC Size)/3DAG(SRC Size))/# of Queries")
         for i in range(len(csv_items)):
             file.write(f"\n\t{csv_items[i]}:\t{div_data[csv_items[i]].values}") #div_data write
-        file.write("\n\n3DAG(Level)/KDTree(Level)")
+        file.write("\n\nsum((3DAG(Level)-KDTree(Level))/# of Queries")
         for i in range(len(csv_items)):
             file.write(f"\n\t{csv_items[i]}:\t{diff_data[csv_items[i]].values}")
         file.write(f"\n\n\nThis data is from:\n{DAGpath}\n{KDpath}")
         file.close()
+    print("Finished Comp.")
+
+
+def FP_stats(DAGpath=None, KDpath=None):
+    if DAGpath == None or KDpath==None:
+        return print("Need path!")
+
+    if DAGpath[len(DAGpath)-1] != "/":    #makes path accessable
+        DAGpath = DAGpath+"/"
+    if KDpath[len(KDpath)-1] != "/":    #makes path accessable
+        KDpath = KDpath+"/"
+
+    DAGpath = DAGpath + "_Report/"    #getting into report folder
+    KDpath = KDpath + "_Report/"
+    
+    
+    for item in os.listdir(DAGpath):
+        if item.__contains__('.csv'):   #only gets items with .csv
+            DAG_fp = pd.read_csv(DAGpath+item)['F/P %']
+            KD_fp = pd.read_csv(KDpath+item)['F/P %']
+
+            temp_df = pd.concat([DAG_fp, KD_fp],axis=1)
+            print(temp_df)
+            
+            # diff_df = DAG_fp - KD_fp    #subtracts 3DAG's false positives by KD Trees false positives. This is done for each query
+            # print(diff_df)
+            # print("_"*50)
+
+            # diff_df = diff_df.values.tolist()
+            # for item in diff_df:
+            #     print(item)
+
+            
 
          
 
@@ -1160,23 +1158,24 @@ def competitive(DAGpath=None, KDpath=None):
 
 ### TEMPLATE TO DO EVERYTHING ###
 
-### Spatial Database NO Duplication ###
-path = r"Saved Datasets/Spatial.xlsx"
-points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
-#___________________________________________________________________________#
+# ### Spatial Database NO Duplication ###
+# path = r"Saved Datasets/Spatial.xlsx"
+# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+# #___________________________________________________________________________#
 
 
-print(f"This is the length of points being inputed into the tree: {len(points)}")
-temp = DAGTree(points, cuttoff=4)
-print("Done with making tree.")
+# print(f"This is the length of points being inputed into the tree: {len(points)}")
+# temp = DAGTree(points, cuttoff=4)
+# print("Done with making tree.")
 
-num = 500000
-sprout = 1
+
+num = 10000
+sprout = 3
 dataset ="Spatial"
 os.makedirs(f"Saved Query/{dataset}/", exist_ok=True)
 dup = False
 itterations = 1
-starting_per = .40
+starting_per = .30
 interval = 4
 
 if dup == False:
@@ -1184,16 +1183,16 @@ if dup == False:
 else:
     dup = "With Duplicates"
 
-for i in range(itterations):
-    os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
-    path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
-    os.makedirs(path,exist_ok=True)
-    SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
-    statistics(path,graph=True,show=False)
-    L2norm(path)
+# for i in range(itterations):
+#     os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
+#     path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
+#     os.makedirs(path,exist_ok=True)
+#     SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
+#     statistics(path,graph=True,show=False)
+#     L2norm(path)
     
 
-##### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
+#### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
 input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
 
 for i in range(itterations):
@@ -1203,9 +1202,11 @@ for i in range(itterations):
     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False)
     competitive(DAGpath,KDpath)
     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
+    # FP_stats(DAGpath=DAGpath,KDpath=KDpath)
+
 
 print("Done with 3DAG Tree!!\n" + "_"*50)
-# #################################################################################################################
+#################################################################################################################
 
 
 

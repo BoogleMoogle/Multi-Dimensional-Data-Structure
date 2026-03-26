@@ -1,80 +1,80 @@
 0.02
 	BRC Size:	76.58
-	SRC Size:	3,501.97
-	SRC Depth:	4.92
-	Diff:		3,425.4
-	F/P %:		92.39%
-	Error %:		5.89%
-	Tot # of Inf: 4,742
+	SRC Size:	3,134.28
+	SRC Depth:	5.07
+	Diff:		3,057.7
+	F/P %:		66.76%
+	Error %:		5.99%
+	Tot # of Inf: 4,744
 
 
 0.06
-	BRC Size:	141.74
-	SRC Size:	4,426.15
-	SRC Depth:	4.04
-	Diff:		4,284.41
-	F/P %:		83.24%
-	Error %:		7.14%
-	Tot # of Inf: 4,296
+	BRC Size:	141.75
+	SRC Size:	4,257.32
+	SRC Depth:	4.1
+	Diff:		4,115.57
+	F/P %:		62.21%
+	Error %:		7.18%
+	Tot # of Inf: 4,301
 
 
 0.10
-	BRC Size:	229.43
-	SRC Size:	5,170.66
-	SRC Depth:	3.49
-	Diff:		4,941.23
-	F/P %:		74.2%
-	Error %:		8.66%
-	Tot # of Inf: 3,818
+	BRC Size:	229.36
+	SRC Size:	5,152.07
+	SRC Depth:	3.5
+	Diff:		4,922.71
+	F/P %:		73.76%
+	Error %:		8.65%
+	Tot # of Inf: 3,816
 
 
 0.14
-	BRC Size:	339.39
-	SRC Size:	6,208.6
-	SRC Depth:	2.98
-	Diff:		5,869.22
-	F/P %:		82.21%
+	BRC Size:	339.4
+	SRC Size:	6,209.78
+	SRC Depth:	2.99
+	Diff:		5,870.38
+	F/P %:		77.83%
 	Error %:		9.86%
-	Tot # of Inf: 3,298
+	Tot # of Inf: 3,303
 
 
 0.18
-	BRC Size:	480.35
-	SRC Size:	7,119.69
+	BRC Size:	480.3
+	SRC Size:	7,126.08
 	SRC Depth:	2.6
-	Diff:		6,639.33
-	F/P %:		80.23%
-	Error %:		10.94%
-	Tot # of Inf: 2,930
+	Diff:		6,645.77
+	F/P %:		86.03%
+	Error %:		10.91%
+	Tot # of Inf: 2,928
 
 
 0.22
-	BRC Size:	639.39
-	SRC Size:	8,156.63
+	BRC Size:	639.31
+	SRC Size:	8,157.18
 	SRC Depth:	2.26
-	Diff:		7,517.23
-	F/P %:		79.03%
-	Error %:		12.03%
-	Tot # of Inf: 2,447
+	Diff:		7,517.86
+	F/P %:		82.44%
+	Error %:		12.02%
+	Tot # of Inf: 2,445
 
 
 0.26
-	BRC Size:	850.92
-	SRC Size:	9,113.66
-	SRC Depth:	1.97
-	Diff:		8,262.74
-	F/P %:		64.33%
-	Error %:		13.22%
+	BRC Size:	850.88
+	SRC Size:	9,112.68
+	SRC Depth:	1.98
+	Diff:		8,261.8
+	F/P %:		62.74%
+	Error %:		13.23%
 	Tot # of Inf: 1,986
 
 
 0.30
-	BRC Size:	1,083.93
-	SRC Size:	10,114.49
+	BRC Size:	1,083.91
+	SRC Size:	10,114.9
 	SRC Depth:	1.72
-	Diff:		9,030.56
-	F/P %:		49.41%
-	Error %:		14.58%
-	Tot # of Inf: 1,524
+	Diff:		9,030.99
+	F/P %:		46.12%
+	Error %:		14.57%
+	Tot # of Inf: 1,525
 
 

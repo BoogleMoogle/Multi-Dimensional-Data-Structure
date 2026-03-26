@@ -1,80 +1,80 @@
 0.02
-	BRC Size:	75.65
-	SRC Size:	3,533.99
-	SRC Depth:	4.89
-	Diff:		3,458.34
-	F/P %:		102.51%
-	Error %:		5.8%
-	Tot # of Inf: 4,783
+	BRC Size:	75.62
+	SRC Size:	3,113.48
+	SRC Depth:	5.07
+	Diff:		3,037.86
+	F/P %:		66.58%
+	Error %:		5.93%
+	Tot # of Inf: 4,785
 
 
 0.06
 	BRC Size:	141.77
-	SRC Size:	4,576.2
-	SRC Depth:	3.94
-	Diff:		4,434.43
-	F/P %:		72.07%
-	Error %:		7.16%
-	Tot # of Inf: 4,282
+	SRC Size:	4,370.17
+	SRC Depth:	4.01
+	Diff:		4,228.4
+	F/P %:		69.7%
+	Error %:		7.2%
+	Tot # of Inf: 4,278
 
 
 0.10
-	BRC Size:	231.88
-	SRC Size:	5,298.02
-	SRC Depth:	3.42
-	Diff:		5,066.14
-	F/P %:		64.11%
-	Error %:		8.66%
-	Tot # of Inf: 3,785
+	BRC Size:	231.82
+	SRC Size:	5,268.73
+	SRC Depth:	3.43
+	Diff:		5,036.91
+	F/P %:		67.7%
+	Error %:		8.67%
+	Tot # of Inf: 3,784
 
 
 0.14
-	BRC Size:	342.14
-	SRC Size:	6,186.94
+	BRC Size:	342.22
+	SRC Size:	6,190.74
 	SRC Depth:	2.97
-	Diff:		5,844.79
-	F/P %:		84.1%
+	Diff:		5,848.51
+	F/P %:		84.57%
 	Error %:		9.88%
-	Tot # of Inf: 3,368
+	Tot # of Inf: 3,369
 
 
 0.18
-	BRC Size:	472.92
-	SRC Size:	7,185.59
+	BRC Size:	472.91
+	SRC Size:	7,186.31
 	SRC Depth:	2.6
-	Diff:		6,712.66
-	F/P %:		76.18%
-	Error %:		10.79%
-	Tot # of Inf: 2,929
+	Diff:		6,713.4
+	F/P %:		77.19%
+	Error %:		10.77%
+	Tot # of Inf: 2,933
 
 
 0.22
-	BRC Size:	645.67
-	SRC Size:	8,206.75
+	BRC Size:	645.7
+	SRC Size:	8,210.09
 	SRC Depth:	2.26
-	Diff:		7,561.08
-	F/P %:		68.96%
-	Error %:		12.11%
+	Diff:		7,564.39
+	F/P %:		72.24%
+	Error %:		12.1%
 	Tot # of Inf: 2,433
 
 
 0.26
-	BRC Size:	854.23
-	SRC Size:	9,096.93
+	BRC Size:	854.14
+	SRC Size:	9,089.89
 	SRC Depth:	1.95
-	Diff:		8,242.7
-	F/P %:		49.4%
+	Diff:		8,235.75
+	F/P %:		54.69%
 	Error %:		13.27%
-	Tot # of Inf: 1,979
+	Tot # of Inf: 1,972
 
 
 0.30
-	BRC Size:	1,058.61
-	SRC Size:	10,020.29
+	BRC Size:	1,058.62
+	SRC Size:	10,022.37
 	SRC Depth:	1.74
-	Diff:		8,961.68
-	F/P %:		52.88%
-	Error %:		14.38%
-	Tot # of Inf: 1,601
+	Diff:		8,963.75
+	F/P %:		54.1%
+	Error %:		14.36%
+	Tot # of Inf: 1,600
 
 

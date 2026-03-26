@@ -1,6 +1,3 @@
-from re import A
-
-from matplotlib.lines import lineStyles
 import matplotlib.pyplot as plt
 import random
 import pandas as pd
@@ -78,8 +75,6 @@ class KDTree:
             return
         if self.parent != None and self.parent.data_size == self.data_size:
             return
-        if self.parent != None:
-            self.parent.points = None       #<- want points in each node? (Note, uses more meory)
         #need to find bbox seperately
         #the axis that we are splitting on is the most improtant, it is what becomes left's max and right's min
         # print(self.split_value)     #<- this value is what actually changes, everything else stays the same
@@ -97,7 +92,7 @@ class KDTree:
 
         self.left = KDTree(points=left,depth=self.depth+1,axis=(self.axis+1)%self.dimensionality,parent=self,cutoff=self.cutoff,bbox=left_bbox)
         self.right = KDTree(points=right,depth=self.depth+1,axis=(self.axis+1)%self.dimensionality,parent=self,cutoff=self.cutoff,bbox=right_bbox)
-
+        self.points = None       #<- want points in each node? (Note, uses more meory)
 
     def SRC(self,query=[], best=None):
         in_range = 0
@@ -245,7 +240,7 @@ class KDTree:
 
     
     def get_leaf_linear(self, boxes=[]):
-        if self.points != None and self.left == None and self.right == None:
+        if self.points != None:
             boxes.append(self.points)
         if self.left != None:
             self.left.get_leaf_linear(boxes)
@@ -254,13 +249,18 @@ class KDTree:
         return boxes
 
 
-    def print_tree(self, points=False, file=False):
+    def print_tree(self, points=False, file=False, title=None):
+        if type(title) != str:
+                    title = "Printed_KDTree.txt"
+        else:
+            if title.__contains__('.txt') == False:
+                title = f"{title}.txt"
         if points == True:
             if self.points != None and self.left == None and self.right == None:
                 if file == False:
                     print(self.points)
                 else:
-                    with open('Printed_KDTree.txt', 'a') as file:
+                    with open(f'{title}', 'a') as file:
                         file.write(f"{self.points}\n")
                         file.close()
         elif points == None:
@@ -268,21 +268,21 @@ class KDTree:
                 if file == False:
                     print(self)
                 else:
-                    with open('Printed_KDTree.txt', 'a') as file:
+                    with open(f'{title}', 'a') as file:
                         file.write(f"{self.__str__()}\n")
                         file.close()
         else:
             if file == False:
                 print(self)
             else:
-                with open('Printed_KDTree.txt', 'a') as file:
+                with open(f'{title}', 'a') as file:
                         file.write(f"{self.__str__()}\n")
                         file.close()
 
         if self.left != None:
-            self.left.print_tree(points,file=file)
+            self.left.print_tree(points,file=file,title=title)
         if self.right != None:
-            self.right.print_tree(points,file=file)
+            self.right.print_tree(points,file=file,title=title)
 
 
 
@@ -384,6 +384,8 @@ def SRC_vs_BRC(tree, num=1, sprout=None, path=None, show=False, duplicates=False
     if path[len(path)-1] != "/":
         path = path+"/"
     
+    print("Starting Queries...")
+
     coeffs_list = []
     #Setting Coeffs
     for j in range(int(round((starting_per*100) / interval,0))+1):
@@ -421,15 +423,15 @@ def SRC_vs_BRC(tree, num=1, sprout=None, path=None, show=False, duplicates=False
 
         if SRC == True:
             SRC_path = f"{path}SRC_{coeffs_list[i]:.2f}.csv"
-            print(f"Starting SRC at {coeffs_list[i]:.2f}...")
+            print(f"\tStarting SRC at {coeffs_list[i]:.2f}...")
             save_query(tree=tree,num=1,path=SRC_path,SRC=True,BRC=False,save=True,show=show,query_list=query_list)
-            print(f"Finished SRC at {coeffs_list[i]:.2f}")
+            print(f"\tFinished SRC at {coeffs_list[i]:.2f}")
             
         if BRC == True:
             BRC_path = f"{path}BRC_{coeffs_list[i]:.2f}.csv"
-            print(f"\nStarting BRC at {coeffs_list[i]:.2f}...")
+            print(f"\n\tStarting BRC at {coeffs_list[i]:.2f}...")
             save_query(tree=tree,num=1,path=BRC_path,SRC=False,BRC=True,save=True,show=show,query_list=query_list)
-            print(f"Finished BRC at {coeffs_list[i]:.2f}\n")
+            print(f"\tFinished BRC at {coeffs_list[i]:.2f}\n")
     print("\nFinished SRC and BRC Queries\n")
 
 
@@ -613,21 +615,37 @@ def L2norm(path=None, show=False):
                 plt.show()
     print("Finished L2 Norm\n")
 
+
+# def FP_graph(path=None):
+#     if path == None:
+#         return print("Need query folder path!")
+
+#     if path[len(path)-1] != "/":    #makes path accessable
+#         path = path+"/"
+
+#     path = path + "_Report/"    #getting into report folder
+    
+#     for item in os.listdir(path):
+#         if item.__contains__('.csv'):   #only gets items with .csv
+            
+
+
+
 ##############################################################
 
 
 
 
-### Gowala ###      social netowrk
-path = r"Saved Datasets/Gowalla_totalCheckins.txt"
-points = points_from_file(path,columns=[1,2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=1000)
-#___________________________________________________________________________#
-
-
-# ### Spatial Database NO Duplication ###
-# path = r"Saved Datasets/Spatial.xlsx"
-# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+# ### Gowala ###      social netowrk
+# path = r"Saved Datasets/Gowalla_totalCheckins.txt"
+# points = points_from_file(path,columns=[1,2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=None)
 # #___________________________________________________________________________#
+
+
+### Spatial Database NO Duplication ###
+path = r"Saved Datasets/Spatial.xlsx"
+points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+#___________________________________________________________________________#
 
 # points = make_points(num=64,sprout=1,aRang=0,bRang=100)
 
@@ -639,37 +657,51 @@ points = points_from_file(path,columns=[1,2,3],file_extension='csv',drop_duplica
 #             points.append((i,j,k))
 
 
-    
 
-
+print(f"# of points: {len(points)}")
+print("Making Tree...")
 temp = KDTree(points,cutoff=4)
-
-temp.print_tree(file=True)
+print("Tree Made\n")
+# temp.print_tree(file=True)
 
 
 ### CONTROL PANNEL ###
 num = 10000
 sprout = 1
-dataset ="Gowalla"
+dataset ="Spatial"
 dup = False
 itterations = 1
 interval = 4
-starting_per = 0.40
+starting_per = 0.30
 SRC = True
 BRC = True
 
 ######################
 
+query = [33.43, -118.85, 35.99, -117.38]
+alist = []
+for item in points:
+    if query[0] <= item[0] and query [2] >= item[0] and query[1] <= item[1] and query[3] >= item[1]:
+        alist.append(item)
+print(f"Length of manual check: {len(alist)}")
 
+# points = pd.DataFrame(points,columns=[0,1])
+# print(points[0].max())
+# print(points[0].min())
+# print(points[1].max())
+# print(points[1].min())
 # temp.print_tree(points=False, file=True)
-# query = [(2,3),(2,4),(5,8)]
-# node = temp.SRC(query)
+# query = [(31,43),(-125,-114)]
+query = [(33.43,35.99), (-118.85, -117.38)]
+node = temp.linear_BRC(query)
+print(len(node))
+# temp.print_tree(points=True,file=True,title="Spatial Points.txt")
 # print(node)
 # print(node.left)
 # print(node.right)
 
 
-
+###UPDATE: Old KD Tree BRC method is incorrect, current method is correct
 
 
 
