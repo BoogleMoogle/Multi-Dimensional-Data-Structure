@@ -1,4 +1,3 @@
-This is sets of queries at levels:
-	Small: 	4%
-	Medium: 	20%
-	Large: 	30%
+CRAWDAD Dataset: 1,642 points
+Spatial Dataset: 21,048 points
+Gowalla Dataset: 72,625 points

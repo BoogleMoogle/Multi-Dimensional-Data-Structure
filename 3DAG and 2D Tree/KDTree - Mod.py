@@ -126,49 +126,6 @@ class KDTree:
 
         return best
 
-        # in_range = 0
-        # for i in range(len(self.bbox)):
-        #     if self.bbox[i][0] <= query[i][0] and self.bbox[i][1] >= query[i][1]: #this node 100% contains the range
-        #         in_range +=1
-        # if in_range == self.dimensionality:
-        #     if best == None or best.depth < self.depth:
-        #         best = self
-        #     if self.left != None:
-        #         in_range = 0
-        #         for j in range(len(self.left.bbox)):
-        #             if self.left.bbox[j][1] >= query[j][1]:
-        #                 in_range += 1
-                
-        #         if in_range == self.left.dimensionality:
-        #             return self.left.SRC(query, best)
-            
-        #     if self.right != None:
-        #         in_range = 0
-        #         for j in range(len(self.right.bbox)):
-        #             if self.right.bbox[j][0] <= query[j][0]:
-        #                 in_range +=1
-                
-        #         if in_range == self.right.dimensionality:
-        #             return self.right.SRC(query, best)
-
-        # return best
-        #Every query should have a tuple for each dimension of our data, so in 3D [(1min, 1max), (2min, 2max), (3min, 3max)]
-        # in_range = 0
-        # for i in range(len(self.bbox)):
-        #     if self.bbox[i][0] <= query[i][0] and self.bbox[i][1] >= query[i][1]:   #if node is in range (dependent on axis) increase in_range by 1
-        #         in_range += 1
-        
-        # if in_range == self.dimensionality:     #this means for all 3 nodes we are in range
-        #     if best == None or best.depth < self.depth:
-        #         best = self
-        
-            
-        #     if self.left != None:
-        #         return self.left.SRC(query, best)
-        #     elif self.right != None:
-        #         return self.right.SRC(query, best)
-        # return best
-
 
     def linear_BRC(self, query):
         nodes = None
@@ -250,13 +207,13 @@ def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=
     
     if gowala==True:
         if limit == False or limit == None:
-            points = pd.read_csv(path,sep='\t',header=None,usecols=columns,names=['timestamp','Lat','Long'])
+            points = pd.read_csv(path,sep='\t',header=None,usecols=columns,names=['Lat','Long'])
         else:
-            points = pd.read_csv(path,sep='\t',header=None,usecols=columns,names=['timestamp','Lat','Long'],nrows=limit)
+            points = pd.read_csv(path,sep='\t',header=None,usecols=columns,names=['Lat','Long'],nrows=limit)
         points = points.dropna()
-        points['timestamp'] = pd.to_datetime(points['timestamp'],format="%Y-%m-%dT%H:%M:%SZ")
+        # points['timestamp'] = pd.to_datetime(points['timestamp'],format="%Y-%m-%dT%H:%M:%SZ")
         #make time stamp into seconds
-        points['timestamp'] = (points['timestamp'] - pd.Timestamp("2009-02-01")).dt.total_seconds().astype(int)
+        # points['timestamp'] = (points['timestamp'] - pd.Timestamp("2009-02-01")).dt.total_seconds().astype(int)
     elif file_extension == 'csv':
         points = pd.read_csv(path)
         # points = points.dropna(how='any')
@@ -499,13 +456,13 @@ def stat_graph(path=None,title="",show=False):
             # src_depth = src_data['Depth']
             total_num = len(src_data['Depth'])  #normally should be 100,0000
             
-            i=0     #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
+            #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
             value_list = []
             percent_list = []
-            for item in range(src_data['Depth'].max()+1):
+            for i in range(src_data['Depth'].max()+1):
                 value_list.append(src_data['Depth'].value_counts().get(i, 0))
                 percent_list.append(f"{round(((value_list[i]/total_num)*100), 2)} %")
-                i+=1
+
             #this gets the depth of nodes returned 
             x_cord = []
             for j in range(len(value_list)):
@@ -553,11 +510,11 @@ def L2norm(path=None, show=False):
         if csv_file.__contains__("SRC"):        #only gets csv files that are SRC Query, then gets the SRC Query.csv file's Depth, and then graphs it
             data = pd.read_csv((path+f"{csv_file}"))    #data will be equal to each original SRC file
 
-            i=0     #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
+            #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
             value_list = []
-            for item in range(data['Depth'].max()+1):
+            for i in range(data['Depth'].max()+1):
                 value_list.append(data['Depth'].value_counts().get(i, 0))
-                i+=1
+
             for j in range(len(value_list)):
                 value_list[j] = value_list[j]/len(data['Depth'])
             #value list has the original data from SRC file
@@ -634,33 +591,30 @@ def get_queries_from_old_data(path):
 
 ##############################################################
 
-
-
-
 # ### Gowala ###      social netowrk
 # path = r"Saved Datasets/Gowalla_totalCheckins.txt"
-# points = points_from_file(path,columns=[1,2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=None)
+# points = points_from_file(path,columns=[2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=300000)
 # #___________________________________________________________________________#
 
+points = []
+for i in range(100):
+    for j in range(100):
+        points.append((i,j))
 
-### Spatial Database NO Duplication ###
-path = r"Saved Datasets/Spatial.xlsx"
-points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
-#___________________________________________________________________________#
+
 
 print(f"# of points: {len(points)}")
 print("Making Tree...")
 temp = KDTree(points,cutoff=4)
 print("Tree Made\n")
 
-
-
 ### CONTROL PANNEL ###
 num = 10000
-sprout = 2
-dataset ="Spatial"
+sprout = 1
+# dataset ="Gowalla - 120,143 points"
+dataset =f"Uniform - [100 x 100]"
 dup = False
-itterations = 2
+itterations = 1
 interval = 4
 starting_per = 0.30
 SRC = True
@@ -668,30 +622,6 @@ BRC = True
 force_old = True
 ######################
 
-# query = [33.43, -118.85, 35.99, -117.38]
-# alist = []
-# for item in points:
-#     if query[0] <= item[0] and query [2] >= item[0] and query[1] <= item[1] and query[3] >= item[1]:
-#         alist.append(item)
-# print(f"Length of manual check: {len(alist)}")
-
-# # points = pd.DataFrame(points,columns=[0,1])
-# # print(points[0].max())
-# # print(points[0].min())
-# # print(points[1].max())
-# # print(points[1].min())
-# # temp.print_tree(points=False, file=True)
-# # query = [(31,43),(-125,-114)]
-# query = [(33.43,35.99), (-118.85, -117.38)]
-# node = temp.linear_BRC(query)
-# print(len(node))
-# # temp.print_tree(points=True,file=True,title="Spatial Points.txt")
-# # print(node)
-# # print(node.left)
-# # print(node.right)
-
-
-###UPDATE: Old KD Tree BRC method is incorrect, current method is correct
 
 if dup == False:
     dup = "Without Duplicates"
@@ -703,7 +633,7 @@ else:
 for i in range(itterations):
     pre_list=None
 
-    #### This bit is only if you are reading data from 3DAG Tree, comment out if you aren't using this ###
+    ### This bit is only if you are reading data from 3DAG Tree, comment out if you aren't using this ###
     path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset, dup, sprout+i, f"{num:,}")
     pre_list = get_queries_from_old_data(path)
     ################################################################
@@ -718,10 +648,6 @@ for i in range(itterations):
 print("KDTree done!!\n"+"_"*50)
 
 ##############################################################################
-
-
-
-
 
 
 

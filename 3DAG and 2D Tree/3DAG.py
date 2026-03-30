@@ -80,6 +80,8 @@ class DAGTree:
 
     #Split Method
     def split(self):
+        if self.points == None:
+            return
         # print(len(inspect.stack()))   #This is to see how many stack frames are open every time split is called
 
         #Points need to be sorted before being put in the left or right or middle child
@@ -740,16 +742,20 @@ def statistics(file_path=None,graph=False,show=False):
     print("Finished Statistics\n")
 
 
-def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=False):        #Need to make it where it can split the csv file with delimeter = ' ' or ','. Also make method to work with .txt
-    """
-    Reads csv file and returns data in a list (which can straight forward be used in making a KD Tree). Uses Pandas lib.
-
-    :param path: Need path (also needs r before path string)
-    :param drop_duplicates: Boolean, if True it will remove all duplicate points and return a list.
-    """
+def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=False,gowala=False,limit=1000):        #Need to make it where it can split the csv file with delimeter = ' ' or ','. Also make method to work with .txt
     if path == None:
         return print("Need path!")
-    if file_extension == 'csv':
+    
+    if gowala==True:
+        if limit == False or limit == None:
+            points = pd.read_csv(path,sep='\t',header=None,usecols=columns,names=['Lat','Long'])
+        else:
+            points = pd.read_csv(path,sep='\t',header=None,usecols=columns,names=['Lat','Long'],nrows=limit)
+        points = points.dropna()
+        # points['timestamp'] = pd.to_datetime(points['timestamp'],format="%Y-%m-%dT%H:%M:%SZ")
+        #make time stamp into seconds
+        # points['timestamp'] = (points['timestamp'] - pd.Timestamp("2009-02-01")).dt.total_seconds().astype(int)
+    elif file_extension == 'csv':
         points = pd.read_csv(path)
         # points = points.dropna(how='any')
     elif file_extension == 'excel':
@@ -759,9 +765,10 @@ def points_from_file(path=None,columns=None,file_extension=None,drop_duplicates=
         # points = points.dropna(how='any')
 
     if columns != None:
-        points = points[columns]
-        if file_extension=='csv':
-            points = points.dropna()
+        if gowala != True:
+            points = points[columns]
+            if file_extension=='csv':
+                points = points.dropna()
 
     if drop_duplicates == True:
         points = points.drop_duplicates()
@@ -1048,8 +1055,8 @@ def competitive(DAGpath=None, KDpath=None):
         if item.__contains__('.csv'):
             csv_items.append(item)      #this gets the csvs, large.csv, medium.csv, small4%.csv
     
-    DAGdata = pd.DataFrame(columns=['SRC Depth'])
-    KDdata = pd.DataFrame(columns=['SRC Depth'])
+    DAGdata = pd.DataFrame(columns=['SRC Size'])
+    KDdata = pd.DataFrame(columns=['SRC Size'])
 
 
     div_data = pd.DataFrame(columns=csv_items)
@@ -1058,11 +1065,16 @@ def competitive(DAGpath=None, KDpath=None):
     os.makedirs(DAGpath+"_Competitive Graphs/",exist_ok=True)
     #need to get all SRC depths of 3DAG and KD, again calculate queries individual of size
     for i in range(len(csv_items)): #itterates through large, medium, then small
-        DAGdata['SRC Depth'] = pd.read_csv(DAGpath+csv_items[i])['SRC Depth']
-        KDdata['SRC Depth'] = pd.read_csv(KDpath+csv_items[i])['SRC Depth']
+        DAGdata['SRC Size'] = pd.read_csv(DAGpath+csv_items[i])['SRC Size']
+        KDdata['SRC Size'] = pd.read_csv(KDpath+csv_items[i])['SRC Size']
 
         #F/P
-        div_data[csv_items[i]] = (((KDdata/DAGdata).sum())/len(DAGdata)).values
+        temp_div_data = KDdata/DAGdata
+        temp_div_data = temp_div_data.fillna(0)
+        div_data[csv_items[i]] = (temp_div_data.sum())/len(DAGdata)
+        div_data.to_csv('temp.csv')
+        # print(div_data)
+        # print("_"*50)
         #this is the competative value for KDTree(SRC Size)/3DAG(SRC Size)
         #in the end, we should see long(N/s)        s being # of data points
 
@@ -1070,7 +1082,7 @@ def competitive(DAGpath=None, KDpath=None):
         diff_data[csv_items[i]] = ((DAGdata-KDdata).sum())/len(DAGdata)
         #this is the competative value for (3DAG(Level) - KDTree(Level))
     
-    #write it all
+    # write it all
     with open(DAGpath+'_Competitive.txt', 'w') as file:
         file.write("KDTree(SRC Size)/3DAG(SRC Size)")
         for i in range(len(csv_items)):
@@ -1154,14 +1166,28 @@ def FP_stats(DAGpath=None, KDpath=None):
 
 
 
-
-
 ### TEMPLATE TO DO EVERYTHING ###
-
-# ### Spatial Database NO Duplication ###
-# path = r"Saved Datasets/Spatial.xlsx"
-# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+# ### Gowala ###      social netowrk
+# path = r"Saved Datasets/Gowalla_totalCheckins.txt"
+# points = points_from_file(path,columns=[2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=300000)
 # #___________________________________________________________________________#
+
+
+# points = []
+# for i in range(100):
+#     for j in range(100):
+#         points.append((i,j))
+
+# x,y = [],[]
+# for item in points:
+#     x.append(item[0])
+#     y.append(item[1])
+
+# plt.scatter(x=x,y=y,c='grey')
+# plt.title(f'CRAWDAD {len(points)} points')
+# plt.tight_layout()
+# plt.show()
+
 
 
 # print(f"This is the length of points being inputed into the tree: {len(points)}")
@@ -1170,9 +1196,8 @@ def FP_stats(DAGpath=None, KDpath=None):
 
 
 num = 10000
-sprout = 3
-dataset ="Spatial"
-os.makedirs(f"Saved Query/{dataset}/", exist_ok=True)
+sprout = 1
+dataset =f"CRAWDAD"
 dup = False
 itterations = 1
 starting_per = .30
@@ -1192,7 +1217,7 @@ else:
 #     L2norm(path)
     
 
-#### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
+### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
 input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
 
 for i in range(itterations):
@@ -1206,10 +1231,7 @@ for i in range(itterations):
 
 
 print("Done with 3DAG Tree!!\n" + "_"*50)
-#################################################################################################################
-
-
-
+################################################################################################################
 
 
 

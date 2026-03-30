@@ -1,0 +1,24 @@
+sum(KDTree(SRC Size)/3DAG(SRC Size))/# of Queries
+	0.02.csv:	[52.53557006]
+	0.06.csv:	[19.45122655]
+	0.10.csv:	[13.28359435]
+	0.14.csv:	[9.40909176]
+	0.18.csv:	[7.40901196]
+	0.22.csv:	[5.97244843]
+	0.26.csv:	[5.42430826]
+	0.30.csv:	[4.6695109]
+
+sum((3DAG(Level)-KDTree(Level))/# of Queries
+	0.02.csv:	[-426.7065]
+	0.06.csv:	[-912.8523]
+	0.10.csv:	[-1323.2026]
+	0.14.csv:	[-1705.69]
+	0.18.csv:	[-1956.3346]
+	0.22.csv:	[-2176.2684]
+	0.26.csv:	[-2399.0408]
+	0.30.csv:	[-2475.1684]
+
+
+This data is from:
+Saved Query/3DAG SRC vs BRC/Uniform - [100 x 100]/Without Duplicates/1 - 10,000/_Report/
+Saved Query/KD SRC vs BRC/Uniform - [100 x 100]/Without Duplicates/1 - 10,000/_Report/
