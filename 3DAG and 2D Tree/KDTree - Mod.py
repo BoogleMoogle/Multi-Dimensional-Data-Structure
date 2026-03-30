@@ -591,16 +591,10 @@ def get_queries_from_old_data(path):
 
 ##############################################################
 
-# ### Gowala ###      social netowrk
-# path = r"Saved Datasets/Gowalla_totalCheckins.txt"
-# points = points_from_file(path,columns=[2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=300000)
-# #___________________________________________________________________________#
-
-points = []
-for i in range(100):
-    for j in range(100):
-        points.append((i,j))
-
+### Gowala ###      social netowrk
+path = r"Saved Datasets/Gowalla_totalCheckins.txt"
+points = points_from_file(path,columns=[2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=300000)
+#___________________________________________________________________________#
 
 
 print(f"# of points: {len(points)}")
@@ -611,8 +605,8 @@ print("Tree Made\n")
 ### CONTROL PANNEL ###
 num = 10000
 sprout = 1
-# dataset ="Gowalla - 120,143 points"
-dataset =f"Uniform - [100 x 100]"
+dataset ="Gowalla - 120,143 points"
+# dataset =f"Uniform - [100 x 100]"
 dup = False
 itterations = 1
 interval = 4

@@ -1055,84 +1055,48 @@ def competitive(DAGpath=None, KDpath=None):
         if item.__contains__('.csv'):
             csv_items.append(item)      #this gets the csvs, large.csv, medium.csv, small4%.csv
     
-    DAGdata = pd.DataFrame(columns=['SRC Size'])
-    KDdata = pd.DataFrame(columns=['SRC Size'])
-
-
-    div_data = pd.DataFrame(columns=csv_items)
-    diff_data = pd.DataFrame(columns=csv_items)
+    # div_data = pd.DataFrame(columns=csv_items)
+    # diff_data = pd.DataFrame(columns=csv_items)
+    div_data = []
+    diff_data = []
 
     os.makedirs(DAGpath+"_Competitive Graphs/",exist_ok=True)
     #need to get all SRC depths of 3DAG and KD, again calculate queries individual of size
     for i in range(len(csv_items)): #itterates through large, medium, then small
-        DAGdata['SRC Size'] = pd.read_csv(DAGpath+csv_items[i])['SRC Size']
-        KDdata['SRC Size'] = pd.read_csv(KDpath+csv_items[i])['SRC Size']
+        DAGdata= pd.read_csv(DAGpath+csv_items[i])
+        KDdata = pd.read_csv(KDpath+csv_items[i])
 
         #F/P
-        temp_div_data = KDdata/DAGdata
-        temp_div_data = temp_div_data.fillna(0)
-        div_data[csv_items[i]] = (temp_div_data.sum())/len(DAGdata)
-        div_data.to_csv('temp.csv')
-        # print(div_data)
-        # print("_"*50)
+        # div_data[csv_items[i]] = (((KDdata['SRC Size'].values/DAGdata['SRC Size'].values).sum())/len(DAGdata.values))
+        div_data.append(((KDdata['SRC Size']/DAGdata['SRC Size']).sum())/len(DAGdata))
         #this is the competative value for KDTree(SRC Size)/3DAG(SRC Size)
         #in the end, we should see long(N/s)        s being # of data points
 
         #lvl. diff
-        diff_data[csv_items[i]] = ((DAGdata-KDdata).sum())/len(DAGdata)
+        diff_data.append(((DAGdata['SRC Depth']-KDdata['SRC Depth']).sum())/len(DAGdata))
         #this is the competative value for (3DAG(Level) - KDTree(Level))
     
     # write it all
     with open(DAGpath+'_Competitive.txt', 'w') as file:
         file.write("KDTree(SRC Size)/3DAG(SRC Size)")
         for i in range(len(csv_items)):
-            file.write(f"\n\t{csv_items[i]}:\t{div_data[csv_items[i]].values}") #div_data write
+            file.write(f"\n\t{csv_items[i]}:\t{div_data[i]}") #div_data write
         file.write("\n\n3DAG(Level)/KDTree(Level)")
         for i in range(len(csv_items)):
-            file.write(f"\n\t{csv_items[i]}:\t{diff_data[csv_items[i]].values}")
+            file.write(f"\n\t{csv_items[i]}:\t{diff_data[i]}")
         file.write(f"\n\n\nThis data is from:\n{DAGpath}\n{KDpath}")
         file.close()
 
     with open(KDpath+'_Competitive.txt', 'w') as file:
         file.write("sum(KDTree(SRC Size)/3DAG(SRC Size))/# of Queries")
         for i in range(len(csv_items)):
-            file.write(f"\n\t{csv_items[i]}:\t{div_data[csv_items[i]].values}") #div_data write
+            file.write(f"\n\t{csv_items[i]}:\t{div_data[i]}") #div_data write
         file.write("\n\nsum((3DAG(Level)-KDTree(Level))/# of Queries")
         for i in range(len(csv_items)):
-            file.write(f"\n\t{csv_items[i]}:\t{diff_data[csv_items[i]].values}")
+            file.write(f"\n\t{csv_items[i]}:\t{diff_data[i]}")
         file.write(f"\n\n\nThis data is from:\n{DAGpath}\n{KDpath}")
         file.close()
     print("Finished Comp.")
-
-
-def FP_stats(DAGpath=None, KDpath=None):
-    if DAGpath == None or KDpath==None:
-        return print("Need path!")
-
-    if DAGpath[len(DAGpath)-1] != "/":    #makes path accessable
-        DAGpath = DAGpath+"/"
-    if KDpath[len(KDpath)-1] != "/":    #makes path accessable
-        KDpath = KDpath+"/"
-
-    DAGpath = DAGpath + "_Report/"    #getting into report folder
-    KDpath = KDpath + "_Report/"
-    
-    
-    for item in os.listdir(DAGpath):
-        if item.__contains__('.csv'):   #only gets items with .csv
-            DAG_fp = pd.read_csv(DAGpath+item)['F/P %']
-            KD_fp = pd.read_csv(KDpath+item)['F/P %']
-
-            temp_df = pd.concat([DAG_fp, KD_fp],axis=1)
-            print(temp_df)
-            
-            # diff_df = DAG_fp - KD_fp    #subtracts 3DAG's false positives by KD Trees false positives. This is done for each query
-            # print(diff_df)
-            # print("_"*50)
-
-            # diff_df = diff_df.values.tolist()
-            # for item in diff_df:
-            #     print(item)
 
             
 
@@ -1167,26 +1131,12 @@ def FP_stats(DAGpath=None, KDpath=None):
 
 
 ### TEMPLATE TO DO EVERYTHING ###
+
 # ### Gowala ###      social netowrk
 # path = r"Saved Datasets/Gowalla_totalCheckins.txt"
 # points = points_from_file(path,columns=[2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=300000)
 # #___________________________________________________________________________#
 
-
-# points = []
-# for i in range(100):
-#     for j in range(100):
-#         points.append((i,j))
-
-# x,y = [],[]
-# for item in points:
-#     x.append(item[0])
-#     y.append(item[1])
-
-# plt.scatter(x=x,y=y,c='grey')
-# plt.title(f'CRAWDAD {len(points)} points')
-# plt.tight_layout()
-# plt.show()
 
 
 
@@ -1197,7 +1147,7 @@ def FP_stats(DAGpath=None, KDpath=None):
 
 num = 10000
 sprout = 1
-dataset =f"CRAWDAD"
+dataset ="CRAWDAD"
 dup = False
 itterations = 1
 starting_per = .30
@@ -1227,7 +1177,7 @@ for i in range(itterations):
     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False)
     competitive(DAGpath,KDpath)
     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
-    # FP_stats(DAGpath=DAGpath,KDpath=KDpath)
+
 
 
 print("Done with 3DAG Tree!!\n" + "_"*50)
