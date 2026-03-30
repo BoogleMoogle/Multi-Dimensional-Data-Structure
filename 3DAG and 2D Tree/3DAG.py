@@ -1143,11 +1143,17 @@ def competitive(DAGpath=None, KDpath=None):
 # print(f"This is the length of points being inputed into the tree: {len(points)}")
 # temp = DAGTree(points, cuttoff=4)
 # print("Done with making tree.")
+points = []
+for i in range(100):
+    for j in range(100):
+        points.append((i,j))
+
+print(len(points))
 
 
 num = 10000
 sprout = 1
-dataset ="CRAWDAD"
+dataset ="Gowalla - 120,143 points"
 dup = False
 itterations = 1
 starting_per = .30
@@ -1170,17 +1176,17 @@ else:
 ### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
 input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
 
-for i in range(itterations):
-    DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
-    KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+# for i in range(itterations):
+#     DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+#     KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
 
-    lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False)
-    competitive(DAGpath,KDpath)
-    L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
+#     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False)
+#     competitive(DAGpath,KDpath)
+#     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
 
 
 
-print("Done with 3DAG Tree!!\n" + "_"*50)
+# print("Done with 3DAG Tree!!\n" + "_"*50)
 ################################################################################################################
 
 
