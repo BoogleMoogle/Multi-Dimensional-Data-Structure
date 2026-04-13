@@ -3,6 +3,7 @@ import random
 import pandas as pd
 import numpy as np
 import os
+import sys
 #to see stack
 import inspect
 np.set_printoptions(legacy='1.25')
@@ -591,22 +592,43 @@ def get_queries_from_old_data(path):
 
 ##############################################################
 
-### Gowala ###      social netowrk
-path = r"Saved Datasets/Gowalla_totalCheckins.txt"
-points = points_from_file(path,columns=[2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=300000)
-#___________________________________________________________________________#
+# ## Gowala ###      social network
+# path = r"Saved Datasets/Gowalla_totalCheckins.txt"
+# points = points_from_file(path,columns=[2,3],file_extension='csv',drop_duplicates=True,gowala=True,limit=100000)
+# #___________________________________________________________________________#
+
+
+# ### Spatial Database NO Duplication ###
+# path = r"Saved Datasets/Spatial.xlsx"
+# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+# #___________________________________________________________________________#
+
+# ### CRAWDAD spitz/cellular Dataset Dropping Duplicates ###
+# path = r"Saved Datasets/DT-mobile-data.csv/VDS_MS_310809_27_0210.csv"
+# points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=True)
+# #___________________________________________________________________________#
+
+
+
+
+points = []
+for i in range(15):
+    for j in range(15):
+        points.append((i+1,j+1))
 
 
 print(f"# of points: {len(points)}")
 print("Making Tree...")
-temp = KDTree(points,cutoff=4)
+temp = KDTree(points,cutoff=1)
 print("Tree Made\n")
 
 ### CONTROL PANNEL ###
 num = 10000
 sprout = 1
-dataset ="Gowalla - 120,143 points"
-# dataset =f"Uniform - [100 x 100]"
+# dataset = "Spatial - Cuttoff at 1"
+dataset = "[16x16] - Cuttoff at 1" 
+# dataset =f"Gowalla - 40,356 points - Cuttoff 1"
+# dataset ="Uniform [0 x 99] - Cuttoff at 1"
 dup = False
 itterations = 1
 interval = 4
@@ -622,7 +644,7 @@ if dup == False:
 else:
     dup = "With Duplicates"
 
-
+# print(sys.getsizeof(temp))
 
 for i in range(itterations):
     pre_list=None

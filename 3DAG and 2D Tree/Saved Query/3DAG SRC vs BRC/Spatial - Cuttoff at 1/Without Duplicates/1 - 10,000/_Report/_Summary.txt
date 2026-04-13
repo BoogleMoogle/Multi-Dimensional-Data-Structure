@@ -1,0 +1,80 @@
+0.02
+	BRC Size:	78.69
+	SRC Size:	651.22
+	SRC Depth:	6.48
+	Diff:		572.53
+	F/P %:		12.19%
+	Error %:		11.99%
+	Tot # of Inf: 4,649
+
+
+0.06
+	BRC Size:	143.13
+	SRC Size:	984.3
+	SRC Depth:	5.4
+	Diff:		841.17
+	F/P %:		14.96%
+	Error %:		14.14%
+	Tot # of Inf: 4,240
+
+
+0.10
+	BRC Size:	229.41
+	SRC Size:	1,427.69
+	SRC Depth:	4.78
+	Diff:		1,198.29
+	F/P %:		16.55%
+	Error %:		15.56%
+	Tot # of Inf: 3,861
+
+
+0.14
+	BRC Size:	341.81
+	SRC Size:	2,083.57
+	SRC Depth:	4.19
+	Diff:		1,741.76
+	F/P %:		18.45%
+	Error %:		17.1%
+	Tot # of Inf: 3,336
+
+
+0.18
+	BRC Size:	469.65
+	SRC Size:	2,888.73
+	SRC Depth:	3.65
+	Diff:		2,419.08
+	F/P %:		23.43%
+	Error %:		17.7%
+	Tot # of Inf: 2,966
+
+
+0.22
+	BRC Size:	650.64
+	SRC Size:	3,660.03
+	SRC Depth:	3.24
+	Diff:		3,009.39
+	F/P %:		23.26%
+	Error %:		19.28%
+	Tot # of Inf: 2,467
+
+
+0.26
+	BRC Size:	845.89
+	SRC Size:	4,432.41
+	SRC Depth:	2.86
+	Diff:		3,586.52
+	F/P %:		27.08%
+	Error %:		20.66%
+	Tot # of Inf: 2,004
+
+
+0.30
+	BRC Size:	1,069.56
+	SRC Size:	5,416.29
+	SRC Depth:	2.55
+	Diff:		4,346.74
+	F/P %:		34.05%
+	Error %:		21.97%
+	Tot # of Inf: 1,553
+
+
