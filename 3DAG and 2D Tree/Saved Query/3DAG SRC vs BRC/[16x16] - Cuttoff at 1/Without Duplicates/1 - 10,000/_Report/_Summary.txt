@@ -78,3 +78,13 @@
 	Tot # of Inf: 0
 
 
+3x3
+	BRC Size:	9.08
+	SRC Size:	48.98
+	SRC Depth:	2.38
+	Diff:		39.9
+	F/P %:		5.43%
+	Error %:		24.13%
+	Tot # of Inf: 0
+
+

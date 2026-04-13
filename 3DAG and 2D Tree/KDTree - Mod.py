@@ -375,12 +375,14 @@ def SRC_vs_BRC(tree, num=1, sprout=None, path=None, show=False, duplicates=False
             query_list = pre_list[b]
             if SRC == True:
                 SRC_path = f"{path}SRC_{coeffs_list[(len(coeffs_list)-1)-i]:.2f}.csv"
+                # SRC_path = f"{path}SRC_3x3.csv"
                 print(f"\tStarting SRC at {coeffs_list[(len(coeffs_list)-1)-i]:.2f}...")
                 save_query(tree=tree,num=1,path=SRC_path,SRC=True,BRC=False,save=True,show=show,query_list=query_list)
                 print(f"\tFinished SRC at {coeffs_list[(len(coeffs_list)-1)-i]:.2f}")
 
             if BRC == True:
                 BRC_path = f"{path}BRC_{coeffs_list[(len(coeffs_list)-1)-i]:.2f}.csv"
+                # BRC_path = f"{path}BRC_3x3.csv"
                 print(f"\n\tStarting BRC at {coeffs_list[(len(coeffs_list)-1)-i]:.2f}...")
                 save_query(tree=tree,num=1,path=BRC_path,SRC=False,BRC=True,save=True,show=show,query_list=query_list)
                 print(f"\tFinished BRC at {coeffs_list[(len(coeffs_list)-1)-i]:.2f}\n")
@@ -406,32 +408,32 @@ def statistics(file_path=None,graph=False,show=False):
     os.makedirs(file_path+"_Report/", exist_ok=True)
 
     for item  in os.listdir(file_path):
-        df = pd.DataFrame(columns=['BRC Size','SRC Size','SRC Depth','Diff','F/P %','Error %'])
-        if item.__contains__('.csv') and item.__contains__('BRC'):
-            df['BRC Size'] = pd.read_csv(file_path + item)['Data Size']
-            df['SRC Size'] = pd.read_csv(file_path + item.replace('BRC','SRC'))['Data Size']
-            df['SRC Depth'] = pd.read_csv(file_path + item.replace('BRC','SRC'))['Depth']
-            df['Error %'] = ((df['BRC Size']/df['SRC Size']))*100
-            df['F/P %'] = (df['SRC Size']/df['BRC Size'])
-            df['Diff'] = df['SRC Size'] - df['BRC Size']
-            #change inf values to 100% for Error %
-            df['Error %'] = df['Error %'].replace([np.inf,-np.inf],100)
-            #get num of inf in F/P %
-            df_total_inf = np.isinf(df['F/P %']).values.sum()
-            df.to_csv(file_path+f"_Report/{item.replace('BRC_','')}")
+            df = pd.DataFrame(columns=['BRC Size','SRC Size','SRC Depth','Diff','F/P %','Error %'])
+            if item.__contains__('.csv') and item.__contains__('BRC'):
+                df['BRC Size'] = pd.read_csv(file_path + item)['Data Size']
+                df['SRC Size'] = pd.read_csv(file_path + item.replace('BRC','SRC'))['Data Size']
+                df['SRC Depth'] = pd.read_csv(file_path + item.replace('BRC','SRC'))['Depth']
+                df['Error %'] = ((df['BRC Size']/df['SRC Size']))*100
+                df['F/P %'] = (df['SRC Size']/df['BRC Size'])
+                df['Diff'] = df['SRC Size'] - df['BRC Size']
+                #change inf values to 100% for Error %
+                df['Error %'] = df['Error %'].replace([np.inf,-np.inf],100)
+                #get num of inf in F/P %
+                df_total_inf = np.isinf(df['F/P %']).values.sum()
+                df.to_csv(file_path+f"_Report/{item.replace('BRC_','')}")
 
-            #this is for summary
-            df_avg_BRC_size = round(df['BRC Size'].mean(),2)
-            df_avg_SRC_size = round(df['SRC Size'].mean(),2)
-            df_avg_SRC_depth = round(df['SRC Depth'].mean(),2)
-            df_avg_diff = round(df['Diff'].mean(),2)
-            df_avg_fp = round(df.replace([np.inf, -np.inf],np.nan).dropna()['F/P %'].mean(),2)
-            df_avg_error = round(df['Error %'].mean(),2)
+                #this is for summary
+                df_avg_BRC_size = round(df['BRC Size'].mean(),2)
+                df_avg_SRC_size = round(df['SRC Size'].mean(),2)
+                df_avg_SRC_depth = round(df['SRC Depth'].mean(),2)
+                df_avg_diff = round(df['Diff'].mean(),2)
+                df_avg_fp = round(df.replace([np.inf, -np.inf],np.nan).dropna()['F/P %'].mean(),2)
+                df_avg_error = round(df['Error %'].mean(),2)
 
-            with open(file_path+"_Report/_Summary.txt", 'a') as file:
-                file.write(f"{item.replace('BRC_','').replace('.csv','')}\n\tBRC Size:\t{df_avg_BRC_size:,}\n\tSRC Size:\t{df_avg_SRC_size:,}\n\tSRC Depth:\t{df_avg_SRC_depth:,}\n\tDiff:\t\t{df_avg_diff:,}\n\tF/P %:\t\t{df_avg_fp:,}%\n\tError %:\t\t{df_avg_error:,}%\n\tTot # of Inf: {df_total_inf:,}\n\n\n")
-            if graph == True:
-                stat_graph(file_path,show=show)
+                with open(file_path+"_Report/_Summary.txt", 'a') as file:
+                    file.write(f"{item.replace('BRC_','').replace('.csv','')}\n\tBRC Size:\t{df_avg_BRC_size:,}\n\tSRC Size:\t{df_avg_SRC_size:,}\n\tSRC Depth:\t{df_avg_SRC_depth:,}\n\tDiff:\t\t{df_avg_diff:,}\n\tF/P %:\t\t{df_avg_fp:,}%\n\tError %:\t\t{df_avg_error:,}%\n\tTot # of Inf: {df_total_inf:,}\n\n\n")
+                if graph == True:
+                    stat_graph(file_path,show=show)
     print("Finished Statistics\n")
 
 
@@ -576,6 +578,7 @@ def get_queries_from_old_data(path):
     return_list = []
     for item in os.listdir(path):
         if item.__contains__('.csv') and item.__contains__('SRC'):
+        # if item.__contains__('3x3') and item.__contains__('SRC'):
             query_list = None
             query_list = pd.DataFrame(pd.read_csv(path+item)['SRC Query'])
             query_list = query_list.values.tolist()
@@ -632,7 +635,7 @@ dataset = "[16x16] - Cuttoff at 1"
 dup = False
 itterations = 1
 interval = 4
-starting_per = 0.30
+starting_per = .30
 SRC = True
 BRC = True
 force_old = True
@@ -646,22 +649,28 @@ else:
 
 # print(sys.getsizeof(temp))
 
-for i in range(itterations):
-    pre_list=None
 
-    ### This bit is only if you are reading data from 3DAG Tree, comment out if you aren't using this ###
-    path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset, dup, sprout+i, f"{num:,}")
-    pre_list = get_queries_from_old_data(path)
-    ################################################################
+# pre_list = get_queries_from_old_data(r"C:\Users\cvinc\Desktop\College\Internship\Github\Multi-Dimensional-Data-Structure\3DAG and 2D Tree\Saved Query\3DAG SRC vs BRC\[16x16] - Cuttoff at 1\Without Duplicates\1 - 10,000\SRC_3x3.csv")
 
-    os.makedirs(r"Saved Query/KD SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
-    path = r"Saved Query/KD SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
-    os.makedirs(path,exist_ok=True)
-    SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval,SRC=SRC,BRC=BRC,force_old=True,pre_list=pre_list)
 
-    statistics(path,graph=True)
-    L2norm(path)
-print("KDTree done!!\n"+"_"*50)
+
+
+# for i in range(itterations):
+    # pre_list=None
+    # ### This bit is only if you are reading data from 3DAG Tree, comment out if you aren't using this ###
+    # path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset, dup, sprout+i, f"{num:,}")
+    # pre_list = get_queries_from_old_data(path)
+    # ################################################################
+
+    # os.makedirs(r"Saved Query/KD SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
+    # path = r"Saved Query/KD SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
+    # os.makedirs(path,exist_ok=True)
+    
+    # SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval,SRC=SRC,BRC=BRC,force_old=True,pre_list=pre_list)
+
+    # statistics(path,graph=True)
+    # L2norm(path)
+# print("KDTree done!!\n"+"_"*50)
 
 ##############################################################################
 

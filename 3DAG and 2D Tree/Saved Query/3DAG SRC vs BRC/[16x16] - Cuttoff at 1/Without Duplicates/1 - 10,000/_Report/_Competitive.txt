@@ -7,6 +7,7 @@ KDTree(SRC Size)/3DAG(SRC Size)
 	0.22.csv:	3.11792826187322
 	0.26.csv:	2.8375529546900298
 	0.30.csv:	2.7764939731374403
+	3x3.csv:	1.8008522267206477
 
 3DAG(Level)/KDTree(Level)
 	0.02.csv:	0.7155
@@ -17,6 +18,7 @@ KDTree(SRC Size)/3DAG(SRC Size)
 	0.22.csv:	1.0457
 	0.26.csv:	0.9999
 	0.30.csv:	0.9811
+	3x3.csv:	0.538
 
 
 This data is from:

@@ -883,10 +883,14 @@ def lvl_diff(DAGpath=None, KDpath=None, title=None, show=True, save=False):
 
         #percentages
         percent_list = []
-        for j in range(len(diff_list)):
+        # for j in range(len(diff_list)):
+        for item in diff_list:
             try:
-                percent_list.append(f"{round((diff_list[j]/diff_list.sum())*100,2)}%")
+                # print(diff_list)
+                # percent_list.append(f"{round((diff_list[j]/diff_list.sum())*100,2)}%")
+                percent_list.append(f"{round((item/diff_list.sum())*100,2)}%")
             except KeyError:
+                print("Error")
                 percent_list.append("0.0%")
         
         #plotting
@@ -1113,6 +1117,8 @@ def competitive(DAGpath=None, KDpath=None):
         file.close()
     print("Finished Comp.")
 
+
+
             
 
          
@@ -1180,6 +1186,8 @@ for i in range(15):
 
 
 
+
+
 print(f"This is the length of points being inputed into the tree: {len(points)}")
 temp = DAGTree(points, cuttoff=1)
 print("Done with making tree.")
@@ -1196,17 +1204,51 @@ itterations = 1
 starting_per = .30
 interval = 4
 
+
 if dup == False:
     dup = "Without Duplicates"
 else:
     dup = "With Duplicates"
 
+pre_list = []
+for i in range(10000):
+    # r = random.uniform(0.2, 5)
+    r = 1
+    xmin = round(random.uniform(temp.bbox[0],temp.bbox[2]-(3)),2)
+    xmax = xmin+3
+    ymin = xmin
+    ymax = ymin+3
+
+    #checking for incorrect mins and maxs
+    if xmin < temp.bbox[0]:
+        xmin = temp.bbox[0]
+    if xmax > temp.bbox[2]:
+        xmax = temp.bbox[2]
+    if ymin < temp.bbox[1]:
+        ymin = temp.bbox[1]
+    if ymax > temp.bbox[3]:
+        ymax = temp.bbox[3]  
+    if ymax < temp.bbox[1]:
+        ymax = temp.bbox[1]
+
+    pre_list.append([xmin,ymin,xmax,ymax])
+
+# # for item in pre_list:
+# #     print(item)
+
 
 # for i in range(itterations):
 #     os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
-#     path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
+#     path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")    
 #     os.makedirs(path,exist_ok=True)
-#     SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
+
+#     SRC_path = f"{path}SRC_3x3.csv"
+#     save_query(tree=temp,num=1,path=SRC_path,SRC=True,BRC=False,save=True,query_list=pre_list)
+    
+#     BRC_path = f"{path}BRC_3x3.csv"
+#     save_query(tree=temp,num=1,path=BRC_path,SRC=False,BRC=True,save=True,query_list=pre_list)
+
+#     # SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
 #     statistics(path,graph=True,show=False)
 #     L2norm(path)
 
@@ -1219,7 +1261,7 @@ for i in range(itterations):
     KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
 
     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False, save=True)
-    competitive(DAGpath,KDpath)
+    # competitive(DAGpath,KDpath)
     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
 print("Done with 3DAG Tree!!\n" + "_"*50)
 ################################################################################################################
