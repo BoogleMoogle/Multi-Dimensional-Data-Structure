@@ -657,18 +657,21 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,duplicates=False
         if coeffs_list[i] <= 0:
             coeffs_list.remove(coeffs_list[i])
             break
-        coeff_num = (tree.bbox[2]-tree.bbox[0])*coeffs_list[i]
+        coeff_numx = ((tree.bbox[2]+0.5)-(tree.bbox[0]-0.5))*coeffs_list[i]
+        coeff_numy = ((tree.bbox[3]+0.5)-(tree.bbox[1]-0.5))*coeffs_list[i]
         points_list = []
 
         j=0
         while j != num:
             # r = random.uniform(0.2, 5)
             r = 1
-            xmin = round(random.uniform(tree.bbox[0],tree.bbox[2]-(coeff_num*r)),2)
-            xmax = round(random.uniform(xmin+1,xmin+(coeff_num*r)),2)
-            ymin = round(random.uniform(tree.bbox[1],tree.bbox[3]-(coeff_num*1/r)),2)
-            ymax = round(random.uniform(ymin+1,ymin+(coeff_num*1/r)),2)
-
+            xmin = round(random.uniform(tree.bbox[0]-0.5,(tree.bbox[2]+0.5)-(coeff_numx*r)),2)
+            # xmax = round(random.uniform(xmin,xmin+(coeff_num*r)),2)
+            xmax = xmin + coeff_numx
+            ymin = round(random.uniform(tree.bbox[1]-0.5,(tree.bbox[3]+0.5)-(coeff_numy*1/r)),2)
+            # ymax = round(random.uniform(ymin,ymin+(coeff_num*1/r)),2)
+            ymax = ymin + coeff_numy
+            
             #checking for incorrect mins and maxs
             if xmin < tree.bbox[0]:
                 xmin = tree.bbox[0]
@@ -1180,16 +1183,16 @@ def competitive(DAGpath=None, KDpath=None):
 
 
 points = []
-for i in range(15):
-    for j in range(15):
-        points.append((i+1,j+1))
+for i in range(16):
+    for j in range(16):
+        points.append((i,j))
 
 
 
 
 
 print(f"This is the length of points being inputed into the tree: {len(points)}")
-temp = DAGTree(points, cuttoff=1)
+temp = DAGTree(points, cuttoff=1,axis=1)
 print("Done with making tree.")
 
 num = 10000
@@ -1198,7 +1201,7 @@ sprout = 1
 # dataset =f"Gowalla - 40,356 points - Cuttoff 1"
 # dataset = "Spatial - Cuttoff at 1"
 # dataset = "CRAWDAD - Cuttoff at 1" 
-dataset = "[16x16] - Cuttoff at 1" 
+dataset = "[16x16] - Y Start" 
 dup = False
 itterations = 1
 starting_per = .30
@@ -1210,47 +1213,47 @@ if dup == False:
 else:
     dup = "With Duplicates"
 
-pre_list = []
-for i in range(10000):
-    # r = random.uniform(0.2, 5)
-    r = 1
-    xmin = round(random.uniform(temp.bbox[0],temp.bbox[2]-(3)),2)
-    xmax = xmin+3
-    ymin = xmin
-    ymax = ymin+3
+# pre_list = []
+# for i in range(10000):
+#     # r = random.uniform(0.2, 5)
+#     r = 1
+#     xmin = round(random.uniform(temp.bbox[0]-0.5,(temp.bbox[2]+0.5)-(3)),2)
+#     xmax = xmin+3
+#     ymin = round(random.uniform(temp.bbox[1]-0.5,(temp.bbox[3]+0.5)-3),2)
+#     ymax = ymin+3
 
-    #checking for incorrect mins and maxs
-    if xmin < temp.bbox[0]:
-        xmin = temp.bbox[0]
-    if xmax > temp.bbox[2]:
-        xmax = temp.bbox[2]
-    if ymin < temp.bbox[1]:
-        ymin = temp.bbox[1]
-    if ymax > temp.bbox[3]:
-        ymax = temp.bbox[3]  
-    if ymax < temp.bbox[1]:
-        ymax = temp.bbox[1]
+#     #checking for incorrect mins and maxs
+#     if xmin < temp.bbox[0]:
+#         xmin = temp.bbox[0]
+#     if xmax > temp.bbox[2]:
+#         xmax = temp.bbox[2]
+#     if ymin < temp.bbox[1]:
+#         ymin = temp.bbox[1]
+#     if ymax > temp.bbox[3]:
+#         ymax = temp.bbox[3]  
+#     if ymax < temp.bbox[1]:
+#         ymax = temp.bbox[1]
 
-    pre_list.append([xmin,ymin,xmax,ymax])
+#     pre_list.append([xmin,ymin,xmax,ymax])
 
-# # for item in pre_list:
-# #     print(item)
+# for item in pre_list:
+#     print(item)
 
 
 # for i in range(itterations):
-#     os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
-#     path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")    
-#     os.makedirs(path,exist_ok=True)
+    # os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
+    # path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")    
+    # os.makedirs(path,exist_ok=True)
 
-#     SRC_path = f"{path}SRC_3x3.csv"
-#     save_query(tree=temp,num=1,path=SRC_path,SRC=True,BRC=False,save=True,query_list=pre_list)
+    # SRC_path = f"{path}SRC_3x3.csv"
+    # save_query(tree=temp,num=1,path=SRC_path,SRC=True,BRC=False,save=True,query_list=pre_list)
     
-#     BRC_path = f"{path}BRC_3x3.csv"
-#     save_query(tree=temp,num=1,path=BRC_path,SRC=False,BRC=True,save=True,query_list=pre_list)
+    # BRC_path = f"{path}BRC_3x3.csv"
+    # save_query(tree=temp,num=1,path=BRC_path,SRC=False,BRC=True,save=True,query_list=pre_list)
 
-#     # SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
-#     statistics(path,graph=True,show=False)
-#     L2norm(path)
+    # SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
+    # statistics(path,graph=True,show=False)
+    # L2norm(path)
 
 
 ### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
@@ -1261,7 +1264,7 @@ for i in range(itterations):
     KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
 
     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False, save=True)
-    # competitive(DAGpath,KDpath)
+    competitive(DAGpath,KDpath)
     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
 print("Done with 3DAG Tree!!\n" + "_"*50)
 ################################################################################################################

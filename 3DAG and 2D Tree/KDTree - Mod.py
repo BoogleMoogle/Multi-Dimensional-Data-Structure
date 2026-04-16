@@ -615,21 +615,21 @@ def get_queries_from_old_data(path):
 
 
 points = []
-for i in range(15):
-    for j in range(15):
-        points.append((i+1,j+1))
+for i in range(16):
+    for j in range(16):
+        points.append((i,j))
 
 
 print(f"# of points: {len(points)}")
 print("Making Tree...")
-temp = KDTree(points,cutoff=1)
+temp = KDTree(points,cutoff=1,axis=1)
 print("Tree Made\n")
 
 ### CONTROL PANNEL ###
 num = 10000
 sprout = 1
 # dataset = "Spatial - Cuttoff at 1"
-dataset = "[16x16] - Cuttoff at 1" 
+dataset = "[16x16] - Y Start" 
 # dataset =f"Gowalla - 40,356 points - Cuttoff 1"
 # dataset ="Uniform [0 x 99] - Cuttoff at 1"
 dup = False
@@ -652,10 +652,7 @@ else:
 
 # pre_list = get_queries_from_old_data(r"C:\Users\cvinc\Desktop\College\Internship\Github\Multi-Dimensional-Data-Structure\3DAG and 2D Tree\Saved Query\3DAG SRC vs BRC\[16x16] - Cuttoff at 1\Without Duplicates\1 - 10,000\SRC_3x3.csv")
 
-
-
-
-# for i in range(itterations):
+for i in range(itterations):
     # pre_list=None
     # ### This bit is only if you are reading data from 3DAG Tree, comment out if you aren't using this ###
     # path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset, dup, sprout+i, f"{num:,}")
@@ -663,14 +660,14 @@ else:
     # ################################################################
 
     # os.makedirs(r"Saved Query/KD SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
-    # path = r"Saved Query/KD SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
+    path = r"Saved Query/KD SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")
     # os.makedirs(path,exist_ok=True)
     
     # SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval,SRC=SRC,BRC=BRC,force_old=True,pre_list=pre_list)
 
-    # statistics(path,graph=True)
-    # L2norm(path)
-# print("KDTree done!!\n"+"_"*50)
+    statistics(path,graph=True)
+    L2norm(path)
+print("KDTree done!!\n"+"_"*50)
 
 ##############################################################################
 
