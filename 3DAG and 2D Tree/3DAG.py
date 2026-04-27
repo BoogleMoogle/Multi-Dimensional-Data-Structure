@@ -1,3 +1,5 @@
+from turtle import right
+
 from cv2 import GSHAPE_GSCALAR
 from matplotlib import figure
 import matplotlib.pyplot as plt
@@ -48,9 +50,23 @@ class DAGTree:
         else:
             self.bbox = bbox
 
-        if self.data_size > cuttoff:
+        if self.parent == []:
             self.split()
-            
+
+
+        # if self.data_size > self.cuttoff:
+        #     self.split()
+        
+        # if self.middle_child == True:
+        # self.connect()
+        # if self.left != None:
+        #     self.left.connect()
+        # if self.right != None:
+        #     self.right.connect()
+        # if self.middle != None:
+        #     self.middle.connect()
+        
+        
 
     #To String Method    
     def __str__(self):
@@ -58,7 +74,7 @@ class DAGTree:
             if self.axis == 0:
                 return f"Split Node: x = {self.split_value[self.axis]}, Level: {self.depth}"#, Left: {self.left}, Right: {self.right}"
             else:
-                return f"Split Node: y = {self.split_value[self.axis]}, Level: {self.depth}"#, Left: {self.left}, Right: {self.right}"
+                return f"Split Node: y = {self.split_value[self.axis]}, Level: {self.depth}, BBOX: {self.bbox}"#, Left: {self.left}, Right: {self.right}"
         else:
             return f"{self.points}"
 
@@ -92,79 +108,91 @@ class DAGTree:
         else:
             self.points.sort(key=lambda x: x[1])
         
-        self.split_value = self.points[len(self.points)//2]
+        self.split_value = self.points[(len(self.points)//2)-1]
         
         #Soft Splitting Method          (ideal, but need more error checking)
         right, left = [], []
         for item in self.points:
-            if item[self.axis] >= self.split_value[self.axis]:          #items with bigger value (right/up)
-                if item[self.axis] == self.split_value[self.axis]:      #if the point is equal to the split number, need to add to right
+            if item[self.axis] > self.split_value[self.axis]:          #items with bigger value (right/up)
+                # if item[self.axis] == self.split_value[self.axis]:      #if the point is equal to the split number, need to add to right
                     # if item[(self.axis + 1) % 2] >= self.split_value[(self.axis + 1) % 2]:
-                    right.append(item)
+                right.append(item)
                     # else:
                     #     left.append(item)
-                else:
-                    right.append(item)
+                # else:
+                    # right.append(item)
             else:                                                       #items with lesser value (left/down)
                 left.append(item)
 
         #for middle child
         middle = []
         for item in left:
-            if item[self.axis] >= left[len(left)//2][self.axis]:                #checks on primary value
-                if item[self.axis] == left[len(left)//2][self.axis]:            #need to check secondary values still
-                    if item[(self.axis + 1) % 2] >= left[len(left)//2][(self.axis + 1) % 2]:
-                        middle.append(item)
-                else:
-                    middle.append(item)
-        
-    
+            if item[self.axis] >= left[(len(left)//2)][self.axis]:                #checks on primary value
+                # if item[self.axis] == left[len(left)//2][self.axis]:            #need to check secondary values still
+                    # if item[(self.axis + 1) % 2] >= left[len(left)//2][(self.axis + 1) % 2]:
+                middle.append(item)
+                # else:
+                    # middle.append(item)
+
         for item in right:
-            if item[self.axis] <= right[(len(right)//2)-1][self.axis]:
-                if item[self.axis] == right[(len(right)//2)-1][self.axis]:              #need to check secondary values still
-                    if item[(self.axis + 1) % 2] <= right[(len(right)//2)-1][(self.axis + 1) % 2]:
-                        middle.append(item)
-                else:
-                    middle.append(item)
+            if item[self.axis] < right[(len(right)//2)][self.axis]:
+                # if item[self.axis] == right[(len(right)//2)-1][self.axis]:              #need to check secondary values still
+                    # if item[(self.axis + 1) % 2] <= right[(len(right)//2)-1][(self.axis + 1) % 2]:
+                middle.append(item)
+                # else:
+                    # middle.append(item)
+        
+        # if self.axis == 0:
+        #     middle.sort()
+        # else:
+        #     middle.sort(key=lambda x: x[1])
+
     
         if self.parent != [] and self.parent[0].data_size == self.data_size:
             # print(f"{self.parent[0].data_size}\t{self.data_size}")
                 pass
         else:
-            self.points = None
             if self.axis == 0:  #this is on the x axis
                 # print(f"left, {self.axis}, {self.depth}")
-                self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                # self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.points[(len(self.points)//2)][self.axis], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.points[(len(self.points)//2)-1][self.axis], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
                 # print(f"right, {self.axis}, {self.depth}")
-                self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
-                
-                if middle != []:
-                    # print(f"middle, {self.axis}, {self.depth}")
+                self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[right[0][self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                # self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+
+                if middle != [] and left != [] and right != []:
+                    # self.middle = DAGTree(middle, depth=self.depth+1, axis=1, bbox=[left[(len(left)//2)][0],self.bbox[1],right[(len(right)//2)][0],self.bbox[3]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
+                    # self.middle = DAGTree(middle, depth=self.depth+1, axis=1, bbox=[middle[0][0],self.bbox[1],middle[len(middle)-1][0],self.bbox[3]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
                     self.middle = DAGTree(middle, depth=self.depth+1, axis=1, bbox=[middle[0][0],self.bbox[1],middle[len(middle)-1][0],self.bbox[3]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
+
             else:               #this is on the y axis
                 # print(f"left, {self.axis}, {self.depth}")
-                self.left = DAGTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                # self.left = DAGTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.points[(len(self.points)//2)][self.axis]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)                
+                self.left = DAGTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.points[(len(self.points)//2)-1][self.axis]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
                 # print(f"right, {self.axis}, {self.depth}")
-                self.right = DAGTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.split_value[self.axis], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
-                
-                if middle != []:
-                    # print(f"middle, {self.axis}, {self.depth}")
+                self.right = DAGTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], right[0][self.axis], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+
+                if middle != [] and left != [] and right != []:
                     self.middle = DAGTree(middle, depth=self.depth+1, axis=0, bbox=[self.bbox[0],middle[0][1],self.bbox[2],middle[len(middle)-1][1]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
-            
-            # if self.middle_child == True:
-            #     self.connect()
-            #     self.left.connect()
-            #     self.right.connect()
-            #     self.middle.connect()
+            self.points = None
+
+            if self.middle_child == True:
+            # self.connect()
+                if self.left != None:
+                    self.left.connect()
+                if self.right != None:
+                    self.right.connect()
+                if self.middle != None:
+                    self.middle.connect()
 
 
-            # # #the recursive call
-            # if self.left.data_size > self.cuttoff:
-            #     self.left.split()
-            # if self.right.data_size > self.cuttoff:
-            #     self.right.split()
-            # if self.middle.data_size > self.cuttoff:
-            #     self.middle.split()
+            #the recursive call
+            if self.left != None and self.left.data_size > self.cuttoff:
+                self.left.split()
+            if self.right != None and self.right.data_size > self.cuttoff:
+                self.right.split()
+            if self.middle != None and self.middle.data_size > self.cuttoff:
+                self.middle.split()
 
 
     #Single Range Cover Search Method
@@ -354,9 +382,9 @@ class DAGTree:
         '''
 
         if self.split_value == None:
-            boxes.append([self.axis,self.bbox,self.split_value,self.depth,self.points,self.middle_child])
+            boxes.append([self.axis,self.bbox,self.split_value,self.depth,self.points,self.middle_child,self])
         else:
-            boxes.append([self.axis,self.bbox,self.split_value[self.axis],self.depth,self.points,self.middle_child])  #removed self.parent
+            boxes.append([self.axis,self.bbox,self.split_value[self.axis],self.depth,self.points,self.middle_child,self])  #removed self.parent
 
         if self.left != None and self.left.parent[0] == self:
             self.left.itterate_through(boxes,leaf=leaf)
@@ -368,14 +396,38 @@ class DAGTree:
         return boxes
 
 
+    #Used With Connect Method
+    def looking(self, pTmp, alist=[]):  #pTmp is the original node we are comparing, self is started as the root node (most top). It is looking through every single node, until one is found.
+        if pTmp.bbox == self.bbox and pTmp is not self:
+            alist.append(self)
+        
+        if self.left != None:
+            # print("Left")
+            self.left.looking(pTmp=pTmp,alist=alist)
+        
+        if self.right != None:
+            # print("Right")
+            self.right.looking(pTmp=pTmp,alist=alist)
+        
+        if self.middle != None:
+            # print("Middle")
+            self.middle.looking(pTmp=pTmp,alist=alist)
+
+        return alist
+
     #Print Tree Function
     def print_tree(self,boxes=[],sort=False,whole=False,file=None):
         if self.left != None or self.right != None:
-            boxes.append([self.axis,self.bbox,self.split_value[self.axis],self.depth,self.points,self.middle_child])
+            try:
+                boxes.append([self.axis,self.bbox,self.split_value[self.axis],self.depth,self.points,self.middle_child,self.parent])
+            except:
+                boxes.append([self.axis,self.bbox,self.split_value[self.axis],self.depth,self.points,self.middle_child,None])
         
         if self.left != None:
             self.left.itterate_through(boxes)
+        if self.right != None:
             self.right.itterate_through(boxes)
+        if self.middle != None:
             self.middle.itterate_through(boxes)
 
         if sort == True:
@@ -395,47 +447,62 @@ class DAGTree:
                     print(f"| Depth: {item[2]}\t| Range: [{item[1][0]}, {item[1][2]}] [{item[1][1]}, {item[1][3]}]\t\t| Points: {item[3]}")
         else:
             i=0
-            temp = pd.DataFrame(columns=['Depth', 'Split', 'Middle','Range [xmin, xmax] [ymin, ymax]','Points'])
+            temp = pd.DataFrame(columns=['Depth','Split','Axis','Middle','Range [xmin, xmax] [ymin, ymax]','Points','Parent BBOX'])
             for item in boxes:
-                temp.loc[i] = item[3], item[2],item[5],f"[{item[1][0]}, {item[1][2]}] [{item[1][1]}, {item[1][3]}", item[4]
+                temp.loc[i] = item[3], item[2],item[0],item[5],f"[{item[1][0]}, {item[1][2]}] [{item[1][1]}, {item[1][3]}]", item[4], item[6]
                 i+=1
             temp.to_csv(file)
 
 
     #Connect Method - Checks if 2 nodes can be connected
     def connect(self):
-        if self.parent != [] and self.parent[0] != None and self != []:
+        if self.parent != [] and self.parent != None and self != None and self.parent[0] != None and self != []:
             pTmp = self
-            while pTmp.parent != []:            
-                pTmp = pTmp.parent[0]
-            pTmp = pTmp.middle
-            points = self.points
-            split_val = self.split_value
-            important_node = pTmp.SRC(self.bbox[0], self.bbox[1], self.bbox[2], self.bbox[3])
-            if important_node != None and important_node.bbox == self.bbox and important_node.data_size == self.data_size and important_node.depth == self.depth:
-                # print(f"SRC Node: {important_node.bbox}\tSelf: {self.bbox}")
-                if important_node.parent[0].left == important_node:
-                    important_node.parent[0].left = self
-                    self.parent.append(important_node.parent[0].left)
-                elif important_node.parent[0].right == important_node:
-                    important_node.parent[0].right = self
-                    self.parent.append(important_node.parent[0].right)
-                elif important_node.parent[0].middle == important_node:
-                    # print(important_node.parent[0].middle)
-                    important_node.parent[0].middle = self
-                    # print(important_node.parent[0].middle)
-                    self.parent.append(important_node.parent[0].middle)
-                important_node = None
-                self.points = points
-                self.split_value = split_val
-        return
-                # self.split()
-                # print("Connect!")
+            root = self
+            while root.parent != []:            
+                root = root.parent[0]
+
+            alist = []
+            temp = root.looking(pTmp=pTmp, alist=alist) #gets all matching bbox's
+            # print(temp)
+            # print("_"*50)
+            #now need to set parents and concurrent nodes
+
+            if temp != [] and temp != None:
+                # print("Connection!!!")
+                if self.parent[0].left == self:
+                    self.parent[0].left = temp[0]
+                    # temp[0].parent.append(self.parent[0])
+
+                elif self.parent[0].middle == self:
+                    self.parent[0].middle = temp[0]
+                    # temp[0].parent.append(self.parent[0])
+
+                elif self.parent[0].right == self:
+                    self.parent[0].right = temp[0]
                 
-                # print(f"Found Node: {important_node.parent[0]}\tOG Node: {self.parent[0]}")
-                # with open("temp.txt",'a') as file:
-                #     file.write("Connect\n")
-                #     file.close()
+                temp_parent_list = []
+                for item in temp[0].parent:
+                    temp_parent_list.append(item)
+                temp_parent_list.append(self.parent[0])
+                # print(temp_parent_list)
+                temp[0].parent = temp_parent_list
+                # print(temp[0].parent)
+
+                # print(f"Connect!!!\n{self}", "_"*50)
+
+                self.parent = []
+                if self.left != None:
+                    self.left = None
+                if self.right != None:
+                    self.right = None
+                if self.middle != None:
+                    self.middle = None
+                # self = None
+
+        return
+
+
 
 
 
@@ -1182,18 +1249,40 @@ def competitive(DAGpath=None, KDpath=None):
 
 
 
+#DO BIGGER UNIFORM 2^4 -> 2^10 (keep checking x and y) x first
+#do gowalla, spatial, crawdad
+
+
+
+
+
 points = []
 for i in range(16):
     for j in range(16):
         points.append((i,j))
 
 
+# points = []
+# for i in range(8):
+#     for j in range(8):
+#         points.append((i,j))
+
 
 
 
 print(f"This is the length of points being inputed into the tree: {len(points)}")
-temp = DAGTree(points, cuttoff=1,axis=1)
+temp = DAGTree(points, cuttoff=1, axis=0)
 print("Done with making tree.")
+
+# temp.print_tree(sort=True,file=r"C:\Users\cvinc\Desktop\College\Internship\Github\Multi-Dimensional-Data-Structure\3DAG and 2D Tree\Saved Query\3DAG SRC vs BRC\[16x16] - X Start\tree.csv")
+
+# pTmp = temp.right.right.right.right.right.right.right.right
+
+# temp.looking(pTmp=pTmp,alist=[])
+
+
+
+
 
 num = 10000
 sprout = 1
@@ -1201,7 +1290,7 @@ sprout = 1
 # dataset =f"Gowalla - 40,356 points - Cuttoff 1"
 # dataset = "Spatial - Cuttoff at 1"
 # dataset = "CRAWDAD - Cuttoff at 1" 
-dataset = "[16x16] - Y Start" 
+dataset = "[16x16] - X Start" 
 dup = False
 itterations = 1
 starting_per = .30
@@ -1236,14 +1325,13 @@ else:
 
 #     pre_list.append([xmin,ymin,xmax,ymax])
 
-# for item in pre_list:
-#     print(item)
 
 
-# for i in range(itterations):
-    # os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
-    # path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")    
-    # os.makedirs(path,exist_ok=True)
+
+for i in range(itterations):
+    os.makedirs(r"Saved Query/3DAG SRC vs BRC/{}/{}".format(dataset,dup), exist_ok=True)
+    path = r"Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/".format(dataset,dup,(sprout+i),f"{num:,}")    
+    os.makedirs(path,exist_ok=True)
 
     # SRC_path = f"{path}SRC_3x3.csv"
     # save_query(tree=temp,num=1,path=SRC_path,SRC=True,BRC=False,save=True,query_list=pre_list)
@@ -1252,12 +1340,12 @@ else:
     # save_query(tree=temp,num=1,path=BRC_path,SRC=False,BRC=True,save=True,query_list=pre_list)
 
     # SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
-    # statistics(path,graph=True,show=False)
-    # L2norm(path)
+    statistics(path,graph=True,show=False)
+    L2norm(path)
 
 
-### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
-# input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
+# ### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
+# # input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
 
 for i in range(itterations):
     DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
@@ -1267,49 +1355,49 @@ for i in range(itterations):
     competitive(DAGpath,KDpath)
     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
 print("Done with 3DAG Tree!!\n" + "_"*50)
-################################################################################################################
+# ################################################################################################################
+
+
+
+
+# print('\a')
 
 
 
 
 
 
+# ##### DATASETS #####
+#     #All /SHOULD/ automatically be set to drop duplicates
+
+# # ### CRAWDAD spitz/cellular Dataset Dropping Duplicates ###
+# # path = r"Saved Datasets/DT-mobile-data.csv/VDS_MS_310809_27_0210.csv"
+# # points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=True)
+# # #___________________________________________________________________________#
+
+
+# # ### SRFG-v1 ###
+# # path = r"Saved Datasets/Check/SRFG-v1.csv"
+# # points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
+# # #___________________________________________________________________________#
+
+# # ### Inventory of Owned & Leased Properties (IOLP) ###
+# # building_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-buildings.xlsx"
+# # lease_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-leases.xlsx"
+
+# # points = points_from_file(lease_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
+# # building_points = points_from_file(building_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
+# # #_____________________________________________________________________________#
 
 
 
-
-
-##### DATASETS #####
-    #All /SHOULD/ automatically be set to drop duplicates
-
-# ### CRAWDAD spitz/cellular Dataset Dropping Duplicates ###
-# path = r"Saved Datasets/DT-mobile-data.csv/VDS_MS_310809_27_0210.csv"
-# points = points_from_file(path,columns=['Laenge','Breite'],file_extension='csv',drop_duplicates=True)
-# #___________________________________________________________________________#
-
-
-# ### SRFG-v1 ###
-# path = r"Saved Datasets/Check/SRFG-v1.csv"
-# points = points_from_file(path,columns=['lat','long'],file_extension='csv',drop_duplicates=True)
-# #___________________________________________________________________________#
-
-# ### Inventory of Owned & Leased Properties (IOLP) ###
-# building_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-buildings.xlsx"
-# lease_path = r"Saved Datasets/Inventory of Owned and Leased Properties/2026-2-20-iolp-leases.xlsx"
-
-# points = points_from_file(lease_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
-# building_points = points_from_file(building_path,columns=['Latitude','Longitude'],file_extension='excel',drop_duplicates=True)
-# #_____________________________________________________________________________#
+# # ### Spatial Database NO Duplication ###
+# # path = r"Saved Datasets/Spatial.xlsx"
+# # points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+# # #___________________________________________________________________________#
 
 
 
-# ### Spatial Database NO Duplication ###
-# path = r"Saved Datasets/Spatial.xlsx"
-# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
-# #___________________________________________________________________________#
-
-
-
-### Template for SRC path and BRC path ###
-# SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_SRC.csv"
-# BRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_BRC.csv"
+# ### Template for SRC path and BRC path ###
+# # SRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_SRC.csv"
+# # BRC_path = r"Saved Query/3DAG SRC vs BRC/Spatial/Without Duplicates/1 - 100,000/Spatial_BRC.csv"
