@@ -614,9 +614,13 @@ def get_queries_from_old_data(path):
 
 
 
+# points = []
+# for i in range(512):
+#     for j in range(512):
+#         points.append((i,j))
 points = []
-for i in range(512):
-    for j in range(512):
+for i in range(16):
+    for j in range(16):
         points.append((i,j))
 
 
@@ -629,13 +633,14 @@ print("Tree Made\n")
 num = 10000
 sprout = 1
 # dataset = "Spatial - Cuttoff at 1"
-dataset = "[512x512] - X Start" 
+# dataset = "[512x512] - X Start" 
+dataset = "[16x16] - X Start" 
 # dataset =f"Gowalla - 40,356 points - Cuttoff 1"
 # dataset ="Uniform [0 x 99] - Cuttoff at 1"
 dup = False
 itterations = 1
 interval = 4
-starting_per = .20
+starting_per = .30
 SRC = True
 BRC = True
 force_old = True

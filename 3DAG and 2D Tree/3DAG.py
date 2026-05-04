@@ -1,6 +1,3 @@
-from turtle import right
-
-from cv2 import GSHAPE_GSCALAR
 from matplotlib import figure
 import matplotlib.pyplot as plt
 import random
@@ -20,10 +17,8 @@ warnings.simplefilter(action='ignore',category=FutureWarning)
 
 
 
-
-
 class DAGTree:
-    def __init__(self, points=[], depth=0, axis=0, split_value=None, bbox=[], left=None, right=None, middle=None, middle_child=False, parent=[], cuttoff=None):
+    def __init__(self, points=[], depth=0, axis=0, split_value=None, bbox=[], left=None, right=None, middle=None, middle_child=False, parent=[], cuttoff=4):
         self.left = left
         self.right = right
         self.middle = middle
@@ -31,8 +26,6 @@ class DAGTree:
         self.data_size = len(points)
         self.middle_child = middle_child
 
-        if cuttoff == None:
-            cuttoff = 4
         self.cuttoff = cuttoff
 
         if axis == 0:   #sort by x values
@@ -152,13 +145,17 @@ class DAGTree:
             # print(f"{self.parent[0].data_size}\t{self.data_size}")
                 pass
         else:
+
             if self.axis == 0:  #this is on the x axis
                 # print(f"left, {self.axis}, {self.depth}")
                 # self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.points[(len(self.points)//2)][self.axis], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
-                self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.points[(len(self.points)//2)-1][self.axis], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
-                # print(f"right, {self.axis}, {self.depth}")
-                self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[right[0][self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
-                # self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                if left != []:
+                    self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                    # print(f"right, {self.axis}, {self.depth}")
+
+                if right != []:
+                    self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[right[0][self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                    # self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
 
                 if middle != [] and left != [] and right != []:
                     # self.middle = DAGTree(middle, depth=self.depth+1, axis=1, bbox=[left[(len(left)//2)][0],self.bbox[1],right[(len(right)//2)][0],self.bbox[3]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
@@ -168,22 +165,29 @@ class DAGTree:
             else:               #this is on the y axis
                 # print(f"left, {self.axis}, {self.depth}")
                 # self.left = DAGTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.points[(len(self.points)//2)][self.axis]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)                
-                self.left = DAGTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.points[(len(self.points)//2)-1][self.axis]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
-                # print(f"right, {self.axis}, {self.depth}")
-                self.right = DAGTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], right[0][self.axis], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                if left != []:
+                    self.left = DAGTree(left,  depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
 
+                
+                if right != []:
+                    self.right = DAGTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], right[0][self.axis], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+
+                    # self.right = DAGTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.split_value[self.axis], self.bbox[2], self.bbox[3]], parent=[self], cuttoff=self.cuttoff, middle_child=self.middle_child)
+                
                 if middle != [] and left != [] and right != []:
                     self.middle = DAGTree(middle, depth=self.depth+1, axis=0, bbox=[self.bbox[0],middle[0][1],self.bbox[2],middle[len(middle)-1][1]], parent=[self], middle_child=True, cuttoff=self.cuttoff)
+
             self.points = None
 
             if self.middle_child == True:
-            # self.connect()
-                if self.left != None:
-                    self.left.connect()
-                if self.right != None:
-                    self.right.connect()
-                if self.middle != None:
-                    self.middle.connect()
+                self.connect()
+                if self != None:
+                    if self.left != None:
+                        self.left.connect()
+                    if self.right != None:
+                        self.right.connect()
+                    if self.middle != None:
+                        self.middle.connect()
 
 
             #the recursive call
@@ -198,20 +202,25 @@ class DAGTree:
     #Single Range Cover Search Method
     def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
         #if/when we are in the range
-        if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
-            if best == None or best.depth < self.depth:
-                best = self
-            if self.left != None:
-                if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
-                    return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-            if self.right != None:
-                if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                    return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-            if self.middle != None:
-                if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
-                    return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-        return best
+        # if self.bbox[0] <= q_xmin and self.bbox[2] >= q_xmax and self.bbox[1] <= q_ymin and self.bbox[3] >= q_ymax: #this node 100% contains the range
+        #     if best == None or best.depth < self.depth:
+        #         best = self
+
+        if self.middle != None:
+            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
+                return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+
+        if self.left != None:
+            if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
+                return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+
+        if self.right != None:
+            if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+
             
+        return self
+
             
         # #if we don't start in range
         # else:
@@ -397,23 +406,37 @@ class DAGTree:
 
 
     #Used With Connect Method
-    def looking(self, pTmp, alist=[]):  #pTmp is the original node we are comparing, self is started as the root node (most top). It is looking through every single node, until one is found.
+    def looking(self,pTmp,alist):  #pTmp is the original node we are comparing, self is started as the root node (most top). It is looking through every single node, until one is found.
         if pTmp.bbox == self.bbox and pTmp is not self:
             alist.append(self)
+            return alist
         
-        if self.left != None:
+        # if self.left != None:
+        #     # print("Left")
+        #     self.left.looking(pTmp,alist)
+        
+        # if self.right != None:
+        #     # print("Right")
+        #     self.right.looking(pTmp,alist)
+        
+        # if self.middle != None:
+        #     # print("Middle")
+        #     self.middle.looking(pTmp,alist)
+
+        if self.left != None and ((self.left.bbox[0]<=pTmp.bbox[0] and self.left.bbox[2]>=pTmp.bbox[2]) or (self.left.bbox[1]<=pTmp.bbox[1] and self.left.bbox[3]>=pTmp.bbox[3])):
             # print("Left")
-            self.left.looking(pTmp=pTmp,alist=alist)
+            self.left.looking(pTmp,alist)
         
-        if self.right != None:
+        if self.right != None and ((self.right.bbox[0]<=pTmp.bbox[0] and self.right.bbox[2]>=pTmp.bbox[2]) or (self.right.bbox[1]<=pTmp.bbox[1] and self.right.bbox[3]>=pTmp.bbox[3])):
             # print("Right")
-            self.right.looking(pTmp=pTmp,alist=alist)
+            self.right.looking(pTmp,alist)
         
-        if self.middle != None:
+        if self.middle != None and ((self.middle.bbox[0]<=pTmp.bbox[0] and self.middle.bbox[2]>=pTmp.bbox[2]) or (self.middle.bbox[1]<=pTmp.bbox[1] and self.middle.bbox[3]>=pTmp.bbox[3])):
             # print("Middle")
-            self.middle.looking(pTmp=pTmp,alist=alist)
+            self.middle.looking(pTmp,alist)
 
         return alist
+
 
     #Print Tree Function
     def print_tree(self,boxes=[],sort=False,whole=False,file=None):
@@ -456,22 +479,24 @@ class DAGTree:
 
     #Connect Method - Checks if 2 nodes can be connected
     def connect(self):
-        if self.parent != [] and self.parent != None and self != None and self.parent[0] != None and self != []:
+        # if self.parent != [] and self.parent != None and self != None and self.parent[0] != None and self.left != None and self.right != None and self.middle != None:
+        if self.parent != []:
             pTmp = self
             root = self
             while root.parent != []:            
                 root = root.parent[0]
 
-            alist = []
-            temp = root.looking(pTmp=pTmp, alist=alist) #gets all matching bbox's
+            temp = root.looking(pTmp, alist=[]) #gets all matching bbox's
             # print(temp)
             # print("_"*50)
-            #now need to set parents and concurrent nodes
+            # now need to set parents and concurrent nodes
 
             if temp != [] and temp != None:
                 # print("Connection!!!")
                 if self.parent[0].left == self:
+                    # print(self.parent[0].left.parent[0])
                     self.parent[0].left = temp[0]
+                    # print(self.parent[0].left.parent[0])
                     # temp[0].parent.append(self.parent[0])
 
                 elif self.parent[0].middle == self:
@@ -480,6 +505,7 @@ class DAGTree:
 
                 elif self.parent[0].right == self:
                     self.parent[0].right = temp[0]
+                    # temp[0].parent.append(self.parent[0])
                 
                 temp_parent_list = []
                 for item in temp[0].parent:
@@ -489,7 +515,7 @@ class DAGTree:
                 temp[0].parent = temp_parent_list
                 # print(temp[0].parent)
 
-                # print(f"Connect!!!\n{self}", "_"*50)
+                # print(f"Connect!!!\n{self}\n", "_"*50)
 
                 self.parent = []
                 if self.left != None:
@@ -498,15 +524,9 @@ class DAGTree:
                     self.right = None
                 if self.middle != None:
                     self.middle = None
-                # self = None
-
+                self = None
+                
         return
-
-
-
-
-
-
 
 ###### General Use Methods ######
 def make_points(num=1, sprout=None, aRang=0, bRang=100, sort=False):
@@ -732,12 +752,12 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,duplicates=False
         while j != num:
             # r = random.uniform(0.2, 5)
             r = 1
-            xmin = round(random.uniform(tree.bbox[0]-0.5,(tree.bbox[2]+0.5)-(coeff_numx*r)),2)
+            xmin = round(random.uniform(tree.bbox[0]-0.5,(tree.bbox[2]+0.5)-(coeff_numx*r)),0)
             # xmax = round(random.uniform(xmin,xmin+(coeff_num*r)),2)
-            xmax = xmin + coeff_numx
-            ymin = round(random.uniform(tree.bbox[1]-0.5,(tree.bbox[3]+0.5)-(coeff_numy*1/r)),2)
+            xmax = round(xmin + coeff_numx,0)
+            ymin = round(random.uniform(tree.bbox[1]-0.5,(tree.bbox[3]+0.5)-(coeff_numy*1/r)),0)
             # ymax = round(random.uniform(ymin,ymin+(coeff_num*1/r)),2)
-            ymax = ymin + coeff_numy
+            ymax = round(ymin + coeff_numy,0)
             
             #checking for incorrect mins and maxs
             if xmin < tree.bbox[0]:
@@ -751,6 +771,15 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,duplicates=False
             if ymax < tree.bbox[1]:
                 ymax = tree.bbox[1]
             
+            if xmin == -0:
+                xmin = 0
+            if ymin == -0:
+                ymin = 0
+            if xmax == -0:
+                xmax = 0
+            if ymax == -0:
+                ymax = 0
+
             # print(f"{xmin},{ymin},{xmax},{ymax}")
             points_list.append([xmin,ymin,xmax,ymax])
             j+=1
@@ -1257,9 +1286,12 @@ def competitive(DAGpath=None, KDpath=None):
 
 
 points = []
-for i in range(16):
-    for j in range(16):
+for i in range(1024):
+    for j in range(1024):
         points.append((i,j))
+
+
+
 
 
 # points = []
@@ -1271,10 +1303,11 @@ for i in range(16):
 
 
 print(f"This is the length of points being inputed into the tree: {len(points)}")
-temp = DAGTree(points, cuttoff=1, axis=0)
+tree = DAGTree(points, cuttoff=1, axis=0)
 print("Done with making tree.")
 
-# temp.print_tree(sort=True,file=r"C:\Users\cvinc\Desktop\College\Internship\Github\Multi-Dimensional-Data-Structure\3DAG and 2D Tree\Saved Query\3DAG SRC vs BRC\[16x16] - X Start\tree.csv")
+# tree.print_tree(sort=True,file=r"C:\Users\cvinc\Desktop\College\Internship\Github\Multi-Dimensional-Data-Structure\3DAG and 2D Tree\Saved Query\3DAG SRC vs BRC\[64x64] - X Start\tree.csv")
+# tree.print_tree(sort=True,file=r"C:\Users\cvinc\Desktop\College\Internship\Github\Multi-Dimensional-Data-Structure\3DAG and 2D Tree\Saved Query\3DAG SRC vs BRC\[16x16] - X Start\tree.csv")
 
 # pTmp = temp.right.right.right.right.right.right.right.right
 
@@ -1290,7 +1323,10 @@ sprout = 1
 # dataset =f"Gowalla - 40,356 points - Cuttoff 1"
 # dataset = "Spatial - Cuttoff at 1"
 # dataset = "CRAWDAD - Cuttoff at 1" 
-dataset = "[16x16] - X Start" 
+# dataset = "[256x256] - X Start" 
+dataset = "[1024x1024] - X Start" 
+# dataset = "[64x64] - X Start" 
+
 dup = False
 itterations = 1
 starting_per = .30
@@ -1325,6 +1361,8 @@ else:
 
 #     pre_list.append([xmin,ymin,xmax,ymax])
 
+# [1.0, 4.0, 3.0, 6.0]
+# tree.SRC(q_xmin = 1.0, q_ymin = 4.0, q_xmax = 3.0, q_ymax = 6.0)
 
 
 
@@ -1334,12 +1372,12 @@ for i in range(itterations):
     os.makedirs(path,exist_ok=True)
 
     # SRC_path = f"{path}SRC_3x3.csv"
-    # save_query(tree=temp,num=1,path=SRC_path,SRC=True,BRC=False,save=True,query_list=pre_list)
+    # save_query(tree=tree,num=1,path=SRC_path,SRC=True,BRC=False,save=True,query_list=pre_list)
     
     # BRC_path = f"{path}BRC_3x3.csv"
-    # save_query(tree=temp,num=1,path=BRC_path,SRC=False,BRC=True,save=True,query_list=pre_list)
+    # save_query(tree=tree,num=1,path=BRC_path,SRC=False,BRC=True,save=True,query_list=pre_list)
 
-    # SRC_vs_BRC(tree=temp,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
+    SRC_vs_BRC(tree=tree,num=num,sprout=sprout+i,path=path,show=False,duplicates=False,starting_per=starting_per,interval=interval)
     statistics(path,graph=True,show=False)
     L2norm(path)
 
@@ -1347,20 +1385,20 @@ for i in range(itterations):
 # ### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
 # # input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
 
-for i in range(itterations):
-    DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
-    KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+# for i in range(itterations):
+#     DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+#     KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
 
-    lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False, save=True)
-    competitive(DAGpath,KDpath)
-    L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
-print("Done with 3DAG Tree!!\n" + "_"*50)
-# ################################################################################################################
-
-
+#     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False, save=True)
+#     competitive(DAGpath,KDpath)
+#     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
+# print("Done with 3DAG Tree!!\n" + "_"*50)
+################################################################################################################
 
 
-# print('\a')
+
+
+print('\a')
 
 
 
