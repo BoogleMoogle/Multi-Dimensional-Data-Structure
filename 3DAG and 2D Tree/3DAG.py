@@ -60,12 +60,11 @@ class DAGTree:
         #     self.middle.connect()
         
         
-
     #To String Method    
     def __str__(self):
         if self.split_value != None:
             if self.axis == 0:
-                return f"Split Node: x = {self.split_value[self.axis]}, Level: {self.depth}"#, Left: {self.left}, Right: {self.right}"
+                return f"Split Node: x = {self.split_value[self.axis]}, Level: {self.depth}, BBOX: {self.bbox}"#, Left: {self.left}, Right: {self.right}"
             else:
                 return f"Split Node: y = {self.split_value[self.axis]}, Level: {self.depth}, BBOX: {self.bbox}"#, Left: {self.left}, Right: {self.right}"
         else:
@@ -206,10 +205,6 @@ class DAGTree:
         #     if best == None or best.depth < self.depth:
         #         best = self
 
-        if self.middle != None:
-            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
-                return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
-
         if self.left != None:
             if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:      #self.bbox[q_xmin,q_ymin,q_xmax,q_ymax]
                 return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
@@ -217,6 +212,10 @@ class DAGTree:
         if self.right != None:
             if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
                 return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            
+        if self.middle != None:
+            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
+                return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax, best)
 
             
         return self
@@ -744,20 +743,30 @@ def SRC_vs_BRC(tree=None,num=1,sprout=None,path=None,show=False,duplicates=False
         if coeffs_list[i] <= 0:
             coeffs_list.remove(coeffs_list[i])
             break
-        coeff_numx = ((tree.bbox[2]+0.5)-(tree.bbox[0]-0.5))*coeffs_list[i]
-        coeff_numy = ((tree.bbox[3]+0.5)-(tree.bbox[1]-0.5))*coeffs_list[i]
+        # coeff_numx = ((tree.bbox[2]+0.5)-abs((tree.bbox[0])))*coeffs_list[i]
+        # coeff_numy = ((tree.bbox[3]+0.5)-abs((tree.bbox[1]-0.5)))*coeffs_list[i]
+        coeff_numx = ((tree.bbox[2]-tree.bbox[0])+1)*coeffs_list[i]
+        coeff_numy = ((tree.bbox[3]-tree.bbox[1])+1)*coeffs_list[i]
         points_list = []
 
         j=0
         while j != num:
             # r = random.uniform(0.2, 5)
             r = 1
-            xmin = round(random.uniform(tree.bbox[0]-0.5,(tree.bbox[2]+0.5)-(coeff_numx*r)),0)
-            # xmax = round(random.uniform(xmin,xmin+(coeff_num*r)),2)
+            xmin = round(random.uniform(tree.bbox[0],tree.bbox[2]-(coeff_numx*r)),0)
             xmax = round(xmin + coeff_numx,0)
-            ymin = round(random.uniform(tree.bbox[1]-0.5,(tree.bbox[3]+0.5)-(coeff_numy*1/r)),0)
-            # ymax = round(random.uniform(ymin,ymin+(coeff_num*1/r)),2)
+            ymin = round(random.uniform(tree.bbox[1],tree.bbox[3]-(coeff_numy*1/r)),0)
             ymax = round(ymin + coeff_numy,0)
+
+            # xmin = round(random.uniform(tree.bbox[0]-0.5,(tree.bbox[2]+0.5)-(coeff_numx*r)),0)
+            # xmax = round(xmin + coeff_numx,0)
+            # ymin = round(random.uniform(tree.bbox[1]-0.5,(tree.bbox[3]+0.5)-(coeff_numy*1/r)),0)
+            # ymax = round(ymin + coeff_numy,0)
+
+            # xmin = round(random.uniform(tree.bbox[0]-0.5,(tree.bbox[2]+0.5)-(coeff_numx*r)),2)
+            # xmax = round(xmin + coeff_numx,2)
+            # ymin = round(random.uniform(tree.bbox[1]-0.5,(tree.bbox[3]+0.5)-(coeff_numy*1/r)),2)
+            # ymax = round(ymin + coeff_numy,2)
             
             #checking for incorrect mins and maxs
             if xmin < tree.bbox[0]:
@@ -1286,20 +1295,9 @@ def competitive(DAGpath=None, KDpath=None):
 
 
 points = []
-for i in range(1024):
-    for j in range(1024):
+for i in range(64):
+    for j in range(64):
         points.append((i,j))
-
-
-
-
-
-# points = []
-# for i in range(8):
-#     for j in range(8):
-#         points.append((i,j))
-
-
 
 
 print(f"This is the length of points being inputed into the tree: {len(points)}")
@@ -1317,18 +1315,19 @@ print("Done with making tree.")
 
 
 
-num = 10000
+num = 50000
 sprout = 1
 # dataset ="Uniform [0 x 99] - Cuttoff at 1"
 # dataset =f"Gowalla - 40,356 points - Cuttoff 1"
 # dataset = "Spatial - Cuttoff at 1"
 # dataset = "CRAWDAD - Cuttoff at 1" 
 # dataset = "[256x256] - X Start" 
-dataset = "[1024x1024] - X Start" 
-# dataset = "[64x64] - X Start" 
+# dataset = "[1024x1024] - X Start" 
+dataset = "[64x64] - X Start P1" 
+# dataset = "[16x16] - X Start P1" 
 
 dup = False
-itterations = 1
+itterations = 3
 starting_per = .30
 interval = 4
 
@@ -1364,6 +1363,48 @@ else:
 # [1.0, 4.0, 3.0, 6.0]
 # tree.SRC(q_xmin = 1.0, q_ymin = 4.0, q_xmax = 3.0, q_ymax = 6.0)
 
+# flag = True
+# temp = tree
+# while flag:
+#     ans = input("Input left, middle, right, parent, points, bbox, or end\n")
+#     if ans == "left":
+#         print(temp.left)
+#         temp = temp.left
+#     elif ans == "right":
+#         print(temp.right)
+#         temp = temp.right
+#     elif ans == "middle":
+#         print(temp.middle)
+#         temp = temp.middle
+#     elif ans == "parent":
+#         # print(temp.parent)
+#         print("Choose:\n")
+#         i=0
+#         for item in temp.parent:
+#             print(f"{i}: {item}")
+#             i+=1
+#         inpu = input("Which parent would you like to go up?\n")
+#         if int(inpu) > len(temp.parent):
+#             print("Stopped")
+#         else:
+#             print(temp.parent[int(inpu)])
+#             temp = temp.parent[int(inpu)]
+#     elif ans == "bbox":
+#         print(temp.bbox)
+#     elif ans == "points":
+#         print(temp.points)
+#     elif ans == "end":
+#         flag = False
+#     else:
+#         print("Incorrect input\n")
+
+
+# print(tree.left.right.right.bbox)
+
+
+
+
+
 
 
 for i in range(itterations):
@@ -1381,18 +1422,18 @@ for i in range(itterations):
     statistics(path,graph=True,show=False)
     L2norm(path)
 
+print('\a')
+### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
+input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
 
-# ### YOU HAVE TO MANUALLY START THE DIFFS BY PRESSING ENTER IN TERMINAL, DON'T START DIFF UNTIL KDTREE IS DONE #####
-# # input("_"*50 + "\n\n\nWhen ready, return to start difference methods")
+for i in range(itterations):
+    DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
+    KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
 
-# for i in range(itterations):
-#     DAGpath = r'Saved Query/3DAG SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
-#     KDpath = r'Saved Query/KD SRC vs BRC/{}/{}/{} - {}/'.format(dataset,dup,(i+sprout),f"{num:,}")
-
-#     lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False, save=True)
-#     competitive(DAGpath,KDpath)
-#     L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
-# print("Done with 3DAG Tree!!\n" + "_"*50)
+    lvl_diff(DAGpath=DAGpath,KDpath=KDpath,title=f"{dataset} ({dup}) {(i+sprout)} - {num:,}",show=False, save=True)
+    competitive(DAGpath,KDpath)
+    L2norm_diff(DAGpath=DAGpath,KDpath=KDpath,graph=True)
+print("Done with 3DAG Tree!!\n" + "_"*50)
 ################################################################################################################
 
 

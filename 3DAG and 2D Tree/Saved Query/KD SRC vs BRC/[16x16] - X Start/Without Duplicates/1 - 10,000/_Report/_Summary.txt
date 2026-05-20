@@ -9,72 +9,72 @@
 
 
 0.06
-	BRC Size:	3.99
-	SRC Size:	41.75
-	SRC Depth:	3.91
-	Diff:		37.76
-	F/P %:		10.46%
-	Error %:		43.43%
+	BRC Size:	4.0
+	SRC Size:	44.17
+	SRC Depth:	3.79
+	Diff:		40.17
+	F/P %:		11.04%
+	Error %:		40.55%
 	Tot # of Inf: 0
 
 
 0.10
-	BRC Size:	8.84
-	SRC Size:	77.19
-	SRC Depth:	2.45
-	Diff:		68.35
-	F/P %:		8.73%
-	Error %:		28.18%
+	BRC Size:	6.13
+	SRC Size:	81.45
+	SRC Depth:	2.33
+	Diff:		75.31
+	F/P %:		14.3%
+	Error %:		17.92%
 	Tot # of Inf: 0
 
 
 0.14
 	BRC Size:	9.0
-	SRC Size:	80.07
-	SRC Depth:	2.37
-	Diff:		71.07
-	F/P %:		8.9%
-	Error %:		27.15%
+	SRC Size:	84.16
+	SRC Depth:	2.27
+	Diff:		75.16
+	F/P %:		9.35%
+	Error %:		25.53%
 	Tot # of Inf: 0
 
 
 0.18
-	BRC Size:	15.93
-	SRC Size:	110.49
-	SRC Depth:	1.69
-	Diff:		94.56
-	F/P %:		6.94%
-	Error %:		28.81%
+	BRC Size:	16.0
+	SRC Size:	114.71
+	SRC Depth:	1.6
+	Diff:		98.71
+	F/P %:		7.17%
+	Error %:		26.59%
 	Tot # of Inf: 0
 
 
 0.22
-	BRC Size:	24.6
-	SRC Size:	140.11
-	SRC Depth:	1.15
-	Diff:		115.52
-	F/P %:		5.68%
-	Error %:		25.57%
+	BRC Size:	16.0
+	SRC Size:	119.66
+	SRC Depth:	1.52
+	Diff:		103.66
+	F/P %:		7.48%
+	Error %:		24.8%
 	Tot # of Inf: 0
 
 
 0.26
 	BRC Size:	25.0
-	SRC Size:	142.15
-	SRC Depth:	1.11
-	Diff:		117.15
-	F/P %:		5.69%
-	Error %:		24.95%
+	SRC Size:	146.39
+	SRC Depth:	1.06
+	Diff:		121.39
+	F/P %:		5.86%
+	Error %:		24.23%
 	Tot # of Inf: 0
 
 
 0.30
-	BRC Size:	35.76
-	SRC Size:	165.5
-	SRC Depth:	0.86
-	Diff:		129.74
-	F/P %:		4.62%
-	Error %:		30.24%
+	BRC Size:	29.93
+	SRC Size:	171.52
+	SRC Depth:	0.8
+	Diff:		141.59
+	F/P %:		5.76%
+	Error %:		23.85%
 	Tot # of Inf: 0
 
 

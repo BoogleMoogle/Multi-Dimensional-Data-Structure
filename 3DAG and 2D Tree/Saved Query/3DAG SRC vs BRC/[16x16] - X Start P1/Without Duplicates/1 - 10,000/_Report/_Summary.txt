@@ -1,0 +1,80 @@
+0.02
+	BRC Size:	1.0
+	SRC Size:	1.0
+	SRC Depth:	8.0
+	Diff:		0.0
+	F/P %:		1.0%
+	Error %:		100.0%
+	Tot # of Inf: 0
+
+
+0.06
+	BRC Size:	4.0
+	SRC Size:	4.0
+	SRC Depth:	6.0
+	Diff:		0.0
+	F/P %:		1.0%
+	Error %:		100.0%
+	Tot # of Inf: 0
+
+
+0.10
+	BRC Size:	9.0
+	SRC Size:	16.0
+	SRC Depth:	4.0
+	Diff:		7.0
+	F/P %:		1.78%
+	Error %:		56.25%
+	Tot # of Inf: 0
+
+
+0.14
+	BRC Size:	9.0
+	SRC Size:	16.0
+	SRC Depth:	4.0
+	Diff:		7.0
+	F/P %:		1.78%
+	Error %:		56.25%
+	Tot # of Inf: 0
+
+
+0.18
+	BRC Size:	16.0
+	SRC Size:	44.27
+	SRC Depth:	2.74
+	Diff:		28.27
+	F/P %:		2.77%
+	Error %:		49.52%
+	Tot # of Inf: 0
+
+
+0.22
+	BRC Size:	25.0
+	SRC Size:	64.0
+	SRC Depth:	2.0
+	Diff:		39.0
+	F/P %:		2.56%
+	Error %:		39.06%
+	Tot # of Inf: 0
+
+
+0.26
+	BRC Size:	25.0
+	SRC Size:	64.0
+	SRC Depth:	2.0
+	Diff:		39.0
+	F/P %:		2.56%
+	Error %:		39.06%
+	Tot # of Inf: 0
+
+
+0.30
+	BRC Size:	36.0
+	SRC Size:	110.0
+	SRC Depth:	1.47
+	Diff:		74.0
+	F/P %:		3.06%
+	Error %:		44.01%
+	Tot # of Inf: 0
+
+
