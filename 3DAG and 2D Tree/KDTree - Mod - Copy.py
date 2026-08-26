@@ -61,13 +61,13 @@ class KDTree:
         #it is important to mention that this is KD Tree, we still only have left and right children
         #need to find middle of data, for each dimension
 
-        self.split_value = self.points[(len(self.points)//2)-1][self.axis]
+        self.split_value = self.points[(len(self.points)//2)][self.axis]
         
         left = []
         right = []
         #dependent on the axis original node is on
         for j in range(len(self.points)):
-            if self.split_value < self.points[j][self.axis]:
+            if self.split_value <= self.points[j][self.axis]:
                 right.append(self.points[j])
             else:
                 left.append(self.points[j])
@@ -86,7 +86,7 @@ class KDTree:
             left_bbox.append(0)
             right_bbox.append(0)
         left_bbox[self.axis] = [self.bbox[self.axis][0],self.split_value]
-        right_bbox[self.axis] = [self.points[(len(self.points)//2)][self.axis],self.bbox[self.axis][1]]
+        right_bbox[self.axis] = [self.split_value,self.bbox[self.axis][1]]
         for i in range(self.dimensionality-1):
             left_bbox[(self.axis+(i+1))%self.dimensionality] = self.bbox[(self.axis+(i+1))%self.dimensionality]
             right_bbox[(self.axis+(i+1))%self.dimensionality] = self.bbox[(self.axis+(i+1))%self.dimensionality]
@@ -601,10 +601,10 @@ def get_queries_from_old_data(path):
 # #___________________________________________________________________________#
 
 
-# ### Spatial Database NO Duplication ###
-# path = r"Saved Datasets/Spatial.xlsx"
-# points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
-# #___________________________________________________________________________#
+### Spatial Database NO Duplication ###
+path = r"Saved Datasets/Spatial.xlsx"
+points = points_from_file(path,columns=['lon','lat'],file_extension='excel',drop_duplicates=True)
+#___________________________________________________________________________#
 
 # ### CRAWDAD spitz/cellular Dataset Dropping Duplicates ###
 # path = r"Saved Datasets/DT-mobile-data.csv/VDS_MS_310809_27_0210.csv"
@@ -617,11 +617,11 @@ def get_queries_from_old_data(path):
 # points = []
 # for i in range(512):
 #     for j in range(512):
+# #         points.append((i,j))
+# points = []
+# for i in range(16):
+#     for j in range(16):
 #         points.append((i,j))
-points = []
-for i in range(64):
-    for j in range(64):
-        points.append((i,j))
 
 
 print(f"# of points: {len(points)}")
@@ -629,21 +629,22 @@ print("Making Tree...")
 temp = KDTree(points,cutoff=1,axis=0)
 print("Tree Made\n")
 
-# temp.print_tree(file=True)
+temp.print_tree(file=True)
 
 ### CONTROL PANNEL ###
-num = 50000
+num = 100000
 sprout = 1
-# dataset = "Spatial - Cuttoff at 1"
+dataset = "Spatial - Cuttoff at 1 X Start"
 # dataset = "[512x512] - X Start" 
 # dataset = "[256x256] - X Start" 
 # dataset = "[1024x1024] - X Start" 
 # dataset = "[16x16] - X Start P1" 
-dataset = "[64x64] - X Start P1" 
+# dataset = "[64x64] - X Start P1" 
 # dataset =f"Gowalla - 40,356 points - Cuttoff 1"
 # dataset ="Uniform [0 x 99] - Cuttoff at 1"
+# dataset = "Spatial - Cuttoff at 1 X Start"
 dup = False
-itterations = 3
+itterations = 1
 interval = 4
 starting_per = .30
 SRC = True
@@ -660,6 +661,7 @@ else:
 # print(sys.getsizeof(temp))
 
 # temp.SRC(query=[[1,3],[4,6]])
+
 
 
 
