@@ -66,12 +66,6 @@ class DAGTree:
 
     #Splitting Method
     def split(self):
-        if self.points == None: #checks if some how a already split node gets split again
-            print("Stopped")
-            return
-
-        print(self.bbox)
-        
         #sort points based on next level
         if self.axis == 0:  #x axis
             self.points.sort()
@@ -79,7 +73,7 @@ class DAGTree:
             self.points.sort(key=lambda x: x[1])
 
 
-        print(f"Mid Axis on axis {self.axis}: {self.points[(len(self.points)//2)][self.axis]}")   #-1 to be left heavy
+        # print(f"Mid Axis on axis {self.axis}: {self.points[(len(self.points)//2)][self.axis]}")   #-1 to be left heavy
         self.split_value = self.points[(len(self.points)//2)]   #this gives the split axis
 
         #Split data points into the left and right children
@@ -90,29 +84,25 @@ class DAGTree:
             else:                                                   #if point (of axis) is greater than or equal to split value, go right
                 right.append(item)
 
-        #Splitting points for middle child
-        print(f"Left: {left}")
-        print(f"Right: {right}")
-        print(f"Depth: {self.depth}")
+        # #Splitting points for middle child
+        # print(f"Left: {left}")
+        # print(f"Right: {right}")
+        # print(f"Depth: {self.depth}")
 
                 
         #need to check if all data points are going to one side, if so we need to stop
         if len(left) == 0 or len(right) == 0:
             return
 
-        #MAY NEED TO CHANGE HOW TO FIND LEFT AND RIGHT MEDIAN BASED ON ODD OR EVEN # OF DATA POINTS
         left_median = left[(len(left)//2)]  #median will always round up
-        # if len(right)%2 == 0:   #even
-        #     right_median = right[(len(right)//2)-1]   #median will always round up
-        # else:                   #odd
         right_median = right[(len(right)//2)]   #median will always round up
-        print(f"Left Median: {left_median}\nRight Median: {right_median}")
+        # print(f"Left Median: {left_median}\nRight Median: {right_median}")
 
         for item in self.points:
             if item[self.axis] >= left_median[self.axis] and item[self.axis] < right_median[self.axis]:
                 middle.append(item)
         #need to check if middle bbox ends up equalling the right or the left childs bbox
-        print(f"Middle: {middle}\n")
+        # print(f"Middle: {middle}\n")
 
         #Making the children
         if self.axis == 0:  #x axis
@@ -179,34 +169,53 @@ class DAGTree:
         self.points=None
 
         if self.left.data_size > self.cutoff:
-            print("Going Left")
+            # print("Going Left")
             self.left.split()
         if self.middle.data_size > self.cutoff:
-            print("Going Middle")
+            # print("Going Middle")
             self.middle.split()
         if self.right.data_size > self.cutoff:
-            print("Going Right")
+            # print("Going Right")
             self.right.split()
 
 
 
     #Stochastic Region Contraction
-    def SRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
+    def SRC_middle(self, q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops=False, num_hops=0):
         if self.middle != None:
             if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
-                return self.middle.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+                return self.middle.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
 
         if self.left != None:
             if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:
-                return self.left.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+                return self.left.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
 
         if self.right != None:
             if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
-                return self.right.SRC(q_xmin, q_ymin, q_xmax, q_ymax)
+                return self.right.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
+        if inc_num_hops == False:
+            return self
+        else:
+            return [self, num_hops]
 
-        return self
+    def linear_BRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
+        #Only traverse right and left
+        #Go as deep as possible for left and right
+        #Return/Get all points
+        nodes = self.get_leaf_linear(points_list=[], query=[q_xmin, q_ymin, q_xmax, q_ymax])
+        return nodes
 
-    # def linear_BRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
+    def get_leaf_linear(self,points_list=[], query=[]):
+        if self.points != None:
+            for item in self.points:
+                if item[0] >= query[0] and item[0] <= query[2] and item[1] >= query[1] and item[1] <= query[3]:
+                    points_list.append(item)
+        if self.left != None:
+            self.left.get_leaf_linear(points_list, query)
+        if self.right != None:
+            self.right.get_leaf_linear(points_list, query)
+        return points_list
+
 
 
 
@@ -220,9 +229,25 @@ for i in range(4):
     for j in range(4):
         points.append((i,j))
 
-print(f"# of points: {len(points)}")
+# print(f"# of points: {len(points)}")
 tree = DAGTree(points, cutoff=4, axis=0)
-print(f"\n\nTree: {tree}")
-print(f"Left:\t{tree.left.bbox}\nMiddle:\t{tree.middle.bbox}\nRight:\t{tree.right.bbox}")
+print(f"Tree: {tree}")
+# print(f"Left:\t{tree.left.bbox}\nMiddle:\t{tree.middle.bbox}\nRight:\t{tree.right.bbox}")
+# print(f"Left Middle BBOX: {tree.left.middle.bbox}\nMiddle Middle BBOX: {tree.middle.middle.bbox}\nRight Middle BBOX: {tree.right.middle.bbox}")
+# print(f"Middle Left: {tree.middle.left.bbox}\nMiddle Right: {tree.middle.right.bbox}")
 
-print(tree.left.left.cutoff)
+# print(f"SRC_middle []: {tree.SRC_middle(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
+print(f"3DAG SRC_middle [1,2,2,3]: {tree.SRC_middle(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3)}")
+print(f"3DAG SRC_middle [0,0,0,0]: {tree.SRC_middle(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0)}")
+print(f"3DAG SRC_middle [4,4,4,4]: {tree.SRC_middle(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4)}")
+print(f"3DAG SRC_middle [1,1,2,2]: {tree.SRC_middle(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2)}")
+print("\n\n\n")
+
+# print(f"BRC []: {tree.linear_BRC(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
+print(f"3DAG BRC [1,2,2,3]: {tree.linear_BRC(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3)}")
+print(f"3DAG BRC [0,0,0,0]: {tree.linear_BRC(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0)}")
+print(f"3DAG BRC [4,4,4,4]: {tree.linear_BRC(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4)}")
+print(f"3DAG BRC [1,1,2,2]: {tree.linear_BRC(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2)}")
+
+
+
