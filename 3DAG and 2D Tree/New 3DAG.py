@@ -222,7 +222,7 @@ class DAGTree:
 
 #SRC, look to middle first
 #Use synthetic data (uniform)
-#For searching use corner method
+#For creating queries use corner method
 
 points = []
 for i in range(4):
