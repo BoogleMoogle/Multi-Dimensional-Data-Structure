@@ -180,7 +180,7 @@ class DAGTree:
 
 
 
-    #Stochastic Region Contraction
+    #Stochastic Region Contraction, middle
     def SRC_middle(self, q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops=False, num_hops=0):
         if self.middle != None:
             if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
@@ -198,12 +198,40 @@ class DAGTree:
         else:
             return [self, num_hops]
 
+
+
+    #SRC, exhaustive
+    def SRC_exhaustive(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None, inc_num_hops=False, num_hops=0):
+        if self.bbox[0] >= q_xmin or self.bbox[1] >= q_ymin or self.bbox[2] <= q_xmax or self.bbox[3] <= q_ymax and (best != None and best.depth < self.depth):
+            best = self
+
+        if self.left != None and self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:
+            temp = self.left.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best, inc_num_hops, num_hops+1)
+            if temp != None and (best == None or temp.depth > best.depth):
+                best = temp
+
+        if self.middle != None and self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:
+            temp = self.middle.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best, inc_num_hops, num_hops+1)
+            if temp != None and (best == None or temp.depth > best.depth):
+                best = temp
+
+        if self.right != None and self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+            temp = self.right.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best, inc_num_hops, num_hops+1)
+            if temp != None and (best == None or temp.depth > best.depth):
+                best = temp
+            
+        return best
+
+
+
     def linear_BRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
         #Only traverse right and left
         #Go as deep as possible for left and right
         #Return/Get all points
         nodes = self.get_leaf_linear(points_list=[], query=[q_xmin, q_ymin, q_xmax, q_ymax])
         return nodes
+
+
 
     def get_leaf_linear(self,points_list=[], query=[]):
         if self.points != None:
@@ -237,17 +265,23 @@ print(f"Tree: {tree}")
 # print(f"Middle Left: {tree.middle.left.bbox}\nMiddle Right: {tree.middle.right.bbox}")
 
 # print(f"SRC_middle []: {tree.SRC_middle(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
-print(f"3DAG SRC_middle [1,2,2,3]: {tree.SRC_middle(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3)}")
-print(f"3DAG SRC_middle [0,0,0,0]: {tree.SRC_middle(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0)}")
-print(f"3DAG SRC_middle [4,4,4,4]: {tree.SRC_middle(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4)}")
-print(f"3DAG SRC_middle [1,1,2,2]: {tree.SRC_middle(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2)}")
+print(f"3DAG SRC_middle [1,2,2,3]: {tree.SRC_middle(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3).bbox}")
+print(f"3DAG SRC_middle [0,0,0,0]: {tree.SRC_middle(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0).bbox}")
+print(f"3DAG SRC_middle [4,4,4,4]: {tree.SRC_middle(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4).bbox}")
+print(f"3DAG SRC_middle [1,1,2,2]: {tree.SRC_middle(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2).bbox}")
 print("\n\n\n")
 
-# print(f"BRC []: {tree.linear_BRC(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
-print(f"3DAG BRC [1,2,2,3]: {tree.linear_BRC(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3)}")
-print(f"3DAG BRC [0,0,0,0]: {tree.linear_BRC(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0)}")
-print(f"3DAG BRC [4,4,4,4]: {tree.linear_BRC(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4)}")
-print(f"3DAG BRC [1,1,2,2]: {tree.linear_BRC(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2)}")
+# print(f"SRC_exhaustive []: {tree.SRC_exhaustive(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
+print(f"SRC_exhaustive [1,2,2,3]: {tree.SRC_exhaustive(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3).bbox}")
+print(f"SRC_exhaustive [0,0,0,0]: {tree.SRC_exhaustive(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0).bbox}")
+print(f"SRC_exhaustive [4,4,4,4]: {tree.SRC_exhaustive(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4).bbox}")
+print(f"SRC_exhaustive [1,1,2,2]: {tree.SRC_exhaustive(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2).bbox}")
+
+# # print(f"BRC []: {tree.linear_BRC(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
+# print(f"3DAG BRC [1,2,2,3]: {tree.linear_BRC(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3)}")
+# print(f"3DAG BRC [0,0,0,0]: {tree.linear_BRC(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0)}")
+# print(f"3DAG BRC [4,4,4,4]: {tree.linear_BRC(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4)}")
+# print(f"3DAG BRC [1,1,2,2]: {tree.linear_BRC(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2)}")
 
 
 

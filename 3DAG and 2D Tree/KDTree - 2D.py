@@ -619,8 +619,8 @@ def get_queries_from_old_data(path):
 #     for j in range(512):
 #         points.append((i,j))
 points = []
-for i in range(4):
-    for j in range(4):
+for i in range(16):
+    for j in range(16):
         points.append((i,j))
 
 
@@ -629,18 +629,18 @@ print("Making Tree...")
 temp = KDTree(points,cutoff=4,axis=0)
 print("Tree Made\n")
 
-# print(f"KD SRC[]: {temp.SRC(query=[])}")
-print(f"KD SRC[1,2,2,3]: {temp.SRC(query=[(1,2),(2,3)])}")
-print(f"KD SRC [0,0,0,0]: {temp.SRC(query=[(0,0),(0,0)])}")
-print(f"KD SRC[4,4,4,4]: {temp.SRC(query=[(4,4),(4,4)])}")
-print(f"KD SRC[1,1,2,2]: {temp.SRC(query=[(1,2),(1,2)])}")
-print("\n\n\n")
+# # print(f"KD SRC[]: {temp.SRC(query=[])}")
+# print(f"KD SRC[1,2,2,3]: {temp.SRC(query=[(1,2),(2,3)]).bbox}")
+# print(f"KD SRC [0,0,0,0]: {temp.SRC(query=[(0,0),(0,0)])}")
+# print(f"KD SRC[4,4,4,4]: {temp.SRC(query=[(4,4),(4,4)])}")
+# print(f"KD SRC[1,1,2,2]: {temp.SRC(query=[(1,2),(1,2)])}")
+# print("\n\n\n")
 
-# print(f"KD BRC []: {temp.linear_BRC(query=[])}")
-print(f"KD BRC [1,2,2,3]: {temp.linear_BRC(query=[(1,2),(2,3)])}")
-print(f"KD BRC [0,0,0,0]: {temp.linear_BRC(query=[(0,0),(0,0)])}")
-print(f"KD BRC [4,4,4,4]: {temp.linear_BRC(query=[(4,4),(4,4)])}")
-print(f"KD BRC [1,1,2,2]: {temp.linear_BRC(query=[(1,2),(1,2)])}")
+# # print(f"KD BRC []: {temp.linear_BRC(query=[])}")
+# print(f"KD BRC [1,2,2,3]: {temp.linear_BRC(query=[(1,2),(2,3)])}")
+# print(f"KD BRC [0,0,0,0]: {temp.linear_BRC(query=[(0,0),(0,0)])}")
+# print(f"KD BRC [4,4,4,4]: {temp.linear_BRC(query=[(4,4),(4,4)])}")
+# print(f"KD BRC [1,1,2,2]: {temp.linear_BRC(query=[(1,2),(1,2)])}")
 
 # ### CONTROL PANNEL ###
 # num = 10000
