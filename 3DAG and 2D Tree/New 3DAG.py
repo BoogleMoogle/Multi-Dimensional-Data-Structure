@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import random
+import os
 
 
 class DAGTree:
@@ -202,10 +203,10 @@ class DAGTree:
 
     #SRC, exhaustive
     def SRC_exhaustive(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
-        if self.bbox[0] >= q_xmin or self.bbox[1] >= q_ymin or self.bbox[2] <= q_xmax or self.bbox[3] <= q_ymax and (best != None and best.depth < self.depth):
+        if self.bbox[0] <= q_xmin and self.bbox[1] <= q_ymin and self.bbox[2] >= q_xmax and self.bbox[3] >= q_ymax or (best != None and best.depth < self.depth):
             best = self
 
-        if self.left != None and self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:
+        if self.left != None and self.left.bbox[2] <= q_xmax and self.left.bbox[3] <= q_ymax:
             temp = self.left.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if temp != None and (best == None or temp.depth > best.depth):
                 best = temp
@@ -219,7 +220,8 @@ class DAGTree:
             temp = self.right.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best)
             if temp != None and (best == None or temp.depth > best.depth):
                 best = temp
-            
+
+
         return best
 
 
@@ -250,6 +252,7 @@ class DAGTree:
 
 
 
+    #BRC, linear
     def linear_BRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
         #Only traverse right and left
         #Go as deep as possible for left and right
@@ -259,64 +262,186 @@ class DAGTree:
 
 
 
-    def get_leaf_linear(self,points_list=[], query=[]):
+    #Linear BRC helper
+    def get_leaf_linear(self,points_list=[], all_leaf=False, query=[]):
         if self.points != None:
-            for item in self.points:
-                if item[0] >= query[0] and item[0] <= query[2] and item[1] >= query[1] and item[1] <= query[3]:
-                    points_list.append(item)
+            if all_leaf == True:
+                points_list.append(self)
+            else:
+                for item in self.points:
+                    if item[0] >= query[0] and item[0] <= query[2] and item[1] >= query[1] and item[1] <= query[3]:
+                        points_list.append(item)
         if self.left != None:
-            self.left.get_leaf_linear(points_list, query)
+            self.left.get_leaf_linear(points_list, all_leaf, query)
         if self.right != None:
-            self.right.get_leaf_linear(points_list, query)
+            self.right.get_leaf_linear(points_list, all_leaf, query)
         return points_list
 
 
 
+    def get_all_nodes(self, node_df=pd.DataFrame(columns=['BBOX','Depth'])):
+        node_df.loc[len(node_df)] = [self.bbox, self.depth]
+        if self.left != None:
+            self.left.get_all_nodes(node_df)
+        if self.middle != None:
+            self.middle.get_all_nodes(node_df)
+        if self.right != None:
+            self.right.get_all_nodes(node_df)
+
+        return node_df
 
 
-#SRC, look to middle first
-#Use synthetic data (uniform)
+### General Use Methods ###
+def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium=False, large=False, SRC_exhaustive=False, SRC_middle=False, SRC_random=False, BRC=False, save=True):
+    if seed != None:
+        random.seed(seed)
+    if path == None:
+        things = os.listdir('3DAG and 2D Tree/')
+
+        if things.__contains__('Saved Queries') == False:
+            os.mkdir("Saved Queries")
+        if name == None or type(name) != str:
+            path = f"3DAG and 2D Tree/Saved Queries/temp {len(os.listdir('3DAG and 2D Tree/Saved Queries'))+1}.csv"
+        elif type(name) == str:
+            path = f"3DAG and 2D Tree/Saved Queries/{name}.csv"
+
+    if small == False and medium == False and large == False:
+        return print("Need to set small, medium, or large to True")
+    if small == True:
+        coeff_num = int((tree.bbox[2]-tree.bbox[0])*0.1)
+    if medium == True:
+        coeff_num = int((tree.bbox[2]-tree.bbox[0])*0.2)
+    if large == True:
+        coeff_num = int((tree.bbox[2]-tree.bbox[0])*0.3)
+
+    i=0
+    while i < num:
+        # #this is for semi random query box generation
+        # xmin = random.randint(tree.bbox[0],tree.bbox[2]-coeff_num)
+        # xmax = random.randint(xmin+1,xmin+coeff_num)
+        # ymin = random.randint(tree.bbox[1],tree.bbox[3]-coeff_num)
+        # ymax = random.randint(ymin+1,ymin+coeff_num)
+
+        #this is for square query generation
+        xmin = random.randint(tree.bbox[0],tree.bbox[2]-coeff_num)
+        xmax = xmin + coeff_num
+        ymin = random.randint(tree.bbox[0],tree.bbox[2]-coeff_num)
+        ymax = ymin + coeff_num
+
+
+        #Arranges the queries xmins and ymins
+        if xmin > xmax:
+            a = xmax
+            xmax = xmin
+            xmin = a
+        if ymin > ymax:
+            a = ymax
+            ymax = ymin
+            ymin = a
+
+        #This limits the possible query ranges to the actual boundery box of the data set
+        if xmin < tree.bbox[0]:
+            xmin = tree.bbox[0]
+
+        if xmax > tree.bbox[2]:
+            xmax = tree.bbox[2]
+
+        if ymin < tree.bbox[1]:
+            ymin = tree.bbox[1]
+
+        if ymax > tree.bbox[3]:
+            ymax = tree.bbox[3]
+        
+        if ymax < tree.bbox[1]:
+            ymax = tree.bbox[1]
+
+        #we need a default searching method
+        if SRC_exhaustive == False and SRC_middle == False and SRC_random == False and BRC == False:
+            SRC_exhaustive = True
+
+        if SRC_exhaustive == True:
+            node = tree.SRC_exhaustive(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax)
+        elif SRC_middle == True:
+            node = tree.SRC_middle(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax, inc_num_hops=True)
+        elif SRC_random == True:
+            node = tree.SRC_random(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax)
+        elif BRC == True:
+            node = tree.linear_BRC(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax)
+
+        if i == 0 and path != None:          # I feel like if I didn't use pandas, or atleast used it at the end to write to the csv file, this would possibly go faster
+            if node == None:
+                pass
+
+            #make these switch statements
+            if small == True:
+                if SRC_exhaustive == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Small","Depth","BBoxes","Data Size"], index=None)
+                elif SRC_middle == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Small","Depth","# Hops","BBoxes","Data Size"], index=None)
+                elif SRC_random == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Small","Depth","BBoxes","Data Size"], index=None)
+                elif BRC == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Small","Points","# Of Points"], index=None)
+            elif medium == True:
+                if SRC_exhaustive == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Medium","Depth","BBoxes","Data Size"], index=None)
+                elif SRC_middle == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Medium","Depth","# Hops","BBoxes","Data Size"], index=None)
+                elif SRC_random == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Medium","Depth","BBoxes","Data Size"], index=None)
+                elif BRC == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Medium","Points","# Of Points"], index=None)
+            elif large == True:
+                if SRC_exhaustive == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Large","Depth","BBoxes","Data Size"], index=None)
+                elif SRC_middle == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Large","Depth","# Hops","BBoxes","Data Size"], index=None)
+                elif SRC_random == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Large","Depth","BBoxes","Data Size"], index=None)
+                elif BRC == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Large","Points","# Of Points"], index=None)
+            else:
+                if SRC_exhaustive == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query","Depth","BBoxes","Data Size"], index=None)
+                elif BRC == True:
+                    temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query","Points","# Of Points"], index=None)
+
+        else:
+            if SRC_exhaustive == True:
+                temp.loc[i] = [xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size
+            elif SRC_middle == True:
+                temp.loc[i] = [xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size
+            elif SRC_random == True:
+                temp.loc[i] = [xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size
+            elif BRC == True:
+                temp.loc[i] = [xmin,ymin,xmax,ymax],node,len(node)
+        i+=1
+
+    if save == True:
+        try:
+            df = pd.read_csv(path)
+            temp.to_csv(path,mode='w',columns=None,index=None)
+        except Exception:
+            temp.to_csv(path,mode='a',columns=None,index=None)
+    else:
+        return print(temp)
+
+    
+
+
 #For creating queries use corner method
 
 points = []
-for i in range(4):
-    for j in range(4):
+for i in range(16):
+    for j in range(16):
         points.append((i,j))
 
 # print(f"# of points: {len(points)}")
 tree = DAGTree(points, cutoff=4, axis=0)
 print(f"Tree: {tree}")
-# print(f"Left:\t{tree.left.bbox}\nMiddle:\t{tree.middle.bbox}\nRight:\t{tree.right.bbox}")
-# print(f"Left Middle BBOX: {tree.left.middle.bbox}\nMiddle Middle BBOX: {tree.middle.middle.bbox}\nRight Middle BBOX: {tree.right.middle.bbox}")
-# print(f"Middle Left: {tree.middle.left.bbox}\nMiddle Right: {tree.middle.right.bbox}")
+# save_query(tree=tree, num=1000, seed=0, large=True, save=True, SRC_random=True, name="16x16 Random Large - 1000")
 
-# # print(f"SRC_middle []: {tree.SRC_middle(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
-# print(f"3DAG SRC_middle [1,2,2,3]: {tree.SRC_middle(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3).bbox}")
-# print(f"3DAG SRC_middle [0,0,0,0]: {tree.SRC_middle(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0).bbox}")
-# print(f"3DAG SRC_middle [4,4,4,4]: {tree.SRC_middle(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4).bbox}")
-# print(f"3DAG SRC_middle [1,1,2,2]: {tree.SRC_middle(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2).bbox}")
-# print("\n\n\n")
-
-# # print(f"SRC_exhaustive []: {tree.SRC_exhaustive(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
-# print(f"SRC_exhaustive [1,2,2,3]: {tree.SRC_exhaustive(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3).bbox}")
-# print(f"SRC_exhaustive [0,0,0,0]: {tree.SRC_exhaustive(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0).bbox}")
-# print(f"SRC_exhaustive [4,4,4,4]: {tree.SRC_exhaustive(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4).bbox}")
-# print(f"SRC_exhaustive [1,1,2,2]: {tree.SRC_exhaustive(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2).bbox}")
-# print("\n\n\n")
-
-# # print(f"SRC_random []: {tree.SRC_random(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
-# seed=None
-# print(f"SRC_random [1,2,2,3]: {tree.SRC_random(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3, seed=seed).bbox}")
-# print(f"SRC_random [0,0,0,0]: {tree.SRC_random(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0, seed=seed).bbox}")
-# print(f"SRC_random [4,4,4,4]: {tree.SRC_random(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4, seed=seed).bbox}")
-# print(f"SRC_random [1,1,2,2]: {tree.SRC_random(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2, seed=seed).bbox}")
-# print("\n\n\n")
-
-# # print(f"BRC []: {tree.linear_BRC(q_xmin=, q_ymin=, q_xmax=, q_ymax=)}")
-# print(f"3DAG BRC [1,2,2,3]: {tree.linear_BRC(q_xmin=1, q_ymin=2, q_xmax=2, q_ymax=3)}")
-# print(f"3DAG BRC [0,0,0,0]: {tree.linear_BRC(q_xmin=0, q_ymin=0, q_xmax=0, q_ymax=0)}")
-# print(f"3DAG BRC [4,4,4,4]: {tree.linear_BRC(q_xmin=4, q_ymin=4, q_xmax=4, q_ymax=4)}")
-# print(f"3DAG BRC [1,1,2,2]: {tree.linear_BRC(q_xmin=1, q_ymin=1, q_xmax=2, q_ymax=2)}")
-
-
-
+# node_df = tree.get_all_nodes()
+# pd.set_option('display.max_rows', None)
+# pd.set_option('display.max_columns', None)
+# node_df.to_csv('16x16(left-middle-right).csv')
