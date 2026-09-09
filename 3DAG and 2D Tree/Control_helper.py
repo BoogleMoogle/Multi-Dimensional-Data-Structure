@@ -1,3 +1,5 @@
+from genericpath import exists
+
 import New_3DAG
 import KDTree_2D
 import numpy as np 
@@ -137,29 +139,12 @@ def stat_graph(path=None,title="",show=False):
 
 
 
-def lvl_diff(path=None, DAGpath=None, KDpath=None, title=None, show=False, save=True):
-    if path == None and DAGpath == None and KDpath == None:
-        return print("Need path!")
+def lvl_diff(DAGpath=None, KDpath=None, title=None, show=False, save=True):
     print("\tStarting Level Diff...")
     #makes sure that there is a slash at the end of the paths
     if DAGpath == None and KDpath == None:
         if path[len(path)-1] != '/':
             path = path + "/"
-
-        DAGitems=[]
-        KDitems=[]
-        for item in os.listdir(path+"DAG/"):
-            if item.__contains__('SRC'):
-                DAGitems.append(item)
-
-        for item in os.listdir(path+"KD/"):
-            if item.__contains__('SRC'):
-                KDitems.append(item)
-
-        for i in range(len(DAGitems)):
-            lvl_diff(DAGpath=path+f"DAG/{DAGitems[i]}/",KDpath=path+f"KD/{KDitems[0]}/")    #recursivley call lvl_diff for all DAG algorithims against KD algorithim
-            
-
     
     #gets the csv files paths, these will be read then processed for graphing
     DAGitems = []
@@ -168,7 +153,7 @@ def lvl_diff(path=None, DAGpath=None, KDpath=None, title=None, show=False, save=
             DAGitems.append(item)
 
     KDitems = []
-    for item in os.listdir(KDpath):
+    for item in os.listdir(KDpath+'/SRC/'):
         if item.__contains__('.csv'):
             KDitems.append(item)
 
@@ -176,7 +161,7 @@ def lvl_diff(path=None, DAGpath=None, KDpath=None, title=None, show=False, save=
     for i in range(len(DAGitems)):
         DAG_list,KD_list=None,None
         DAG_list = pd.read_csv(DAGpath+DAGitems[i])['Depth']
-        KD_list = pd.read_csv(KDpath+KDitems[i])['Depth']
+        KD_list = pd.read_csv(KDpath+"SRC/"+KDitems[i])['Depth']
         #DAG_list and KD_list have the depths of returned nodes through SRC search
         #now finding the difference: DAG - KD          DAG will always be bigger, so if a negative value occurs something is terribly wrong
 
@@ -238,11 +223,83 @@ def lvl_diff(path=None, DAGpath=None, KDpath=None, title=None, show=False, save=
     print("\t\tFinished Level Diff")
 
 
-def __main__(num=10, dataset=None, seed=None,rng=None):
-    points = []
-    for i in range(rng):
-        for j in range(rng):
-            points.append((i,j))
+
+def L2norm(path=None, show=False):
+    print("\tStarting L2 Norm...")
+    os.makedirs(path+"_L2 Norm/",exist_ok=True)
+    files = os.listdir(path)
+    for csv_file in files:
+        if csv_file.__contains__("SRC"):        #only gets csv files that are SRC Query, then gets the SRC Query.csv file's Depth, and then graphs it
+            data = pd.read_csv((path+f"{csv_file}"))    #data will be equal to each original SRC file
+            
+            i=0     #this is to find how many times a depth is returned by SRC from the SRC Query.csv file, note it may not return the maximum depth if the SRC Query.csv file
+            value_list = []
+            for i in range(data['Depth'].max()+1):
+                value_list.append(data['Depth'].value_counts().get(i, 0))
+                # i+=1
+            for j in range(len(value_list)):
+                value_list[j] = value_list[j]/len(data['Depth'])
+            #value list has the original data from SRC file
+            columns_li = []
+            for i in range(len(value_list)):
+                columns_li.append(i)
+            stored_data = pd.DataFrame(columns=['L2 Norm'])
+
+            randomized_sample = data['Depth'].sample(n=len(data))   #randomized_sample fully randomly samples the entire data set
+            #need to make columns of the first 100 points, then again for the first and next 100 (200 total), then containue
+    
+            #this is going through the randomly sampled data (SRC Depth) and going through it for every 100 points
+            for i in range(int(randomized_sample.shape[0]/100)):
+                temp = randomized_sample.head(100*(i+1))
+                temp_value_list = []
+                j=0
+                for j in range(randomized_sample.max()+1):   #this gets the depths of the nodes
+                    temp_value_list.append(temp.value_counts().get(j, 0))
+
+
+                #temp_value_list has the # of returned nodes of this random sample, want %
+                for j in range(len(temp_value_list)):
+                    temp_value_list[j] = temp_value_list[j]/(100*(i+1))
+                temp_row = []
+                temp_val = 0
+                for k in range(len(temp_value_list)):
+                    # for j in range(len(temp_value_list[k])):
+                    temp_val += ((temp_value_list[k]-value_list[k])**2)
+                    # temp_row.append(((temp_value_list[k]-value_list[k])**2)**0.5)       #this is the L2 norm as: ((sample - original)^2)^1/2
+                temp_row.append((temp_val)**0.5)
+                stored_data.loc[len(stored_data)] = temp_row
+            stored_data.to_csv(f"{path}/_L2 Norm/{csv_file}")
+
+            #need to save figure (scatter)
+            stored_data = stored_data.values.tolist()
+
+            x=[]
+            for i in range(len(stored_data)):
+                x.append(i)
+            plt.figure(figsize=(16,10))
+            plt.scatter(x,stored_data,marker='*', color='grey')
+            plt.xlabel("Distribution")
+            plt.ylabel("L2 Norm Val")
+            plt.ylim(bottom=0)
+            plt.xlim(left=0)
+            plt.title(f"{csv_file.replace('.csv','')}")
+            plt.tight_layout()
+            os.makedirs(path+"_L2 Norm/Pictures",exist_ok=True)
+            plt.savefig(path+f"_L2 Norm/Pictures/{csv_file.replace('.csv','.png')}")
+            if show == True:
+                plt.show()
+            else:
+                plt.close('all')
+
+    print("\t\tFinished L2 Norm\n")
+
+    
+
+def __main__(num=10, dataset=None, seed=None, rng=None, points=None):
+    if points == None:
+        for i in range(rng):
+            for j in range(rng):
+                points.append((i,j))
 
     print(f"Starting {dataset} - {num}")
 
@@ -263,6 +320,7 @@ def __main__(num=10, dataset=None, seed=None,rng=None):
     os.makedirs(path+"/DAG/SRC Exhaustive",exist_ok=True)
     os.makedirs(path+"/DAG/SRC Middle",exist_ok=True)
     os.makedirs(path+"/DAG/SRC Random",exist_ok=True)
+    os.makedirs(path+"/DAG/SRC Left and Right",exist_ok=True)
     os.makedirs(path+"/DAG/BRC",exist_ok=True)
 
     os.makedirs(path+"/KD",exist_ok=True)
@@ -274,6 +332,7 @@ def __main__(num=10, dataset=None, seed=None,rng=None):
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",small=True,save=True, name=f"DAG {dataset} SRC_exhaustive Small {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",small=True,save=True, name=f"DAG {dataset} SRC_middle Small {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",small=True,save=True, name=f"DAG {dataset} SRC_random Small {num}")
+    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_leftright=True,path=path+"/DAG/SRC Left and Right",small=True,save=True, name=f"DAG {dataset} SRC_leftright Small {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",small=True,save=True, name=f"DAG {dataset} BRC Small {num}")
     KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Small {num}")
     KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Small {num}")
@@ -283,6 +342,7 @@ def __main__(num=10, dataset=None, seed=None,rng=None):
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",medium=True,save=True, name=f"DAG {dataset} SRC_exhaustive Medium {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",medium=True,save=True, name=f"DAG {dataset} SRC_middle Medium {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",medium=True,save=True, name=f"DAG {dataset} SRC_random Medium {num}")
+    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Left and Right",medium=True,save=True, name=f"DAG {dataset} SRC_leftright Medium {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",medium=True,save=True, name=f"DAG {dataset} BRC Medium {num}")
     KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Medium {num}")
     KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Medium {num}")
@@ -292,6 +352,7 @@ def __main__(num=10, dataset=None, seed=None,rng=None):
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",large=True,save=True, name=f"DAG {dataset} SRC_exhaustive Large {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",large=True,save=True, name=f"DAG {dataset} SRC_middle Large {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",large=True,save=True, name=f"DAG {dataset} SRC_random Large {num}")
+    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Left and Right",large=True,save=True, name=f"DAG {dataset} SRC_leftright Large {num}")
     New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",large=True,save=True, name=f"DAG {dataset} BRC Large {num}")
     KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Large {num}")
     KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Large {num}")
@@ -299,12 +360,22 @@ def __main__(num=10, dataset=None, seed=None,rng=None):
     stat_graph(path=path+"/DAG/SRC Exhaustive/",title=f"DAG Exh {dataset}")
     stat_graph(path=path+"/DAG/SRC Middle/",title=f"DAG Mid {dataset}")
     stat_graph(path=path+"/DAG/SRC Random/", title=f"DAG Rand {dataset}")
+    stat_graph(path=path+"/DAG/SRC Left and Right/",title=f"DAG L&R {dataset}")
     stat_graph(path=path+"/DAG/BRC/", title=f"DAG BRC {dataset}")
 
     stat_graph(path=path+"/KD/SRC/", title=f"KD SRC {dataset}")
     stat_graph(path=path+"/KD/BRC/", title=f"KD BRC {dataset}")
 
-    lvl_diff(path=path)
+    L2norm(path=path+"/DAG/SRC Exhaustive/")
+    L2norm(path=path+"/DAG/SRC Middle/")
+    L2norm(path=path+"/DAG/SRC Random/")
+    L2norm(path=path+"/DAG/SRC Left and Right/")
+    L2norm(path=path+"/KD/SRC/")
+
+    lvl_diff(DAGpath=path+"/DAG/SRC Exhaustive/", KDpath=path+"/KD/")
+    lvl_diff(DAGpath=path+"/DAG/SRC Middle/", KDpath=path+"/KD/")
+    lvl_diff(DAGpath=path+"/DAG/SRC Random/", KDpath=path+"/KD/")
+    lvl_diff(DAGpath=path+"/DAG/SRC Left and Right/", KDpath=path+"/KD/")
 
     print(f"\nFinished {dataset} - {num}\n\n\n")
 

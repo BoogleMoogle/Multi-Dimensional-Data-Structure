@@ -231,6 +231,26 @@ class DAGTree:
 
 
 
+    #SRC, Left and Right
+    def SRC_leftright(self, q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops=False, num_hops=0):
+        if self.left != None:
+            if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:
+                return self.left.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
+
+        if self.right != None:
+            if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                return self.right.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
+            
+        if self.middle != None:
+            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
+                return self.middle.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
+
+        if inc_num_hops == False:
+            return self
+        else:
+            return [self, num_hops]
+
+
     #SRC, exhaustive
     def SRC_exhaustive(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
         if self.bbox[0] <= q_xmin and self.bbox[1] <= q_ymin and self.bbox[2] >= q_xmax and self.bbox[3] >= q_ymax or (best == None and best.depth < self.depth):
@@ -356,7 +376,7 @@ class DAGTree:
 
 
 ### General Use Methods ###
-def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium=False, large=False, SRC_exhaustive=False, SRC_middle=False, SRC_random=False, BRC=False, save=True, query_list=None):
+def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium=False, large=False, SRC_exhaustive=False, SRC_middle=False, SRC_random=False, SRC_leftright=False, BRC=False, save=True, query_list=None):
     if seed != None:
         random.seed(seed)
     if path == None:
@@ -505,8 +525,11 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                 node = tree.SRC_middle(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3], inc_num_hops=True)
             elif SRC_random == True:
                 node = tree.SRC_random(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3])
+            elif SRC_leftright == True:
+                node = tree.SRC_leftright(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3], inc_num_hops=True)
             elif BRC == True:
                 node = tree.linear_BRC(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3])
+            
 
             if i == 0 and path != None:          # I feel like if I didn't use pandas, or atleast used it at the end to write to the csv file, this would possibly go faster
                 if node == None:
@@ -520,6 +543,8 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Small","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif SRC_random == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Small","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_leftright == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_leftright Query: Small","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif BRC == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Small","Points","# Of Points"], index=None)
                 elif medium == True:
@@ -529,6 +554,8 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Medium","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif SRC_random == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Medium","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_leftright == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_leftright Query: Medium","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif BRC == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Medium","Points","# Of Points"], index=None)
                 elif large == True:
@@ -538,6 +565,8 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Large","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif SRC_random == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Large","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_leftright == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_leftright Query: Large","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif BRC == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Large","Points","# Of Points"], index=None)
                 else:
@@ -553,6 +582,8 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                     temp.loc[i] = [xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size
                 elif SRC_random == True:
                     temp.loc[i] = [xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size
+                elif SRC_leftright == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size
                 elif BRC == True:
                     temp.loc[i] = [xmin,ymin,xmax,ymax],node,len(node)
             i+=1
