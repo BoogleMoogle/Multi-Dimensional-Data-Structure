@@ -1,0 +1,1094 @@
+,BBOX,Depth,parent
+0,"[0, 0, 16, 16]",0,[]
+1,"[0, 0, 8, 16]",1,[<__main__.DAGTree object at 0x0000021CE870E060>]
+2,"[0, 0, 8, 8]",2,[<__main__.DAGTree object at 0x0000021CEA565460>]
+3,"[0, 0, 4, 8]",3,[<__main__.DAGTree object at 0x0000021CEA17D5E0>]
+4,"[0, 0, 4, 4]",4,[<__main__.DAGTree object at 0x0000021CEA516360>]
+5,"[0, 0, 2, 4]",5,[<__main__.DAGTree object at 0x0000021CEA4ED9A0>]
+6,"[0, 0, 2, 2]",6,[<__main__.DAGTree object at 0x0000021CE8E2BF80>]
+7,"[0, 1, 2, 3]",6,[<__main__.DAGTree object at 0x0000021CE8E2BF80>]
+8,"[0, 2, 2, 4]",6,"[<__main__.DAGTree object at 0x0000021CE8E2BF80>, <__main__.DAGTree object at 0x0000021CEA5F9760>]"
+9,"[1, 0, 3, 4]",5,[<__main__.DAGTree object at 0x0000021CEA4ED9A0>]
+10,"[1, 0, 3, 2]",6,[<__main__.DAGTree object at 0x0000021CE8DF6AB0>]
+11,"[1, 1, 3, 3]",6,[<__main__.DAGTree object at 0x0000021CE8DF6AB0>]
+12,"[1, 2, 3, 4]",6,"[<__main__.DAGTree object at 0x0000021CE8DF6AB0>, <__main__.DAGTree object at 0x0000021CEA5F97C0>]"
+13,"[2, 0, 4, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA4ED9A0>, <__main__.DAGTree object at 0x0000021CEA5F9B20>]"
+14,"[2, 0, 4, 2]",6,[<__main__.DAGTree object at 0x0000021CC0C0EF00>]
+15,"[2, 1, 4, 3]",6,[<__main__.DAGTree object at 0x0000021CC0C0EF00>]
+16,"[2, 2, 4, 4]",6,"[<__main__.DAGTree object at 0x0000021CC0C0EF00>, <__main__.DAGTree object at 0x0000021CEA5F9790>]"
+17,"[0, 2, 4, 6]",4,[<__main__.DAGTree object at 0x0000021CEA516360>]
+18,"[0, 2, 2, 6]",5,[<__main__.DAGTree object at 0x0000021CE810D640>]
+19,"[0, 2, 2, 4]",6,"[<__main__.DAGTree object at 0x0000021CE8E2BF80>, <__main__.DAGTree object at 0x0000021CEA5F9760>]"
+20,"[0, 3, 2, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F9760>]
+21,"[0, 4, 2, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9760>, <__main__.DAGTree object at 0x0000021CEA5F9910>]"
+22,"[1, 2, 3, 6]",5,[<__main__.DAGTree object at 0x0000021CE810D640>]
+23,"[1, 2, 3, 4]",6,"[<__main__.DAGTree object at 0x0000021CE8DF6AB0>, <__main__.DAGTree object at 0x0000021CEA5F97C0>]"
+24,"[1, 3, 3, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F97C0>]
+25,"[1, 4, 3, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F97C0>, <__main__.DAGTree object at 0x0000021CEA5F9970>]"
+26,"[2, 2, 4, 6]",5,"[<__main__.DAGTree object at 0x0000021CE810D640>, <__main__.DAGTree object at 0x0000021CEA5F9B80>]"
+27,"[2, 2, 4, 4]",6,"[<__main__.DAGTree object at 0x0000021CC0C0EF00>, <__main__.DAGTree object at 0x0000021CEA5F9790>]"
+28,"[2, 3, 4, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F9790>]
+29,"[2, 4, 4, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9790>, <__main__.DAGTree object at 0x0000021CEA5F9940>]"
+30,"[0, 4, 4, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA516360>, <__main__.DAGTree object at 0x0000021CEA5FA3C0>]"
+31,"[0, 4, 2, 8]",5,[<__main__.DAGTree object at 0x0000021CEA4ED1C0>]
+32,"[0, 4, 2, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9760>, <__main__.DAGTree object at 0x0000021CEA5F9910>]"
+33,"[0, 5, 2, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9910>]
+34,"[0, 6, 2, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9910>, <__main__.DAGTree object at 0x0000021CEA5FA4B0>]"
+35,"[1, 4, 3, 8]",5,[<__main__.DAGTree object at 0x0000021CEA4ED1C0>]
+36,"[1, 4, 3, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F97C0>, <__main__.DAGTree object at 0x0000021CEA5F9970>]"
+37,"[1, 5, 3, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9970>]
+38,"[1, 6, 3, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9970>, <__main__.DAGTree object at 0x0000021CEA5FA510>]"
+39,"[2, 4, 4, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA4ED1C0>, <__main__.DAGTree object at 0x0000021CEA5F9B50>]"
+40,"[2, 4, 4, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9790>, <__main__.DAGTree object at 0x0000021CEA5F9940>]"
+41,"[2, 5, 4, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9940>]
+42,"[2, 6, 4, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9940>, <__main__.DAGTree object at 0x0000021CEA5FA4E0>]"
+43,"[2, 0, 6, 8]",3,[<__main__.DAGTree object at 0x0000021CEA17D5E0>]
+44,"[2, 0, 6, 4]",4,[<__main__.DAGTree object at 0x0000021CEA1FFE00>]
+45,"[2, 0, 4, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA4ED9A0>, <__main__.DAGTree object at 0x0000021CEA5F9B20>]"
+46,"[2, 0, 4, 2]",6,[<__main__.DAGTree object at 0x0000021CC0C0EF00>]
+47,"[2, 1, 4, 3]",6,[<__main__.DAGTree object at 0x0000021CC0C0EF00>]
+48,"[2, 2, 4, 4]",6,"[<__main__.DAGTree object at 0x0000021CC0C0EF00>, <__main__.DAGTree object at 0x0000021CEA5F9790>]"
+49,"[3, 0, 5, 4]",5,[<__main__.DAGTree object at 0x0000021CEA5F9B20>]
+50,"[3, 0, 5, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BB0>]
+51,"[3, 1, 5, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BB0>]
+52,"[3, 2, 5, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BB0>, <__main__.DAGTree object at 0x0000021CEA5F9D30>]"
+53,"[4, 0, 6, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B20>, <__main__.DAGTree object at 0x0000021CEA5F9F70>]"
+54,"[4, 0, 6, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BE0>]
+55,"[4, 1, 6, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BE0>]
+56,"[4, 2, 6, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BE0>, <__main__.DAGTree object at 0x0000021CEA5F9D60>]"
+57,"[2, 2, 6, 6]",4,[<__main__.DAGTree object at 0x0000021CEA1FFE00>]
+58,"[2, 2, 4, 6]",5,"[<__main__.DAGTree object at 0x0000021CE810D640>, <__main__.DAGTree object at 0x0000021CEA5F9B80>]"
+59,"[2, 2, 4, 4]",6,"[<__main__.DAGTree object at 0x0000021CC0C0EF00>, <__main__.DAGTree object at 0x0000021CEA5F9790>]"
+60,"[2, 3, 4, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F9790>]
+61,"[2, 4, 4, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9790>, <__main__.DAGTree object at 0x0000021CEA5F9940>]"
+62,"[3, 2, 5, 6]",5,[<__main__.DAGTree object at 0x0000021CEA5F9B80>]
+63,"[3, 2, 5, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BB0>, <__main__.DAGTree object at 0x0000021CEA5F9D30>]"
+64,"[3, 3, 5, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F9D30>]
+65,"[3, 4, 5, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D30>, <__main__.DAGTree object at 0x0000021CEA5F9E50>]"
+66,"[4, 2, 6, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B80>, <__main__.DAGTree object at 0x0000021CEA5F9FD0>]"
+67,"[4, 2, 6, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BE0>, <__main__.DAGTree object at 0x0000021CEA5F9D60>]"
+68,"[4, 3, 6, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F9D60>]
+69,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+70,"[2, 4, 6, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA1FFE00>, <__main__.DAGTree object at 0x0000021CEA5FA420>]"
+71,"[2, 4, 4, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA4ED1C0>, <__main__.DAGTree object at 0x0000021CEA5F9B50>]"
+72,"[2, 4, 4, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9790>, <__main__.DAGTree object at 0x0000021CEA5F9940>]"
+73,"[2, 5, 4, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9940>]
+74,"[2, 6, 4, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9940>, <__main__.DAGTree object at 0x0000021CEA5FA4E0>]"
+75,"[3, 4, 5, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5F9B50>]
+76,"[3, 4, 5, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D30>, <__main__.DAGTree object at 0x0000021CEA5F9E50>]"
+77,"[3, 5, 5, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E50>]
+78,"[3, 6, 5, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E50>, <__main__.DAGTree object at 0x0000021CEA5FA870>]"
+79,"[4, 4, 6, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B50>, <__main__.DAGTree object at 0x0000021CEA5F9FA0>]"
+80,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+81,"[4, 5, 6, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E80>]
+82,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+83,"[4, 0, 8, 8]",3,"[<__main__.DAGTree object at 0x0000021CEA17D5E0>, <__main__.DAGTree object at 0x0000021CEA5FB740>]"
+84,"[4, 0, 8, 4]",4,[<__main__.DAGTree object at 0x0000021CEA1FDDF0>]
+85,"[4, 0, 6, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B20>, <__main__.DAGTree object at 0x0000021CEA5F9F70>]"
+86,"[4, 0, 6, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BE0>]
+87,"[4, 1, 6, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BE0>]
+88,"[4, 2, 6, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BE0>, <__main__.DAGTree object at 0x0000021CEA5F9D60>]"
+89,"[5, 0, 7, 4]",5,[<__main__.DAGTree object at 0x0000021CEA5F9F70>]
+90,"[5, 0, 7, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FA000>]
+91,"[5, 1, 7, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FA000>]
+92,"[5, 2, 7, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA000>, <__main__.DAGTree object at 0x0000021CEA5FA180>]"
+93,"[6, 0, 8, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9F70>, <__main__.DAGTree object at 0x0000021CEA5FB830>]"
+94,"[6, 0, 8, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FA030>]
+95,"[6, 1, 8, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FA030>]
+96,"[6, 2, 8, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA030>, <__main__.DAGTree object at 0x0000021CEA5FA1B0>]"
+97,"[4, 2, 8, 6]",4,[<__main__.DAGTree object at 0x0000021CEA1FDDF0>]
+98,"[4, 2, 6, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B80>, <__main__.DAGTree object at 0x0000021CEA5F9FD0>]"
+99,"[4, 2, 6, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BE0>, <__main__.DAGTree object at 0x0000021CEA5F9D60>]"
+100,"[4, 3, 6, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F9D60>]
+101,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+102,"[5, 2, 7, 6]",5,[<__main__.DAGTree object at 0x0000021CEA5F9FD0>]
+103,"[5, 2, 7, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA000>, <__main__.DAGTree object at 0x0000021CEA5FA180>]"
+104,"[5, 3, 7, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FA180>]
+105,"[5, 4, 7, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA180>, <__main__.DAGTree object at 0x0000021CEA5FA2A0>]"
+106,"[6, 2, 8, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FD0>, <__main__.DAGTree object at 0x0000021CEA5FB890>]"
+107,"[6, 2, 8, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA030>, <__main__.DAGTree object at 0x0000021CEA5FA1B0>]"
+108,"[6, 3, 8, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FA1B0>]
+109,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+110,"[4, 4, 8, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA1FDDF0>, <__main__.DAGTree object at 0x0000021CEA5FA3F0>]"
+111,"[4, 4, 6, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B50>, <__main__.DAGTree object at 0x0000021CEA5F9FA0>]"
+112,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+113,"[4, 5, 6, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E80>]
+114,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+115,"[5, 4, 7, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5F9FA0>]
+116,"[5, 4, 7, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA180>, <__main__.DAGTree object at 0x0000021CEA5FA2A0>]"
+117,"[5, 5, 7, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2A0>]
+118,"[5, 6, 7, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2A0>, <__main__.DAGTree object at 0x0000021CEA5FAB10>]"
+119,"[6, 4, 8, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FA0>, <__main__.DAGTree object at 0x0000021CEA5FB860>]"
+120,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+121,"[6, 5, 8, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2D0>]
+122,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+123,"[0, 4, 8, 12]",2,[<__main__.DAGTree object at 0x0000021CEA565460>]
+124,"[0, 4, 4, 12]",3,[<__main__.DAGTree object at 0x0000021CEA515700>]
+125,"[0, 4, 4, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA516360>, <__main__.DAGTree object at 0x0000021CEA5FA3C0>]"
+126,"[0, 4, 2, 8]",5,[<__main__.DAGTree object at 0x0000021CEA4ED1C0>]
+127,"[0, 4, 2, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9760>, <__main__.DAGTree object at 0x0000021CEA5F9910>]"
+128,"[0, 5, 2, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9910>]
+129,"[0, 6, 2, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9910>, <__main__.DAGTree object at 0x0000021CEA5FA4B0>]"
+130,"[1, 4, 3, 8]",5,[<__main__.DAGTree object at 0x0000021CEA4ED1C0>]
+131,"[1, 4, 3, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F97C0>, <__main__.DAGTree object at 0x0000021CEA5F9970>]"
+132,"[1, 5, 3, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9970>]
+133,"[1, 6, 3, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9970>, <__main__.DAGTree object at 0x0000021CEA5FA510>]"
+134,"[2, 4, 4, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA4ED1C0>, <__main__.DAGTree object at 0x0000021CEA5F9B50>]"
+135,"[2, 4, 4, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9790>, <__main__.DAGTree object at 0x0000021CEA5F9940>]"
+136,"[2, 5, 4, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9940>]
+137,"[2, 6, 4, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9940>, <__main__.DAGTree object at 0x0000021CEA5FA4E0>]"
+138,"[0, 6, 4, 10]",4,[<__main__.DAGTree object at 0x0000021CEA5FA3C0>]
+139,"[0, 6, 2, 10]",5,[<__main__.DAGTree object at 0x0000021CEA5FA450>]
+140,"[0, 6, 2, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9910>, <__main__.DAGTree object at 0x0000021CEA5FA4B0>]"
+141,"[0, 7, 2, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA4B0>]
+142,"[0, 8, 2, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4B0>, <__main__.DAGTree object at 0x0000021CEA5FA660>]"
+143,"[1, 6, 3, 10]",5,[<__main__.DAGTree object at 0x0000021CEA5FA450>]
+144,"[1, 6, 3, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9970>, <__main__.DAGTree object at 0x0000021CEA5FA510>]"
+145,"[1, 7, 3, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA510>]
+146,"[1, 8, 3, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA510>, <__main__.DAGTree object at 0x0000021CEA5FA6C0>]"
+147,"[2, 6, 4, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA450>, <__main__.DAGTree object at 0x0000021CEA5FA810>]"
+148,"[2, 6, 4, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9940>, <__main__.DAGTree object at 0x0000021CEA5FA4E0>]"
+149,"[2, 7, 4, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA4E0>]
+150,"[2, 8, 4, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4E0>, <__main__.DAGTree object at 0x0000021CEA5FA690>]"
+151,"[0, 8, 4, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA3C0>, <__main__.DAGTree object at 0x0000021CEA5FAD50>]"
+152,"[0, 8, 2, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FA480>]
+153,"[0, 8, 2, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4B0>, <__main__.DAGTree object at 0x0000021CEA5FA660>]"
+154,"[0, 9, 2, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA660>]
+155,"[0, 10, 2, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA660>, <__main__.DAGTree object at 0x0000021CEA5FAE40>]"
+156,"[1, 8, 3, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FA480>]
+157,"[1, 8, 3, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA510>, <__main__.DAGTree object at 0x0000021CEA5FA6C0>]"
+158,"[1, 9, 3, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA6C0>]
+159,"[1, 10, 3, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA6C0>, <__main__.DAGTree object at 0x0000021CEA5FAF00>]"
+160,"[2, 8, 4, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA480>, <__main__.DAGTree object at 0x0000021CEA5FA840>]"
+161,"[2, 8, 4, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4E0>, <__main__.DAGTree object at 0x0000021CEA5FA690>]"
+162,"[2, 9, 4, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA690>]
+163,"[2, 10, 4, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA690>, <__main__.DAGTree object at 0x0000021CEA5FAEA0>]"
+164,"[2, 4, 6, 12]",3,[<__main__.DAGTree object at 0x0000021CEA515700>]
+165,"[2, 4, 6, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA1FFE00>, <__main__.DAGTree object at 0x0000021CEA5FA420>]"
+166,"[2, 4, 4, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA4ED1C0>, <__main__.DAGTree object at 0x0000021CEA5F9B50>]"
+167,"[2, 4, 4, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9790>, <__main__.DAGTree object at 0x0000021CEA5F9940>]"
+168,"[2, 5, 4, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9940>]
+169,"[2, 6, 4, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9940>, <__main__.DAGTree object at 0x0000021CEA5FA4E0>]"
+170,"[3, 4, 5, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5F9B50>]
+171,"[3, 4, 5, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D30>, <__main__.DAGTree object at 0x0000021CEA5F9E50>]"
+172,"[3, 5, 5, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E50>]
+173,"[3, 6, 5, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E50>, <__main__.DAGTree object at 0x0000021CEA5FA870>]"
+174,"[4, 4, 6, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B50>, <__main__.DAGTree object at 0x0000021CEA5F9FA0>]"
+175,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+176,"[4, 5, 6, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E80>]
+177,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+178,"[2, 6, 6, 10]",4,[<__main__.DAGTree object at 0x0000021CEA5FA420>]
+179,"[2, 6, 4, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA450>, <__main__.DAGTree object at 0x0000021CEA5FA810>]"
+180,"[2, 6, 4, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9940>, <__main__.DAGTree object at 0x0000021CEA5FA4E0>]"
+181,"[2, 7, 4, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA4E0>]
+182,"[2, 8, 4, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4E0>, <__main__.DAGTree object at 0x0000021CEA5FA690>]"
+183,"[3, 6, 5, 10]",5,[<__main__.DAGTree object at 0x0000021CEA5FA810>]
+184,"[3, 6, 5, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E50>, <__main__.DAGTree object at 0x0000021CEA5FA870>]"
+185,"[3, 7, 5, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA870>]
+186,"[3, 8, 5, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA870>, <__main__.DAGTree object at 0x0000021CEA5FA990>]"
+187,"[4, 6, 6, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA810>, <__main__.DAGTree object at 0x0000021CEA5FAAB0>]"
+188,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+189,"[4, 7, 6, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA8A0>]
+190,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+191,"[2, 8, 6, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA420>, <__main__.DAGTree object at 0x0000021CEA5FADB0>]"
+192,"[2, 8, 4, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA480>, <__main__.DAGTree object at 0x0000021CEA5FA840>]"
+193,"[2, 8, 4, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4E0>, <__main__.DAGTree object at 0x0000021CEA5FA690>]"
+194,"[2, 9, 4, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA690>]
+195,"[2, 10, 4, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA690>, <__main__.DAGTree object at 0x0000021CEA5FAEA0>]"
+196,"[3, 8, 5, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FA840>]
+197,"[3, 8, 5, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA870>, <__main__.DAGTree object at 0x0000021CEA5FA990>]"
+198,"[3, 9, 5, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA990>]
+199,"[3, 10, 5, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA990>, <__main__.DAGTree object at 0x0000021CEA5FB260>]"
+200,"[4, 8, 6, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA840>, <__main__.DAGTree object at 0x0000021CEA5FAAE0>]"
+201,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+202,"[4, 9, 6, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA9C0>]
+203,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+204,"[4, 4, 8, 12]",3,"[<__main__.DAGTree object at 0x0000021CEA515700>, <__main__.DAGTree object at 0x0000021CEA5FB7A0>]"
+205,"[4, 4, 8, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA1FDDF0>, <__main__.DAGTree object at 0x0000021CEA5FA3F0>]"
+206,"[4, 4, 6, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B50>, <__main__.DAGTree object at 0x0000021CEA5F9FA0>]"
+207,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+208,"[4, 5, 6, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E80>]
+209,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+210,"[5, 4, 7, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5F9FA0>]
+211,"[5, 4, 7, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA180>, <__main__.DAGTree object at 0x0000021CEA5FA2A0>]"
+212,"[5, 5, 7, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2A0>]
+213,"[5, 6, 7, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2A0>, <__main__.DAGTree object at 0x0000021CEA5FAB10>]"
+214,"[6, 4, 8, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FA0>, <__main__.DAGTree object at 0x0000021CEA5FB860>]"
+215,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+216,"[6, 5, 8, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2D0>]
+217,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+218,"[4, 6, 8, 10]",4,[<__main__.DAGTree object at 0x0000021CEA5FA3F0>]
+219,"[4, 6, 6, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA810>, <__main__.DAGTree object at 0x0000021CEA5FAAB0>]"
+220,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+221,"[4, 7, 6, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA8A0>]
+222,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+223,"[5, 6, 7, 10]",5,[<__main__.DAGTree object at 0x0000021CEA5FAAB0>]
+224,"[5, 6, 7, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2A0>, <__main__.DAGTree object at 0x0000021CEA5FAB10>]"
+225,"[5, 7, 7, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FAB10>]
+226,"[5, 8, 7, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB10>, <__main__.DAGTree object at 0x0000021CEA5FAC30>]"
+227,"[6, 6, 8, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAB0>, <__main__.DAGTree object at 0x0000021CEA638170>]"
+228,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+229,"[6, 7, 8, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FAB40>]
+230,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+231,"[4, 8, 8, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA3F0>, <__main__.DAGTree object at 0x0000021CEA5FAD80>]"
+232,"[4, 8, 6, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA840>, <__main__.DAGTree object at 0x0000021CEA5FAAE0>]"
+233,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+234,"[4, 9, 6, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA9C0>]
+235,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+236,"[5, 8, 7, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FAAE0>]
+237,"[5, 8, 7, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB10>, <__main__.DAGTree object at 0x0000021CEA5FAC30>]"
+238,"[5, 9, 7, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC30>]
+239,"[5, 10, 7, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC30>, <__main__.DAGTree object at 0x0000021CEA5FB500>]"
+240,"[6, 8, 8, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAE0>, <__main__.DAGTree object at 0x0000021CEA6381A0>]"
+241,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+242,"[6, 9, 8, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC60>]
+243,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+244,"[0, 8, 8, 16]",2,[<__main__.DAGTree object at 0x0000021CEA565460>]
+245,"[0, 8, 4, 16]",3,[<__main__.DAGTree object at 0x0000021CEA5146E0>]
+246,"[0, 8, 4, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA3C0>, <__main__.DAGTree object at 0x0000021CEA5FAD50>]"
+247,"[0, 8, 2, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FA480>]
+248,"[0, 8, 2, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4B0>, <__main__.DAGTree object at 0x0000021CEA5FA660>]"
+249,"[0, 9, 2, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA660>]
+250,"[0, 10, 2, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA660>, <__main__.DAGTree object at 0x0000021CEA5FAE40>]"
+251,"[1, 8, 3, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FA480>]
+252,"[1, 8, 3, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA510>, <__main__.DAGTree object at 0x0000021CEA5FA6C0>]"
+253,"[1, 9, 3, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA6C0>]
+254,"[1, 10, 3, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA6C0>, <__main__.DAGTree object at 0x0000021CEA5FAF00>]"
+255,"[2, 8, 4, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA480>, <__main__.DAGTree object at 0x0000021CEA5FA840>]"
+256,"[2, 8, 4, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4E0>, <__main__.DAGTree object at 0x0000021CEA5FA690>]"
+257,"[2, 9, 4, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA690>]
+258,"[2, 10, 4, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA690>, <__main__.DAGTree object at 0x0000021CEA5FAEA0>]"
+259,"[0, 10, 4, 14]",4,[<__main__.DAGTree object at 0x0000021CEA5FAD50>]
+260,"[0, 10, 2, 14]",5,[<__main__.DAGTree object at 0x0000021CEA5FADE0>]
+261,"[0, 10, 2, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA660>, <__main__.DAGTree object at 0x0000021CEA5FAE40>]"
+262,"[0, 11, 2, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FAE40>]
+263,"[0, 12, 2, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAE40>, <__main__.DAGTree object at 0x0000021CEA5FB050>]"
+264,"[1, 10, 3, 14]",5,[<__main__.DAGTree object at 0x0000021CEA5FADE0>]
+265,"[1, 10, 3, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA6C0>, <__main__.DAGTree object at 0x0000021CEA5FAF00>]"
+266,"[1, 11, 3, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FAF00>]
+267,"[1, 12, 3, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAF00>, <__main__.DAGTree object at 0x0000021CEA5FB0B0>]"
+268,"[2, 10, 4, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FADE0>, <__main__.DAGTree object at 0x0000021CEA5FB200>]"
+269,"[2, 10, 4, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA690>, <__main__.DAGTree object at 0x0000021CEA5FAEA0>]"
+270,"[2, 11, 4, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FAEA0>]
+271,"[2, 12, 4, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAEA0>, <__main__.DAGTree object at 0x0000021CEA5FB080>]"
+272,"[0, 12, 4, 16]",4,[<__main__.DAGTree object at 0x0000021CEA5FAD50>]
+273,"[0, 12, 2, 16]",5,[<__main__.DAGTree object at 0x0000021CEA5FAE10>]
+274,"[0, 12, 2, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAE40>, <__main__.DAGTree object at 0x0000021CEA5FB050>]"
+275,"[0, 13, 2, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB050>]
+276,"[0, 14, 2, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB050>]
+277,"[1, 12, 3, 16]",5,[<__main__.DAGTree object at 0x0000021CEA5FAE10>]
+278,"[1, 12, 3, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAF00>, <__main__.DAGTree object at 0x0000021CEA5FB0B0>]"
+279,"[1, 13, 3, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB0B0>]
+280,"[1, 14, 3, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB0B0>]
+281,"[2, 12, 4, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAE10>, <__main__.DAGTree object at 0x0000021CEA5FB230>]"
+282,"[2, 12, 4, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAEA0>, <__main__.DAGTree object at 0x0000021CEA5FB080>]"
+283,"[2, 13, 4, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB080>]
+284,"[2, 14, 4, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB080>]
+285,"[2, 8, 6, 16]",3,[<__main__.DAGTree object at 0x0000021CEA5146E0>]
+286,"[2, 8, 6, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA420>, <__main__.DAGTree object at 0x0000021CEA5FADB0>]"
+287,"[2, 8, 4, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA480>, <__main__.DAGTree object at 0x0000021CEA5FA840>]"
+288,"[2, 8, 4, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA4E0>, <__main__.DAGTree object at 0x0000021CEA5FA690>]"
+289,"[2, 9, 4, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA690>]
+290,"[2, 10, 4, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA690>, <__main__.DAGTree object at 0x0000021CEA5FAEA0>]"
+291,"[3, 8, 5, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FA840>]
+292,"[3, 8, 5, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA870>, <__main__.DAGTree object at 0x0000021CEA5FA990>]"
+293,"[3, 9, 5, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA990>]
+294,"[3, 10, 5, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA990>, <__main__.DAGTree object at 0x0000021CEA5FB260>]"
+295,"[4, 8, 6, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA840>, <__main__.DAGTree object at 0x0000021CEA5FAAE0>]"
+296,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+297,"[4, 9, 6, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA9C0>]
+298,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+299,"[2, 10, 6, 14]",4,[<__main__.DAGTree object at 0x0000021CEA5FADB0>]
+300,"[2, 10, 4, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FADE0>, <__main__.DAGTree object at 0x0000021CEA5FB200>]"
+301,"[2, 10, 4, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA690>, <__main__.DAGTree object at 0x0000021CEA5FAEA0>]"
+302,"[2, 11, 4, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FAEA0>]
+303,"[2, 12, 4, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAEA0>, <__main__.DAGTree object at 0x0000021CEA5FB080>]"
+304,"[3, 10, 5, 14]",5,[<__main__.DAGTree object at 0x0000021CEA5FB200>]
+305,"[3, 10, 5, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA990>, <__main__.DAGTree object at 0x0000021CEA5FB260>]"
+306,"[3, 11, 5, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB260>]
+307,"[3, 12, 5, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB260>, <__main__.DAGTree object at 0x0000021CEA5FB380>]"
+308,"[4, 10, 6, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB200>, <__main__.DAGTree object at 0x0000021CEA5FB4A0>]"
+309,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+310,"[4, 11, 6, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB290>]
+311,"[4, 12, 6, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB290>, <__main__.DAGTree object at 0x0000021CEA5FB3B0>]"
+312,"[2, 12, 6, 16]",4,[<__main__.DAGTree object at 0x0000021CEA5FADB0>]
+313,"[2, 12, 4, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAE10>, <__main__.DAGTree object at 0x0000021CEA5FB230>]"
+314,"[2, 12, 4, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAEA0>, <__main__.DAGTree object at 0x0000021CEA5FB080>]"
+315,"[2, 13, 4, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB080>]
+316,"[2, 14, 4, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB080>]
+317,"[3, 12, 5, 16]",5,[<__main__.DAGTree object at 0x0000021CEA5FB230>]
+318,"[3, 12, 5, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB260>, <__main__.DAGTree object at 0x0000021CEA5FB380>]"
+319,"[3, 13, 5, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB380>]
+320,"[3, 14, 5, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB380>]
+321,"[4, 12, 6, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB230>, <__main__.DAGTree object at 0x0000021CEA5FB4D0>]"
+322,"[4, 12, 6, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB290>, <__main__.DAGTree object at 0x0000021CEA5FB3B0>]"
+323,"[4, 13, 6, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB3B0>]
+324,"[4, 14, 6, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB3B0>]
+325,"[4, 8, 8, 16]",3,"[<__main__.DAGTree object at 0x0000021CEA5146E0>, <__main__.DAGTree object at 0x0000021CEA5FB770>]"
+326,"[4, 8, 8, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA3F0>, <__main__.DAGTree object at 0x0000021CEA5FAD80>]"
+327,"[4, 8, 6, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA840>, <__main__.DAGTree object at 0x0000021CEA5FAAE0>]"
+328,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+329,"[4, 9, 6, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA9C0>]
+330,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+331,"[5, 8, 7, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FAAE0>]
+332,"[5, 8, 7, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB10>, <__main__.DAGTree object at 0x0000021CEA5FAC30>]"
+333,"[5, 9, 7, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC30>]
+334,"[5, 10, 7, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC30>, <__main__.DAGTree object at 0x0000021CEA5FB500>]"
+335,"[6, 8, 8, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAE0>, <__main__.DAGTree object at 0x0000021CEA6381A0>]"
+336,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+337,"[6, 9, 8, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC60>]
+338,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+339,"[4, 10, 8, 14]",4,[<__main__.DAGTree object at 0x0000021CEA5FAD80>]
+340,"[4, 10, 6, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB200>, <__main__.DAGTree object at 0x0000021CEA5FB4A0>]"
+341,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+342,"[4, 11, 6, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB290>]
+343,"[4, 12, 6, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB290>, <__main__.DAGTree object at 0x0000021CEA5FB3B0>]"
+344,"[5, 10, 7, 14]",5,[<__main__.DAGTree object at 0x0000021CEA5FB4A0>]
+345,"[5, 10, 7, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC30>, <__main__.DAGTree object at 0x0000021CEA5FB500>]"
+346,"[5, 11, 7, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB500>]
+347,"[5, 12, 7, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB500>, <__main__.DAGTree object at 0x0000021CEA5FB620>]"
+348,"[6, 10, 8, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB4A0>, <__main__.DAGTree object at 0x0000021CEA638710>]"
+349,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+350,"[6, 11, 8, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB530>]
+351,"[6, 12, 8, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB530>, <__main__.DAGTree object at 0x0000021CEA5FB650>]"
+352,"[4, 12, 8, 16]",4,[<__main__.DAGTree object at 0x0000021CEA5FAD80>]
+353,"[4, 12, 6, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB230>, <__main__.DAGTree object at 0x0000021CEA5FB4D0>]"
+354,"[4, 12, 6, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB290>, <__main__.DAGTree object at 0x0000021CEA5FB3B0>]"
+355,"[4, 13, 6, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB3B0>]
+356,"[4, 14, 6, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB3B0>]
+357,"[5, 12, 7, 16]",5,[<__main__.DAGTree object at 0x0000021CEA5FB4D0>]
+358,"[5, 12, 7, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB500>, <__main__.DAGTree object at 0x0000021CEA5FB620>]"
+359,"[5, 13, 7, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB620>]
+360,"[5, 14, 7, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB620>]
+361,"[6, 12, 8, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB4D0>, <__main__.DAGTree object at 0x0000021CEA638740>]"
+362,"[6, 12, 8, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB530>, <__main__.DAGTree object at 0x0000021CEA5FB650>]"
+363,"[6, 13, 8, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB650>]
+364,"[6, 14, 8, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB650>]
+365,"[4, 0, 12, 16]",1,[<__main__.DAGTree object at 0x0000021CE870E060>]
+366,"[4, 0, 12, 8]",2,[<__main__.DAGTree object at 0x0000021CE8C8BDA0>]
+367,"[4, 0, 8, 8]",3,"[<__main__.DAGTree object at 0x0000021CEA17D5E0>, <__main__.DAGTree object at 0x0000021CEA5FB740>]"
+368,"[4, 0, 8, 4]",4,[<__main__.DAGTree object at 0x0000021CEA1FDDF0>]
+369,"[4, 0, 6, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B20>, <__main__.DAGTree object at 0x0000021CEA5F9F70>]"
+370,"[4, 0, 6, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BE0>]
+371,"[4, 1, 6, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5F9BE0>]
+372,"[4, 2, 6, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BE0>, <__main__.DAGTree object at 0x0000021CEA5F9D60>]"
+373,"[5, 0, 7, 4]",5,[<__main__.DAGTree object at 0x0000021CEA5F9F70>]
+374,"[5, 0, 7, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FA000>]
+375,"[5, 1, 7, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FA000>]
+376,"[5, 2, 7, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA000>, <__main__.DAGTree object at 0x0000021CEA5FA180>]"
+377,"[6, 0, 8, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9F70>, <__main__.DAGTree object at 0x0000021CEA5FB830>]"
+378,"[6, 0, 8, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FA030>]
+379,"[6, 1, 8, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FA030>]
+380,"[6, 2, 8, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA030>, <__main__.DAGTree object at 0x0000021CEA5FA1B0>]"
+381,"[4, 2, 8, 6]",4,[<__main__.DAGTree object at 0x0000021CEA1FDDF0>]
+382,"[4, 2, 6, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B80>, <__main__.DAGTree object at 0x0000021CEA5F9FD0>]"
+383,"[4, 2, 6, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9BE0>, <__main__.DAGTree object at 0x0000021CEA5F9D60>]"
+384,"[4, 3, 6, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5F9D60>]
+385,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+386,"[5, 2, 7, 6]",5,[<__main__.DAGTree object at 0x0000021CEA5F9FD0>]
+387,"[5, 2, 7, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA000>, <__main__.DAGTree object at 0x0000021CEA5FA180>]"
+388,"[5, 3, 7, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FA180>]
+389,"[5, 4, 7, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA180>, <__main__.DAGTree object at 0x0000021CEA5FA2A0>]"
+390,"[6, 2, 8, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FD0>, <__main__.DAGTree object at 0x0000021CEA5FB890>]"
+391,"[6, 2, 8, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA030>, <__main__.DAGTree object at 0x0000021CEA5FA1B0>]"
+392,"[6, 3, 8, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FA1B0>]
+393,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+394,"[4, 4, 8, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA1FDDF0>, <__main__.DAGTree object at 0x0000021CEA5FA3F0>]"
+395,"[4, 4, 6, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B50>, <__main__.DAGTree object at 0x0000021CEA5F9FA0>]"
+396,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+397,"[4, 5, 6, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E80>]
+398,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+399,"[5, 4, 7, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5F9FA0>]
+400,"[5, 4, 7, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA180>, <__main__.DAGTree object at 0x0000021CEA5FA2A0>]"
+401,"[5, 5, 7, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2A0>]
+402,"[5, 6, 7, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2A0>, <__main__.DAGTree object at 0x0000021CEA5FAB10>]"
+403,"[6, 4, 8, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FA0>, <__main__.DAGTree object at 0x0000021CEA5FB860>]"
+404,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+405,"[6, 5, 8, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2D0>]
+406,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+407,"[6, 0, 10, 8]",3,[<__main__.DAGTree object at 0x0000021CEA5FB740>]
+408,"[6, 0, 10, 4]",4,[<__main__.DAGTree object at 0x0000021CEA5FB7D0>]
+409,"[6, 0, 8, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9F70>, <__main__.DAGTree object at 0x0000021CEA5FB830>]"
+410,"[6, 0, 8, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FA030>]
+411,"[6, 1, 8, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FA030>]
+412,"[6, 2, 8, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA030>, <__main__.DAGTree object at 0x0000021CEA5FA1B0>]"
+413,"[7, 0, 9, 4]",5,[<__main__.DAGTree object at 0x0000021CEA5FB830>]
+414,"[7, 0, 9, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8C0>]
+415,"[7, 1, 9, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8C0>]
+416,"[7, 2, 9, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8C0>, <__main__.DAGTree object at 0x0000021CEA5FBA40>]"
+417,"[8, 0, 10, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB830>, <__main__.DAGTree object at 0x0000021CEA5FBC80>]"
+418,"[8, 0, 10, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8F0>]
+419,"[8, 1, 10, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8F0>]
+420,"[8, 2, 10, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8F0>, <__main__.DAGTree object at 0x0000021CEA5FBA70>]"
+421,"[6, 2, 10, 6]",4,[<__main__.DAGTree object at 0x0000021CEA5FB7D0>]
+422,"[6, 2, 8, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FD0>, <__main__.DAGTree object at 0x0000021CEA5FB890>]"
+423,"[6, 2, 8, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA030>, <__main__.DAGTree object at 0x0000021CEA5FA1B0>]"
+424,"[6, 3, 8, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FA1B0>]
+425,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+426,"[7, 2, 9, 6]",5,[<__main__.DAGTree object at 0x0000021CEA5FB890>]
+427,"[7, 2, 9, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8C0>, <__main__.DAGTree object at 0x0000021CEA5FBA40>]"
+428,"[7, 3, 9, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBA40>]
+429,"[7, 4, 9, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA40>, <__main__.DAGTree object at 0x0000021CEA5FBB60>]"
+430,"[8, 2, 10, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB890>, <__main__.DAGTree object at 0x0000021CEA5FBCE0>]"
+431,"[8, 2, 10, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8F0>, <__main__.DAGTree object at 0x0000021CEA5FBA70>]"
+432,"[8, 3, 10, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBA70>]
+433,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+434,"[6, 4, 10, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA5FB7D0>, <__main__.DAGTree object at 0x0000021CEA638110>]"
+435,"[6, 4, 8, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FA0>, <__main__.DAGTree object at 0x0000021CEA5FB860>]"
+436,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+437,"[6, 5, 8, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2D0>]
+438,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+439,"[7, 4, 9, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5FB860>]
+440,"[7, 4, 9, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA40>, <__main__.DAGTree object at 0x0000021CEA5FBB60>]"
+441,"[7, 5, 9, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB60>]
+442,"[7, 6, 9, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB60>, <__main__.DAGTree object at 0x0000021CEA6381D0>]"
+443,"[8, 4, 10, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB860>, <__main__.DAGTree object at 0x0000021CEA5FBCB0>]"
+444,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+445,"[8, 5, 10, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB90>]
+446,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+447,"[8, 0, 12, 8]",3,"[<__main__.DAGTree object at 0x0000021CEA5FB740>, <__main__.DAGTree object at 0x0000021CEA638C50>]"
+448,"[8, 0, 12, 4]",4,[<__main__.DAGTree object at 0x0000021CEA5FB800>]
+449,"[8, 0, 10, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB830>, <__main__.DAGTree object at 0x0000021CEA5FBC80>]"
+450,"[8, 0, 10, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8F0>]
+451,"[8, 1, 10, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8F0>]
+452,"[8, 2, 10, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8F0>, <__main__.DAGTree object at 0x0000021CEA5FBA70>]"
+453,"[9, 0, 11, 4]",5,[<__main__.DAGTree object at 0x0000021CEA5FBC80>]
+454,"[9, 0, 11, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD10>]
+455,"[9, 1, 11, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD10>]
+456,"[9, 2, 11, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD10>, <__main__.DAGTree object at 0x0000021CEA5FBE90>]"
+457,"[10, 0, 12, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBC80>, <__main__.DAGTree object at 0x0000021CEA638D40>]"
+458,"[10, 0, 12, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD40>]
+459,"[10, 1, 12, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD40>]
+460,"[10, 2, 12, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD40>, <__main__.DAGTree object at 0x0000021CEA5FBEC0>]"
+461,"[8, 2, 12, 6]",4,[<__main__.DAGTree object at 0x0000021CEA5FB800>]
+462,"[8, 2, 10, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB890>, <__main__.DAGTree object at 0x0000021CEA5FBCE0>]"
+463,"[8, 2, 10, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8F0>, <__main__.DAGTree object at 0x0000021CEA5FBA70>]"
+464,"[8, 3, 10, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBA70>]
+465,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+466,"[9, 2, 11, 6]",5,[<__main__.DAGTree object at 0x0000021CEA5FBCE0>]
+467,"[9, 2, 11, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD10>, <__main__.DAGTree object at 0x0000021CEA5FBE90>]"
+468,"[9, 3, 11, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBE90>]
+469,"[9, 4, 11, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBE90>, <__main__.DAGTree object at 0x0000021CEA5FBFB0>]"
+470,"[10, 2, 12, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCE0>, <__main__.DAGTree object at 0x0000021CEA638DA0>]"
+471,"[10, 2, 12, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD40>, <__main__.DAGTree object at 0x0000021CEA5FBEC0>]"
+472,"[10, 3, 12, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBEC0>]
+473,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+474,"[8, 4, 12, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA5FB800>, <__main__.DAGTree object at 0x0000021CEA638140>]"
+475,"[8, 4, 10, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB860>, <__main__.DAGTree object at 0x0000021CEA5FBCB0>]"
+476,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+477,"[8, 5, 10, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB90>]
+478,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+479,"[9, 4, 11, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5FBCB0>]
+480,"[9, 4, 11, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBE90>, <__main__.DAGTree object at 0x0000021CEA5FBFB0>]"
+481,"[9, 5, 11, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFB0>]
+482,"[9, 6, 11, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFB0>, <__main__.DAGTree object at 0x0000021CEA638470>]"
+483,"[10, 4, 12, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCB0>, <__main__.DAGTree object at 0x0000021CEA638D70>]"
+484,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+485,"[10, 5, 12, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFE0>]
+486,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+487,"[4, 4, 12, 12]",2,[<__main__.DAGTree object at 0x0000021CE8C8BDA0>]
+488,"[4, 4, 8, 12]",3,"[<__main__.DAGTree object at 0x0000021CEA515700>, <__main__.DAGTree object at 0x0000021CEA5FB7A0>]"
+489,"[4, 4, 8, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA1FDDF0>, <__main__.DAGTree object at 0x0000021CEA5FA3F0>]"
+490,"[4, 4, 6, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9B50>, <__main__.DAGTree object at 0x0000021CEA5F9FA0>]"
+491,"[4, 4, 6, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9D60>, <__main__.DAGTree object at 0x0000021CEA5F9E80>]"
+492,"[4, 5, 6, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5F9E80>]
+493,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+494,"[5, 4, 7, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5F9FA0>]
+495,"[5, 4, 7, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA180>, <__main__.DAGTree object at 0x0000021CEA5FA2A0>]"
+496,"[5, 5, 7, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2A0>]
+497,"[5, 6, 7, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2A0>, <__main__.DAGTree object at 0x0000021CEA5FAB10>]"
+498,"[6, 4, 8, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FA0>, <__main__.DAGTree object at 0x0000021CEA5FB860>]"
+499,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+500,"[6, 5, 8, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2D0>]
+501,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+502,"[4, 6, 8, 10]",4,[<__main__.DAGTree object at 0x0000021CEA5FA3F0>]
+503,"[4, 6, 6, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA810>, <__main__.DAGTree object at 0x0000021CEA5FAAB0>]"
+504,"[4, 6, 6, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5F9E80>, <__main__.DAGTree object at 0x0000021CEA5FA8A0>]"
+505,"[4, 7, 6, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FA8A0>]
+506,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+507,"[5, 6, 7, 10]",5,[<__main__.DAGTree object at 0x0000021CEA5FAAB0>]
+508,"[5, 6, 7, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2A0>, <__main__.DAGTree object at 0x0000021CEA5FAB10>]"
+509,"[5, 7, 7, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FAB10>]
+510,"[5, 8, 7, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB10>, <__main__.DAGTree object at 0x0000021CEA5FAC30>]"
+511,"[6, 6, 8, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAB0>, <__main__.DAGTree object at 0x0000021CEA638170>]"
+512,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+513,"[6, 7, 8, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FAB40>]
+514,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+515,"[4, 8, 8, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA3F0>, <__main__.DAGTree object at 0x0000021CEA5FAD80>]"
+516,"[4, 8, 6, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA840>, <__main__.DAGTree object at 0x0000021CEA5FAAE0>]"
+517,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+518,"[4, 9, 6, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA9C0>]
+519,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+520,"[5, 8, 7, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FAAE0>]
+521,"[5, 8, 7, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB10>, <__main__.DAGTree object at 0x0000021CEA5FAC30>]"
+522,"[5, 9, 7, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC30>]
+523,"[5, 10, 7, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC30>, <__main__.DAGTree object at 0x0000021CEA5FB500>]"
+524,"[6, 8, 8, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAE0>, <__main__.DAGTree object at 0x0000021CEA6381A0>]"
+525,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+526,"[6, 9, 8, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC60>]
+527,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+528,"[6, 4, 10, 12]",3,[<__main__.DAGTree object at 0x0000021CEA5FB7A0>]
+529,"[6, 4, 10, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA5FB7D0>, <__main__.DAGTree object at 0x0000021CEA638110>]"
+530,"[6, 4, 8, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5F9FA0>, <__main__.DAGTree object at 0x0000021CEA5FB860>]"
+531,"[6, 4, 8, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA1B0>, <__main__.DAGTree object at 0x0000021CEA5FA2D0>]"
+532,"[6, 5, 8, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FA2D0>]
+533,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+534,"[7, 4, 9, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5FB860>]
+535,"[7, 4, 9, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA40>, <__main__.DAGTree object at 0x0000021CEA5FBB60>]"
+536,"[7, 5, 9, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB60>]
+537,"[7, 6, 9, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB60>, <__main__.DAGTree object at 0x0000021CEA6381D0>]"
+538,"[8, 4, 10, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB860>, <__main__.DAGTree object at 0x0000021CEA5FBCB0>]"
+539,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+540,"[8, 5, 10, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB90>]
+541,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+542,"[6, 6, 10, 10]",4,[<__main__.DAGTree object at 0x0000021CEA638110>]
+543,"[6, 6, 8, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAB0>, <__main__.DAGTree object at 0x0000021CEA638170>]"
+544,"[6, 6, 8, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA2D0>, <__main__.DAGTree object at 0x0000021CEA5FAB40>]"
+545,"[6, 7, 8, 9]",6,[<__main__.DAGTree object at 0x0000021CEA5FAB40>]
+546,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+547,"[7, 6, 9, 10]",5,[<__main__.DAGTree object at 0x0000021CEA638170>]
+548,"[7, 6, 9, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB60>, <__main__.DAGTree object at 0x0000021CEA6381D0>]"
+549,"[7, 7, 9, 9]",6,[<__main__.DAGTree object at 0x0000021CEA6381D0>]
+550,"[7, 8, 9, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6381D0>, <__main__.DAGTree object at 0x0000021CEA6382F0>]"
+551,"[8, 6, 10, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA638170>, <__main__.DAGTree object at 0x0000021CEA638410>]"
+552,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+553,"[8, 7, 10, 9]",6,[<__main__.DAGTree object at 0x0000021CEA638200>]
+554,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+555,"[6, 8, 10, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA638110>, <__main__.DAGTree object at 0x0000021CEA6386B0>]"
+556,"[6, 8, 8, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAE0>, <__main__.DAGTree object at 0x0000021CEA6381A0>]"
+557,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+558,"[6, 9, 8, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC60>]
+559,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+560,"[7, 8, 9, 12]",5,[<__main__.DAGTree object at 0x0000021CEA6381A0>]
+561,"[7, 8, 9, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6381D0>, <__main__.DAGTree object at 0x0000021CEA6382F0>]"
+562,"[7, 9, 9, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6382F0>]
+563,"[7, 10, 9, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6382F0>, <__main__.DAGTree object at 0x0000021CEA638770>]"
+564,"[8, 8, 10, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA6381A0>, <__main__.DAGTree object at 0x0000021CEA638440>]"
+565,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+566,"[8, 9, 10, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638320>]
+567,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+568,"[8, 4, 12, 12]",3,"[<__main__.DAGTree object at 0x0000021CEA5FB7A0>, <__main__.DAGTree object at 0x0000021CEA638CB0>]"
+569,"[8, 4, 12, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA5FB800>, <__main__.DAGTree object at 0x0000021CEA638140>]"
+570,"[8, 4, 10, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB860>, <__main__.DAGTree object at 0x0000021CEA5FBCB0>]"
+571,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+572,"[8, 5, 10, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB90>]
+573,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+574,"[9, 4, 11, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5FBCB0>]
+575,"[9, 4, 11, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBE90>, <__main__.DAGTree object at 0x0000021CEA5FBFB0>]"
+576,"[9, 5, 11, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFB0>]
+577,"[9, 6, 11, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFB0>, <__main__.DAGTree object at 0x0000021CEA638470>]"
+578,"[10, 4, 12, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCB0>, <__main__.DAGTree object at 0x0000021CEA638D70>]"
+579,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+580,"[10, 5, 12, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFE0>]
+581,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+582,"[8, 6, 12, 10]",4,[<__main__.DAGTree object at 0x0000021CEA638140>]
+583,"[8, 6, 10, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA638170>, <__main__.DAGTree object at 0x0000021CEA638410>]"
+584,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+585,"[8, 7, 10, 9]",6,[<__main__.DAGTree object at 0x0000021CEA638200>]
+586,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+587,"[9, 6, 11, 10]",5,[<__main__.DAGTree object at 0x0000021CEA638410>]
+588,"[9, 6, 11, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFB0>, <__main__.DAGTree object at 0x0000021CEA638470>]"
+589,"[9, 7, 11, 9]",6,[<__main__.DAGTree object at 0x0000021CEA638470>]
+590,"[9, 8, 11, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638470>, <__main__.DAGTree object at 0x0000021CEA638590>]"
+591,"[10, 6, 12, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA638410>, <__main__.DAGTree object at 0x0000021CEA639640>]"
+592,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+593,"[10, 7, 12, 9]",6,[<__main__.DAGTree object at 0x0000021CEA6384A0>]
+594,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+595,"[8, 8, 12, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA638140>, <__main__.DAGTree object at 0x0000021CEA6386E0>]"
+596,"[8, 8, 10, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA6381A0>, <__main__.DAGTree object at 0x0000021CEA638440>]"
+597,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+598,"[8, 9, 10, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638320>]
+599,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+600,"[9, 8, 11, 12]",5,[<__main__.DAGTree object at 0x0000021CEA638440>]
+601,"[9, 8, 11, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638470>, <__main__.DAGTree object at 0x0000021CEA638590>]"
+602,"[9, 9, 11, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638590>]
+603,"[9, 10, 11, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638590>, <__main__.DAGTree object at 0x0000021CEA638A10>]"
+604,"[10, 8, 12, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA638440>, <__main__.DAGTree object at 0x0000021CEA639670>]"
+605,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+606,"[10, 9, 12, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6385C0>]
+607,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+608,"[4, 8, 12, 16]",2,[<__main__.DAGTree object at 0x0000021CE8C8BDA0>]
+609,"[4, 8, 8, 16]",3,"[<__main__.DAGTree object at 0x0000021CEA5146E0>, <__main__.DAGTree object at 0x0000021CEA5FB770>]"
+610,"[4, 8, 8, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA5FA3F0>, <__main__.DAGTree object at 0x0000021CEA5FAD80>]"
+611,"[4, 8, 6, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FA840>, <__main__.DAGTree object at 0x0000021CEA5FAAE0>]"
+612,"[4, 8, 6, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA8A0>, <__main__.DAGTree object at 0x0000021CEA5FA9C0>]"
+613,"[4, 9, 6, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FA9C0>]
+614,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+615,"[5, 8, 7, 12]",5,[<__main__.DAGTree object at 0x0000021CEA5FAAE0>]
+616,"[5, 8, 7, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB10>, <__main__.DAGTree object at 0x0000021CEA5FAC30>]"
+617,"[5, 9, 7, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC30>]
+618,"[5, 10, 7, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC30>, <__main__.DAGTree object at 0x0000021CEA5FB500>]"
+619,"[6, 8, 8, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAE0>, <__main__.DAGTree object at 0x0000021CEA6381A0>]"
+620,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+621,"[6, 9, 8, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC60>]
+622,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+623,"[4, 10, 8, 14]",4,[<__main__.DAGTree object at 0x0000021CEA5FAD80>]
+624,"[4, 10, 6, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB200>, <__main__.DAGTree object at 0x0000021CEA5FB4A0>]"
+625,"[4, 10, 6, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FA9C0>, <__main__.DAGTree object at 0x0000021CEA5FB290>]"
+626,"[4, 11, 6, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB290>]
+627,"[4, 12, 6, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB290>, <__main__.DAGTree object at 0x0000021CEA5FB3B0>]"
+628,"[5, 10, 7, 14]",5,[<__main__.DAGTree object at 0x0000021CEA5FB4A0>]
+629,"[5, 10, 7, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC30>, <__main__.DAGTree object at 0x0000021CEA5FB500>]"
+630,"[5, 11, 7, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB500>]
+631,"[5, 12, 7, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB500>, <__main__.DAGTree object at 0x0000021CEA5FB620>]"
+632,"[6, 10, 8, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB4A0>, <__main__.DAGTree object at 0x0000021CEA638710>]"
+633,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+634,"[6, 11, 8, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB530>]
+635,"[6, 12, 8, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB530>, <__main__.DAGTree object at 0x0000021CEA5FB650>]"
+636,"[4, 12, 8, 16]",4,[<__main__.DAGTree object at 0x0000021CEA5FAD80>]
+637,"[4, 12, 6, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB230>, <__main__.DAGTree object at 0x0000021CEA5FB4D0>]"
+638,"[4, 12, 6, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB290>, <__main__.DAGTree object at 0x0000021CEA5FB3B0>]"
+639,"[4, 13, 6, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB3B0>]
+640,"[4, 14, 6, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB3B0>]
+641,"[5, 12, 7, 16]",5,[<__main__.DAGTree object at 0x0000021CEA5FB4D0>]
+642,"[5, 12, 7, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB500>, <__main__.DAGTree object at 0x0000021CEA5FB620>]"
+643,"[5, 13, 7, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB620>]
+644,"[5, 14, 7, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB620>]
+645,"[6, 12, 8, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB4D0>, <__main__.DAGTree object at 0x0000021CEA638740>]"
+646,"[6, 12, 8, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB530>, <__main__.DAGTree object at 0x0000021CEA5FB650>]"
+647,"[6, 13, 8, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB650>]
+648,"[6, 14, 8, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB650>]
+649,"[6, 8, 10, 16]",3,[<__main__.DAGTree object at 0x0000021CEA5FB770>]
+650,"[6, 8, 10, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA638110>, <__main__.DAGTree object at 0x0000021CEA6386B0>]"
+651,"[6, 8, 8, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA5FAAE0>, <__main__.DAGTree object at 0x0000021CEA6381A0>]"
+652,"[6, 8, 8, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAB40>, <__main__.DAGTree object at 0x0000021CEA5FAC60>]"
+653,"[6, 9, 8, 11]",6,[<__main__.DAGTree object at 0x0000021CEA5FAC60>]
+654,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+655,"[7, 8, 9, 12]",5,[<__main__.DAGTree object at 0x0000021CEA6381A0>]
+656,"[7, 8, 9, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6381D0>, <__main__.DAGTree object at 0x0000021CEA6382F0>]"
+657,"[7, 9, 9, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6382F0>]
+658,"[7, 10, 9, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6382F0>, <__main__.DAGTree object at 0x0000021CEA638770>]"
+659,"[8, 8, 10, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA6381A0>, <__main__.DAGTree object at 0x0000021CEA638440>]"
+660,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+661,"[8, 9, 10, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638320>]
+662,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+663,"[6, 10, 10, 14]",4,[<__main__.DAGTree object at 0x0000021CEA6386B0>]
+664,"[6, 10, 8, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB4A0>, <__main__.DAGTree object at 0x0000021CEA638710>]"
+665,"[6, 10, 8, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA5FAC60>, <__main__.DAGTree object at 0x0000021CEA5FB530>]"
+666,"[6, 11, 8, 13]",6,[<__main__.DAGTree object at 0x0000021CEA5FB530>]
+667,"[6, 12, 8, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB530>, <__main__.DAGTree object at 0x0000021CEA5FB650>]"
+668,"[7, 10, 9, 14]",5,[<__main__.DAGTree object at 0x0000021CEA638710>]
+669,"[7, 10, 9, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6382F0>, <__main__.DAGTree object at 0x0000021CEA638770>]"
+670,"[7, 11, 9, 13]",6,[<__main__.DAGTree object at 0x0000021CEA638770>]
+671,"[7, 12, 9, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638770>, <__main__.DAGTree object at 0x0000021CEA638890>]"
+672,"[8, 10, 10, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA638710>, <__main__.DAGTree object at 0x0000021CEA6389B0>]"
+673,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+674,"[8, 11, 10, 13]",6,[<__main__.DAGTree object at 0x0000021CEA6387A0>]
+675,"[8, 12, 10, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA6387A0>, <__main__.DAGTree object at 0x0000021CEA6388C0>]"
+676,"[6, 12, 10, 16]",4,[<__main__.DAGTree object at 0x0000021CEA6386B0>]
+677,"[6, 12, 8, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB4D0>, <__main__.DAGTree object at 0x0000021CEA638740>]"
+678,"[6, 12, 8, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB530>, <__main__.DAGTree object at 0x0000021CEA5FB650>]"
+679,"[6, 13, 8, 15]",6,[<__main__.DAGTree object at 0x0000021CEA5FB650>]
+680,"[6, 14, 8, 16]",6,[<__main__.DAGTree object at 0x0000021CEA5FB650>]
+681,"[7, 12, 9, 16]",5,[<__main__.DAGTree object at 0x0000021CEA638740>]
+682,"[7, 12, 9, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638770>, <__main__.DAGTree object at 0x0000021CEA638890>]"
+683,"[7, 13, 9, 15]",6,[<__main__.DAGTree object at 0x0000021CEA638890>]
+684,"[7, 14, 9, 16]",6,[<__main__.DAGTree object at 0x0000021CEA638890>]
+685,"[8, 12, 10, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA638740>, <__main__.DAGTree object at 0x0000021CEA6389E0>]"
+686,"[8, 12, 10, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA6387A0>, <__main__.DAGTree object at 0x0000021CEA6388C0>]"
+687,"[8, 13, 10, 15]",6,[<__main__.DAGTree object at 0x0000021CEA6388C0>]
+688,"[8, 14, 10, 16]",6,[<__main__.DAGTree object at 0x0000021CEA6388C0>]
+689,"[8, 8, 12, 16]",3,"[<__main__.DAGTree object at 0x0000021CEA5FB770>, <__main__.DAGTree object at 0x0000021CEA638C80>]"
+690,"[8, 8, 12, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA638140>, <__main__.DAGTree object at 0x0000021CEA6386E0>]"
+691,"[8, 8, 10, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA6381A0>, <__main__.DAGTree object at 0x0000021CEA638440>]"
+692,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+693,"[8, 9, 10, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638320>]
+694,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+695,"[9, 8, 11, 12]",5,[<__main__.DAGTree object at 0x0000021CEA638440>]
+696,"[9, 8, 11, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638470>, <__main__.DAGTree object at 0x0000021CEA638590>]"
+697,"[9, 9, 11, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638590>]
+698,"[9, 10, 11, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638590>, <__main__.DAGTree object at 0x0000021CEA638A10>]"
+699,"[10, 8, 12, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA638440>, <__main__.DAGTree object at 0x0000021CEA639670>]"
+700,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+701,"[10, 9, 12, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6385C0>]
+702,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+703,"[8, 10, 12, 14]",4,[<__main__.DAGTree object at 0x0000021CEA6386E0>]
+704,"[8, 10, 10, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA638710>, <__main__.DAGTree object at 0x0000021CEA6389B0>]"
+705,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+706,"[8, 11, 10, 13]",6,[<__main__.DAGTree object at 0x0000021CEA6387A0>]
+707,"[8, 12, 10, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA6387A0>, <__main__.DAGTree object at 0x0000021CEA6388C0>]"
+708,"[9, 10, 11, 14]",5,[<__main__.DAGTree object at 0x0000021CEA6389B0>]
+709,"[9, 10, 11, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638590>, <__main__.DAGTree object at 0x0000021CEA638A10>]"
+710,"[9, 11, 11, 13]",6,[<__main__.DAGTree object at 0x0000021CEA638A10>]
+711,"[9, 12, 11, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A10>, <__main__.DAGTree object at 0x0000021CEA638B30>]"
+712,"[10, 10, 12, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA6389B0>, <__main__.DAGTree object at 0x0000021CEA639BE0>]"
+713,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+714,"[10, 11, 12, 13]",6,[<__main__.DAGTree object at 0x0000021CEA638A40>]
+715,"[10, 12, 12, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A40>, <__main__.DAGTree object at 0x0000021CEA638B60>]"
+716,"[8, 12, 12, 16]",4,[<__main__.DAGTree object at 0x0000021CEA6386E0>]
+717,"[8, 12, 10, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA638740>, <__main__.DAGTree object at 0x0000021CEA6389E0>]"
+718,"[8, 12, 10, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA6387A0>, <__main__.DAGTree object at 0x0000021CEA6388C0>]"
+719,"[8, 13, 10, 15]",6,[<__main__.DAGTree object at 0x0000021CEA6388C0>]
+720,"[8, 14, 10, 16]",6,[<__main__.DAGTree object at 0x0000021CEA6388C0>]
+721,"[9, 12, 11, 16]",5,[<__main__.DAGTree object at 0x0000021CEA6389E0>]
+722,"[9, 12, 11, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A10>, <__main__.DAGTree object at 0x0000021CEA638B30>]"
+723,"[9, 13, 11, 15]",6,[<__main__.DAGTree object at 0x0000021CEA638B30>]
+724,"[9, 14, 11, 16]",6,[<__main__.DAGTree object at 0x0000021CEA638B30>]
+725,"[10, 12, 12, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA6389E0>, <__main__.DAGTree object at 0x0000021CEA639C10>]"
+726,"[10, 12, 12, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A40>, <__main__.DAGTree object at 0x0000021CEA638B60>]"
+727,"[10, 13, 12, 15]",6,[<__main__.DAGTree object at 0x0000021CEA638B60>]
+728,"[10, 14, 12, 16]",6,[<__main__.DAGTree object at 0x0000021CEA638B60>]
+729,"[8, 0, 16, 16]",1,[<__main__.DAGTree object at 0x0000021CE870E060>]
+730,"[8, 0, 16, 8]",2,[<__main__.DAGTree object at 0x0000021CE851F410>]
+731,"[8, 0, 12, 8]",3,"[<__main__.DAGTree object at 0x0000021CEA5FB740>, <__main__.DAGTree object at 0x0000021CEA638C50>]"
+732,"[8, 0, 12, 4]",4,[<__main__.DAGTree object at 0x0000021CEA5FB800>]
+733,"[8, 0, 10, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB830>, <__main__.DAGTree object at 0x0000021CEA5FBC80>]"
+734,"[8, 0, 10, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8F0>]
+735,"[8, 1, 10, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FB8F0>]
+736,"[8, 2, 10, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8F0>, <__main__.DAGTree object at 0x0000021CEA5FBA70>]"
+737,"[9, 0, 11, 4]",5,[<__main__.DAGTree object at 0x0000021CEA5FBC80>]
+738,"[9, 0, 11, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD10>]
+739,"[9, 1, 11, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD10>]
+740,"[9, 2, 11, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD10>, <__main__.DAGTree object at 0x0000021CEA5FBE90>]"
+741,"[10, 0, 12, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBC80>, <__main__.DAGTree object at 0x0000021CEA638D40>]"
+742,"[10, 0, 12, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD40>]
+743,"[10, 1, 12, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD40>]
+744,"[10, 2, 12, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD40>, <__main__.DAGTree object at 0x0000021CEA5FBEC0>]"
+745,"[8, 2, 12, 6]",4,[<__main__.DAGTree object at 0x0000021CEA5FB800>]
+746,"[8, 2, 10, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB890>, <__main__.DAGTree object at 0x0000021CEA5FBCE0>]"
+747,"[8, 2, 10, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FB8F0>, <__main__.DAGTree object at 0x0000021CEA5FBA70>]"
+748,"[8, 3, 10, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBA70>]
+749,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+750,"[9, 2, 11, 6]",5,[<__main__.DAGTree object at 0x0000021CEA5FBCE0>]
+751,"[9, 2, 11, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD10>, <__main__.DAGTree object at 0x0000021CEA5FBE90>]"
+752,"[9, 3, 11, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBE90>]
+753,"[9, 4, 11, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBE90>, <__main__.DAGTree object at 0x0000021CEA5FBFB0>]"
+754,"[10, 2, 12, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCE0>, <__main__.DAGTree object at 0x0000021CEA638DA0>]"
+755,"[10, 2, 12, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD40>, <__main__.DAGTree object at 0x0000021CEA5FBEC0>]"
+756,"[10, 3, 12, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBEC0>]
+757,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+758,"[8, 4, 12, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA5FB800>, <__main__.DAGTree object at 0x0000021CEA638140>]"
+759,"[8, 4, 10, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB860>, <__main__.DAGTree object at 0x0000021CEA5FBCB0>]"
+760,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+761,"[8, 5, 10, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB90>]
+762,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+763,"[9, 4, 11, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5FBCB0>]
+764,"[9, 4, 11, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBE90>, <__main__.DAGTree object at 0x0000021CEA5FBFB0>]"
+765,"[9, 5, 11, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFB0>]
+766,"[9, 6, 11, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFB0>, <__main__.DAGTree object at 0x0000021CEA638470>]"
+767,"[10, 4, 12, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCB0>, <__main__.DAGTree object at 0x0000021CEA638D70>]"
+768,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+769,"[10, 5, 12, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFE0>]
+770,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+771,"[10, 0, 14, 8]",3,[<__main__.DAGTree object at 0x0000021CEA638C50>]
+772,"[10, 0, 14, 4]",4,[<__main__.DAGTree object at 0x0000021CEA638CE0>]
+773,"[10, 0, 12, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBC80>, <__main__.DAGTree object at 0x0000021CEA638D40>]"
+774,"[10, 0, 12, 2]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD40>]
+775,"[10, 1, 12, 3]",6,[<__main__.DAGTree object at 0x0000021CEA5FBD40>]
+776,"[10, 2, 12, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD40>, <__main__.DAGTree object at 0x0000021CEA5FBEC0>]"
+777,"[11, 0, 13, 4]",5,[<__main__.DAGTree object at 0x0000021CEA638D40>]
+778,"[11, 0, 13, 2]",6,[<__main__.DAGTree object at 0x0000021CEA638DD0>]
+779,"[11, 1, 13, 3]",6,[<__main__.DAGTree object at 0x0000021CEA638DD0>]
+780,"[11, 2, 13, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA638DD0>, <__main__.DAGTree object at 0x0000021CEA638F50>]"
+781,"[12, 0, 14, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA638D40>, <__main__.DAGTree object at 0x0000021CEA639190>]"
+782,"[12, 0, 14, 2]",6,[<__main__.DAGTree object at 0x0000021CEA638E00>]
+783,"[12, 1, 14, 3]",6,[<__main__.DAGTree object at 0x0000021CEA638E00>]
+784,"[12, 2, 14, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA638E00>, <__main__.DAGTree object at 0x0000021CEA638F80>]"
+785,"[10, 2, 14, 6]",4,[<__main__.DAGTree object at 0x0000021CEA638CE0>]
+786,"[10, 2, 12, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCE0>, <__main__.DAGTree object at 0x0000021CEA638DA0>]"
+787,"[10, 2, 12, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBD40>, <__main__.DAGTree object at 0x0000021CEA5FBEC0>]"
+788,"[10, 3, 12, 5]",6,[<__main__.DAGTree object at 0x0000021CEA5FBEC0>]
+789,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+790,"[11, 2, 13, 6]",5,[<__main__.DAGTree object at 0x0000021CEA638DA0>]
+791,"[11, 2, 13, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA638DD0>, <__main__.DAGTree object at 0x0000021CEA638F50>]"
+792,"[11, 3, 13, 5]",6,[<__main__.DAGTree object at 0x0000021CEA638F50>]
+793,"[11, 4, 13, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F50>, <__main__.DAGTree object at 0x0000021CEA639070>]"
+794,"[12, 2, 14, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA638DA0>, <__main__.DAGTree object at 0x0000021CEA6391F0>]"
+795,"[12, 2, 14, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA638E00>, <__main__.DAGTree object at 0x0000021CEA638F80>]"
+796,"[12, 3, 14, 5]",6,[<__main__.DAGTree object at 0x0000021CEA638F80>]
+797,"[12, 4, 14, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F80>, <__main__.DAGTree object at 0x0000021CEA6390A0>]"
+798,"[10, 4, 14, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA638CE0>, <__main__.DAGTree object at 0x0000021CEA6395E0>]"
+799,"[10, 4, 12, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCB0>, <__main__.DAGTree object at 0x0000021CEA638D70>]"
+800,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+801,"[10, 5, 12, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFE0>]
+802,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+803,"[11, 4, 13, 8]",5,[<__main__.DAGTree object at 0x0000021CEA638D70>]
+804,"[11, 4, 13, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F50>, <__main__.DAGTree object at 0x0000021CEA639070>]"
+805,"[11, 5, 13, 7]",6,[<__main__.DAGTree object at 0x0000021CEA639070>]
+806,"[11, 6, 13, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA639070>, <__main__.DAGTree object at 0x0000021CEA6396A0>]"
+807,"[12, 4, 14, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA638D70>, <__main__.DAGTree object at 0x0000021CEA6391C0>]"
+808,"[12, 4, 14, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F80>, <__main__.DAGTree object at 0x0000021CEA6390A0>]"
+809,"[12, 5, 14, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6390A0>]
+810,"[12, 6, 14, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6390A0>, <__main__.DAGTree object at 0x0000021CEA6396D0>]"
+811,"[12, 0, 16, 8]",3,[<__main__.DAGTree object at 0x0000021CEA638C50>]
+812,"[12, 0, 16, 4]",4,[<__main__.DAGTree object at 0x0000021CEA638D10>]
+813,"[12, 0, 14, 4]",5,"[<__main__.DAGTree object at 0x0000021CEA638D40>, <__main__.DAGTree object at 0x0000021CEA639190>]"
+814,"[12, 0, 14, 2]",6,[<__main__.DAGTree object at 0x0000021CEA638E00>]
+815,"[12, 1, 14, 3]",6,[<__main__.DAGTree object at 0x0000021CEA638E00>]
+816,"[12, 2, 14, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA638E00>, <__main__.DAGTree object at 0x0000021CEA638F80>]"
+817,"[13, 0, 15, 4]",5,[<__main__.DAGTree object at 0x0000021CEA639190>]
+818,"[13, 0, 15, 2]",6,[<__main__.DAGTree object at 0x0000021CEA639220>]
+819,"[13, 1, 15, 3]",6,[<__main__.DAGTree object at 0x0000021CEA639220>]
+820,"[13, 2, 15, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA639220>, <__main__.DAGTree object at 0x0000021CEA6393A0>]"
+821,"[14, 0, 16, 4]",5,[<__main__.DAGTree object at 0x0000021CEA639190>]
+822,"[14, 0, 16, 2]",6,[<__main__.DAGTree object at 0x0000021CEA639250>]
+823,"[14, 1, 16, 3]",6,[<__main__.DAGTree object at 0x0000021CEA639250>]
+824,"[14, 2, 16, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA639250>, <__main__.DAGTree object at 0x0000021CEA6393D0>]"
+825,"[12, 2, 16, 6]",4,[<__main__.DAGTree object at 0x0000021CEA638D10>]
+826,"[12, 2, 14, 6]",5,"[<__main__.DAGTree object at 0x0000021CEA638DA0>, <__main__.DAGTree object at 0x0000021CEA6391F0>]"
+827,"[12, 2, 14, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA638E00>, <__main__.DAGTree object at 0x0000021CEA638F80>]"
+828,"[12, 3, 14, 5]",6,[<__main__.DAGTree object at 0x0000021CEA638F80>]
+829,"[12, 4, 14, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F80>, <__main__.DAGTree object at 0x0000021CEA6390A0>]"
+830,"[13, 2, 15, 6]",5,[<__main__.DAGTree object at 0x0000021CEA6391F0>]
+831,"[13, 2, 15, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA639220>, <__main__.DAGTree object at 0x0000021CEA6393A0>]"
+832,"[13, 3, 15, 5]",6,[<__main__.DAGTree object at 0x0000021CEA6393A0>]
+833,"[13, 4, 15, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA6393A0>, <__main__.DAGTree object at 0x0000021CEA6394C0>]"
+834,"[14, 2, 16, 6]",5,[<__main__.DAGTree object at 0x0000021CEA6391F0>]
+835,"[14, 2, 16, 4]",6,"[<__main__.DAGTree object at 0x0000021CEA639250>, <__main__.DAGTree object at 0x0000021CEA6393D0>]"
+836,"[14, 3, 16, 5]",6,[<__main__.DAGTree object at 0x0000021CEA6393D0>]
+837,"[14, 4, 16, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA6393D0>, <__main__.DAGTree object at 0x0000021CEA6394F0>]"
+838,"[12, 4, 16, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA638D10>, <__main__.DAGTree object at 0x0000021CEA639610>]"
+839,"[12, 4, 14, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA638D70>, <__main__.DAGTree object at 0x0000021CEA6391C0>]"
+840,"[12, 4, 14, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F80>, <__main__.DAGTree object at 0x0000021CEA6390A0>]"
+841,"[12, 5, 14, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6390A0>]
+842,"[12, 6, 14, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6390A0>, <__main__.DAGTree object at 0x0000021CEA6396D0>]"
+843,"[13, 4, 15, 8]",5,[<__main__.DAGTree object at 0x0000021CEA6391C0>]
+844,"[13, 4, 15, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA6393A0>, <__main__.DAGTree object at 0x0000021CEA6394C0>]"
+845,"[13, 5, 15, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6394C0>]
+846,"[13, 6, 15, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6394C0>, <__main__.DAGTree object at 0x0000021CEA639940>]"
+847,"[14, 4, 16, 8]",5,[<__main__.DAGTree object at 0x0000021CEA6391C0>]
+848,"[14, 4, 16, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA6393D0>, <__main__.DAGTree object at 0x0000021CEA6394F0>]"
+849,"[14, 5, 16, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6394F0>]
+850,"[14, 6, 16, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6394F0>, <__main__.DAGTree object at 0x0000021CEA639970>]"
+851,"[8, 4, 16, 12]",2,[<__main__.DAGTree object at 0x0000021CE851F410>]
+852,"[8, 4, 12, 12]",3,"[<__main__.DAGTree object at 0x0000021CEA5FB7A0>, <__main__.DAGTree object at 0x0000021CEA638CB0>]"
+853,"[8, 4, 12, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA5FB800>, <__main__.DAGTree object at 0x0000021CEA638140>]"
+854,"[8, 4, 10, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FB860>, <__main__.DAGTree object at 0x0000021CEA5FBCB0>]"
+855,"[8, 4, 10, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBA70>, <__main__.DAGTree object at 0x0000021CEA5FBB90>]"
+856,"[8, 5, 10, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBB90>]
+857,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+858,"[9, 4, 11, 8]",5,[<__main__.DAGTree object at 0x0000021CEA5FBCB0>]
+859,"[9, 4, 11, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBE90>, <__main__.DAGTree object at 0x0000021CEA5FBFB0>]"
+860,"[9, 5, 11, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFB0>]
+861,"[9, 6, 11, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFB0>, <__main__.DAGTree object at 0x0000021CEA638470>]"
+862,"[10, 4, 12, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCB0>, <__main__.DAGTree object at 0x0000021CEA638D70>]"
+863,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+864,"[10, 5, 12, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFE0>]
+865,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+866,"[8, 6, 12, 10]",4,[<__main__.DAGTree object at 0x0000021CEA638140>]
+867,"[8, 6, 10, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA638170>, <__main__.DAGTree object at 0x0000021CEA638410>]"
+868,"[8, 6, 10, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBB90>, <__main__.DAGTree object at 0x0000021CEA638200>]"
+869,"[8, 7, 10, 9]",6,[<__main__.DAGTree object at 0x0000021CEA638200>]
+870,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+871,"[9, 6, 11, 10]",5,[<__main__.DAGTree object at 0x0000021CEA638410>]
+872,"[9, 6, 11, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFB0>, <__main__.DAGTree object at 0x0000021CEA638470>]"
+873,"[9, 7, 11, 9]",6,[<__main__.DAGTree object at 0x0000021CEA638470>]
+874,"[9, 8, 11, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638470>, <__main__.DAGTree object at 0x0000021CEA638590>]"
+875,"[10, 6, 12, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA638410>, <__main__.DAGTree object at 0x0000021CEA639640>]"
+876,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+877,"[10, 7, 12, 9]",6,[<__main__.DAGTree object at 0x0000021CEA6384A0>]
+878,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+879,"[8, 8, 12, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA638140>, <__main__.DAGTree object at 0x0000021CEA6386E0>]"
+880,"[8, 8, 10, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA6381A0>, <__main__.DAGTree object at 0x0000021CEA638440>]"
+881,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+882,"[8, 9, 10, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638320>]
+883,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+884,"[9, 8, 11, 12]",5,[<__main__.DAGTree object at 0x0000021CEA638440>]
+885,"[9, 8, 11, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638470>, <__main__.DAGTree object at 0x0000021CEA638590>]"
+886,"[9, 9, 11, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638590>]
+887,"[9, 10, 11, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638590>, <__main__.DAGTree object at 0x0000021CEA638A10>]"
+888,"[10, 8, 12, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA638440>, <__main__.DAGTree object at 0x0000021CEA639670>]"
+889,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+890,"[10, 9, 12, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6385C0>]
+891,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+892,"[10, 4, 14, 12]",3,[<__main__.DAGTree object at 0x0000021CEA638CB0>]
+893,"[10, 4, 14, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA638CE0>, <__main__.DAGTree object at 0x0000021CEA6395E0>]"
+894,"[10, 4, 12, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA5FBCB0>, <__main__.DAGTree object at 0x0000021CEA638D70>]"
+895,"[10, 4, 12, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBEC0>, <__main__.DAGTree object at 0x0000021CEA5FBFE0>]"
+896,"[10, 5, 12, 7]",6,[<__main__.DAGTree object at 0x0000021CEA5FBFE0>]
+897,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+898,"[11, 4, 13, 8]",5,[<__main__.DAGTree object at 0x0000021CEA638D70>]
+899,"[11, 4, 13, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F50>, <__main__.DAGTree object at 0x0000021CEA639070>]"
+900,"[11, 5, 13, 7]",6,[<__main__.DAGTree object at 0x0000021CEA639070>]
+901,"[11, 6, 13, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA639070>, <__main__.DAGTree object at 0x0000021CEA6396A0>]"
+902,"[12, 4, 14, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA638D70>, <__main__.DAGTree object at 0x0000021CEA6391C0>]"
+903,"[12, 4, 14, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F80>, <__main__.DAGTree object at 0x0000021CEA6390A0>]"
+904,"[12, 5, 14, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6390A0>]
+905,"[12, 6, 14, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6390A0>, <__main__.DAGTree object at 0x0000021CEA6396D0>]"
+906,"[10, 6, 14, 10]",4,[<__main__.DAGTree object at 0x0000021CEA6395E0>]
+907,"[10, 6, 12, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA638410>, <__main__.DAGTree object at 0x0000021CEA639640>]"
+908,"[10, 6, 12, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA5FBFE0>, <__main__.DAGTree object at 0x0000021CEA6384A0>]"
+909,"[10, 7, 12, 9]",6,[<__main__.DAGTree object at 0x0000021CEA6384A0>]
+910,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+911,"[11, 6, 13, 10]",5,[<__main__.DAGTree object at 0x0000021CEA639640>]
+912,"[11, 6, 13, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA639070>, <__main__.DAGTree object at 0x0000021CEA6396A0>]"
+913,"[11, 7, 13, 9]",6,[<__main__.DAGTree object at 0x0000021CEA6396A0>]
+914,"[11, 8, 13, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396A0>, <__main__.DAGTree object at 0x0000021CEA6397C0>]"
+915,"[12, 6, 14, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA639640>, <__main__.DAGTree object at 0x0000021CEA6398E0>]"
+916,"[12, 6, 14, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6390A0>, <__main__.DAGTree object at 0x0000021CEA6396D0>]"
+917,"[12, 7, 14, 9]",6,[<__main__.DAGTree object at 0x0000021CEA6396D0>]
+918,"[12, 8, 14, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396D0>, <__main__.DAGTree object at 0x0000021CEA6397F0>]"
+919,"[10, 8, 14, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA6395E0>, <__main__.DAGTree object at 0x0000021CEA639B80>]"
+920,"[10, 8, 12, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA638440>, <__main__.DAGTree object at 0x0000021CEA639670>]"
+921,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+922,"[10, 9, 12, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6385C0>]
+923,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+924,"[11, 8, 13, 12]",5,[<__main__.DAGTree object at 0x0000021CEA639670>]
+925,"[11, 8, 13, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396A0>, <__main__.DAGTree object at 0x0000021CEA6397C0>]"
+926,"[11, 9, 13, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6397C0>]
+927,"[11, 10, 13, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397C0>, <__main__.DAGTree object at 0x0000021CEA639C40>]"
+928,"[12, 8, 14, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA639670>, <__main__.DAGTree object at 0x0000021CEA639910>]"
+929,"[12, 8, 14, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396D0>, <__main__.DAGTree object at 0x0000021CEA6397F0>]"
+930,"[12, 9, 14, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6397F0>]
+931,"[12, 10, 14, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397F0>, <__main__.DAGTree object at 0x0000021CEA639C70>]"
+932,"[12, 4, 16, 12]",3,[<__main__.DAGTree object at 0x0000021CEA638CB0>]
+933,"[12, 4, 16, 8]",4,"[<__main__.DAGTree object at 0x0000021CEA638D10>, <__main__.DAGTree object at 0x0000021CEA639610>]"
+934,"[12, 4, 14, 8]",5,"[<__main__.DAGTree object at 0x0000021CEA638D70>, <__main__.DAGTree object at 0x0000021CEA6391C0>]"
+935,"[12, 4, 14, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA638F80>, <__main__.DAGTree object at 0x0000021CEA6390A0>]"
+936,"[12, 5, 14, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6390A0>]
+937,"[12, 6, 14, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6390A0>, <__main__.DAGTree object at 0x0000021CEA6396D0>]"
+938,"[13, 4, 15, 8]",5,[<__main__.DAGTree object at 0x0000021CEA6391C0>]
+939,"[13, 4, 15, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA6393A0>, <__main__.DAGTree object at 0x0000021CEA6394C0>]"
+940,"[13, 5, 15, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6394C0>]
+941,"[13, 6, 15, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6394C0>, <__main__.DAGTree object at 0x0000021CEA639940>]"
+942,"[14, 4, 16, 8]",5,[<__main__.DAGTree object at 0x0000021CEA6391C0>]
+943,"[14, 4, 16, 6]",6,"[<__main__.DAGTree object at 0x0000021CEA6393D0>, <__main__.DAGTree object at 0x0000021CEA6394F0>]"
+944,"[14, 5, 16, 7]",6,[<__main__.DAGTree object at 0x0000021CEA6394F0>]
+945,"[14, 6, 16, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6394F0>, <__main__.DAGTree object at 0x0000021CEA639970>]"
+946,"[12, 6, 16, 10]",4,[<__main__.DAGTree object at 0x0000021CEA639610>]
+947,"[12, 6, 14, 10]",5,"[<__main__.DAGTree object at 0x0000021CEA639640>, <__main__.DAGTree object at 0x0000021CEA6398E0>]"
+948,"[12, 6, 14, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6390A0>, <__main__.DAGTree object at 0x0000021CEA6396D0>]"
+949,"[12, 7, 14, 9]",6,[<__main__.DAGTree object at 0x0000021CEA6396D0>]
+950,"[12, 8, 14, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396D0>, <__main__.DAGTree object at 0x0000021CEA6397F0>]"
+951,"[13, 6, 15, 10]",5,[<__main__.DAGTree object at 0x0000021CEA6398E0>]
+952,"[13, 6, 15, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6394C0>, <__main__.DAGTree object at 0x0000021CEA639940>]"
+953,"[13, 7, 15, 9]",6,[<__main__.DAGTree object at 0x0000021CEA639940>]
+954,"[13, 8, 15, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA639940>, <__main__.DAGTree object at 0x0000021CEA639A60>]"
+955,"[14, 6, 16, 10]",5,[<__main__.DAGTree object at 0x0000021CEA6398E0>]
+956,"[14, 6, 16, 8]",6,"[<__main__.DAGTree object at 0x0000021CEA6394F0>, <__main__.DAGTree object at 0x0000021CEA639970>]"
+957,"[14, 7, 16, 9]",6,[<__main__.DAGTree object at 0x0000021CEA639970>]
+958,"[14, 8, 16, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA639970>, <__main__.DAGTree object at 0x0000021CEA639A90>]"
+959,"[12, 8, 16, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA639610>, <__main__.DAGTree object at 0x0000021CEA639BB0>]"
+960,"[12, 8, 14, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA639670>, <__main__.DAGTree object at 0x0000021CEA639910>]"
+961,"[12, 8, 14, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396D0>, <__main__.DAGTree object at 0x0000021CEA6397F0>]"
+962,"[12, 9, 14, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6397F0>]
+963,"[12, 10, 14, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397F0>, <__main__.DAGTree object at 0x0000021CEA639C70>]"
+964,"[13, 8, 15, 12]",5,[<__main__.DAGTree object at 0x0000021CEA639910>]
+965,"[13, 8, 15, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA639940>, <__main__.DAGTree object at 0x0000021CEA639A60>]"
+966,"[13, 9, 15, 11]",6,[<__main__.DAGTree object at 0x0000021CEA639A60>]
+967,"[13, 10, 15, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA639A60>, <__main__.DAGTree object at 0x0000021CEA639EE0>]"
+968,"[14, 8, 16, 12]",5,[<__main__.DAGTree object at 0x0000021CEA639910>]
+969,"[14, 8, 16, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA639970>, <__main__.DAGTree object at 0x0000021CEA639A90>]"
+970,"[14, 9, 16, 11]",6,[<__main__.DAGTree object at 0x0000021CEA639A90>]
+971,"[14, 10, 16, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA639A90>, <__main__.DAGTree object at 0x0000021CEA639F10>]"
+972,"[8, 8, 16, 16]",2,[<__main__.DAGTree object at 0x0000021CE851F410>]
+973,"[8, 8, 12, 16]",3,"[<__main__.DAGTree object at 0x0000021CEA5FB770>, <__main__.DAGTree object at 0x0000021CEA638C80>]"
+974,"[8, 8, 12, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA638140>, <__main__.DAGTree object at 0x0000021CEA6386E0>]"
+975,"[8, 8, 10, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA6381A0>, <__main__.DAGTree object at 0x0000021CEA638440>]"
+976,"[8, 8, 10, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638200>, <__main__.DAGTree object at 0x0000021CEA638320>]"
+977,"[8, 9, 10, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638320>]
+978,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+979,"[9, 8, 11, 12]",5,[<__main__.DAGTree object at 0x0000021CEA638440>]
+980,"[9, 8, 11, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA638470>, <__main__.DAGTree object at 0x0000021CEA638590>]"
+981,"[9, 9, 11, 11]",6,[<__main__.DAGTree object at 0x0000021CEA638590>]
+982,"[9, 10, 11, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638590>, <__main__.DAGTree object at 0x0000021CEA638A10>]"
+983,"[10, 8, 12, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA638440>, <__main__.DAGTree object at 0x0000021CEA639670>]"
+984,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+985,"[10, 9, 12, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6385C0>]
+986,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+987,"[8, 10, 12, 14]",4,[<__main__.DAGTree object at 0x0000021CEA6386E0>]
+988,"[8, 10, 10, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA638710>, <__main__.DAGTree object at 0x0000021CEA6389B0>]"
+989,"[8, 10, 10, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638320>, <__main__.DAGTree object at 0x0000021CEA6387A0>]"
+990,"[8, 11, 10, 13]",6,[<__main__.DAGTree object at 0x0000021CEA6387A0>]
+991,"[8, 12, 10, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA6387A0>, <__main__.DAGTree object at 0x0000021CEA6388C0>]"
+992,"[9, 10, 11, 14]",5,[<__main__.DAGTree object at 0x0000021CEA6389B0>]
+993,"[9, 10, 11, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA638590>, <__main__.DAGTree object at 0x0000021CEA638A10>]"
+994,"[9, 11, 11, 13]",6,[<__main__.DAGTree object at 0x0000021CEA638A10>]
+995,"[9, 12, 11, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A10>, <__main__.DAGTree object at 0x0000021CEA638B30>]"
+996,"[10, 10, 12, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA6389B0>, <__main__.DAGTree object at 0x0000021CEA639BE0>]"
+997,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+998,"[10, 11, 12, 13]",6,[<__main__.DAGTree object at 0x0000021CEA638A40>]
+999,"[10, 12, 12, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A40>, <__main__.DAGTree object at 0x0000021CEA638B60>]"
+1000,"[8, 12, 12, 16]",4,[<__main__.DAGTree object at 0x0000021CEA6386E0>]
+1001,"[8, 12, 10, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA638740>, <__main__.DAGTree object at 0x0000021CEA6389E0>]"
+1002,"[8, 12, 10, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA6387A0>, <__main__.DAGTree object at 0x0000021CEA6388C0>]"
+1003,"[8, 13, 10, 15]",6,[<__main__.DAGTree object at 0x0000021CEA6388C0>]
+1004,"[8, 14, 10, 16]",6,[<__main__.DAGTree object at 0x0000021CEA6388C0>]
+1005,"[9, 12, 11, 16]",5,[<__main__.DAGTree object at 0x0000021CEA6389E0>]
+1006,"[9, 12, 11, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A10>, <__main__.DAGTree object at 0x0000021CEA638B30>]"
+1007,"[9, 13, 11, 15]",6,[<__main__.DAGTree object at 0x0000021CEA638B30>]
+1008,"[9, 14, 11, 16]",6,[<__main__.DAGTree object at 0x0000021CEA638B30>]
+1009,"[10, 12, 12, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA6389E0>, <__main__.DAGTree object at 0x0000021CEA639C10>]"
+1010,"[10, 12, 12, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A40>, <__main__.DAGTree object at 0x0000021CEA638B60>]"
+1011,"[10, 13, 12, 15]",6,[<__main__.DAGTree object at 0x0000021CEA638B60>]
+1012,"[10, 14, 12, 16]",6,[<__main__.DAGTree object at 0x0000021CEA638B60>]
+1013,"[10, 8, 14, 16]",3,[<__main__.DAGTree object at 0x0000021CEA638C80>]
+1014,"[10, 8, 14, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA6395E0>, <__main__.DAGTree object at 0x0000021CEA639B80>]"
+1015,"[10, 8, 12, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA638440>, <__main__.DAGTree object at 0x0000021CEA639670>]"
+1016,"[10, 8, 12, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6384A0>, <__main__.DAGTree object at 0x0000021CEA6385C0>]"
+1017,"[10, 9, 12, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6385C0>]
+1018,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+1019,"[11, 8, 13, 12]",5,[<__main__.DAGTree object at 0x0000021CEA639670>]
+1020,"[11, 8, 13, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396A0>, <__main__.DAGTree object at 0x0000021CEA6397C0>]"
+1021,"[11, 9, 13, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6397C0>]
+1022,"[11, 10, 13, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397C0>, <__main__.DAGTree object at 0x0000021CEA639C40>]"
+1023,"[12, 8, 14, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA639670>, <__main__.DAGTree object at 0x0000021CEA639910>]"
+1024,"[12, 8, 14, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396D0>, <__main__.DAGTree object at 0x0000021CEA6397F0>]"
+1025,"[12, 9, 14, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6397F0>]
+1026,"[12, 10, 14, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397F0>, <__main__.DAGTree object at 0x0000021CEA639C70>]"
+1027,"[10, 10, 14, 14]",4,[<__main__.DAGTree object at 0x0000021CEA639B80>]
+1028,"[10, 10, 12, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA6389B0>, <__main__.DAGTree object at 0x0000021CEA639BE0>]"
+1029,"[10, 10, 12, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6385C0>, <__main__.DAGTree object at 0x0000021CEA638A40>]"
+1030,"[10, 11, 12, 13]",6,[<__main__.DAGTree object at 0x0000021CEA638A40>]
+1031,"[10, 12, 12, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A40>, <__main__.DAGTree object at 0x0000021CEA638B60>]"
+1032,"[11, 10, 13, 14]",5,[<__main__.DAGTree object at 0x0000021CEA639BE0>]
+1033,"[11, 10, 13, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397C0>, <__main__.DAGTree object at 0x0000021CEA639C40>]"
+1034,"[11, 11, 13, 13]",6,[<__main__.DAGTree object at 0x0000021CEA639C40>]
+1035,"[11, 12, 13, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639C40>, <__main__.DAGTree object at 0x0000021CEA639D60>]"
+1036,"[12, 10, 14, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA639BE0>, <__main__.DAGTree object at 0x0000021CEA639E80>]"
+1037,"[12, 10, 14, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397F0>, <__main__.DAGTree object at 0x0000021CEA639C70>]"
+1038,"[12, 11, 14, 13]",6,[<__main__.DAGTree object at 0x0000021CEA639C70>]
+1039,"[12, 12, 14, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639C70>, <__main__.DAGTree object at 0x0000021CEA639D90>]"
+1040,"[10, 12, 14, 16]",4,[<__main__.DAGTree object at 0x0000021CEA639B80>]
+1041,"[10, 12, 12, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA6389E0>, <__main__.DAGTree object at 0x0000021CEA639C10>]"
+1042,"[10, 12, 12, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA638A40>, <__main__.DAGTree object at 0x0000021CEA638B60>]"
+1043,"[10, 13, 12, 15]",6,[<__main__.DAGTree object at 0x0000021CEA638B60>]
+1044,"[10, 14, 12, 16]",6,[<__main__.DAGTree object at 0x0000021CEA638B60>]
+1045,"[11, 12, 13, 16]",5,[<__main__.DAGTree object at 0x0000021CEA639C10>]
+1046,"[11, 12, 13, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639C40>, <__main__.DAGTree object at 0x0000021CEA639D60>]"
+1047,"[11, 13, 13, 15]",6,[<__main__.DAGTree object at 0x0000021CEA639D60>]
+1048,"[11, 14, 13, 16]",6,[<__main__.DAGTree object at 0x0000021CEA639D60>]
+1049,"[12, 12, 14, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA639C10>, <__main__.DAGTree object at 0x0000021CEA639EB0>]"
+1050,"[12, 12, 14, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639C70>, <__main__.DAGTree object at 0x0000021CEA639D90>]"
+1051,"[12, 13, 14, 15]",6,[<__main__.DAGTree object at 0x0000021CEA639D90>]
+1052,"[12, 14, 14, 16]",6,[<__main__.DAGTree object at 0x0000021CEA639D90>]
+1053,"[12, 8, 16, 16]",3,[<__main__.DAGTree object at 0x0000021CEA638C80>]
+1054,"[12, 8, 16, 12]",4,"[<__main__.DAGTree object at 0x0000021CEA639610>, <__main__.DAGTree object at 0x0000021CEA639BB0>]"
+1055,"[12, 8, 14, 12]",5,"[<__main__.DAGTree object at 0x0000021CEA639670>, <__main__.DAGTree object at 0x0000021CEA639910>]"
+1056,"[12, 8, 14, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA6396D0>, <__main__.DAGTree object at 0x0000021CEA6397F0>]"
+1057,"[12, 9, 14, 11]",6,[<__main__.DAGTree object at 0x0000021CEA6397F0>]
+1058,"[12, 10, 14, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397F0>, <__main__.DAGTree object at 0x0000021CEA639C70>]"
+1059,"[13, 8, 15, 12]",5,[<__main__.DAGTree object at 0x0000021CEA639910>]
+1060,"[13, 8, 15, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA639940>, <__main__.DAGTree object at 0x0000021CEA639A60>]"
+1061,"[13, 9, 15, 11]",6,[<__main__.DAGTree object at 0x0000021CEA639A60>]
+1062,"[13, 10, 15, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA639A60>, <__main__.DAGTree object at 0x0000021CEA639EE0>]"
+1063,"[14, 8, 16, 12]",5,[<__main__.DAGTree object at 0x0000021CEA639910>]
+1064,"[14, 8, 16, 10]",6,"[<__main__.DAGTree object at 0x0000021CEA639970>, <__main__.DAGTree object at 0x0000021CEA639A90>]"
+1065,"[14, 9, 16, 11]",6,[<__main__.DAGTree object at 0x0000021CEA639A90>]
+1066,"[14, 10, 16, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA639A90>, <__main__.DAGTree object at 0x0000021CEA639F10>]"
+1067,"[12, 10, 16, 14]",4,[<__main__.DAGTree object at 0x0000021CEA639BB0>]
+1068,"[12, 10, 14, 14]",5,"[<__main__.DAGTree object at 0x0000021CEA639BE0>, <__main__.DAGTree object at 0x0000021CEA639E80>]"
+1069,"[12, 10, 14, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA6397F0>, <__main__.DAGTree object at 0x0000021CEA639C70>]"
+1070,"[12, 11, 14, 13]",6,[<__main__.DAGTree object at 0x0000021CEA639C70>]
+1071,"[12, 12, 14, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639C70>, <__main__.DAGTree object at 0x0000021CEA639D90>]"
+1072,"[13, 10, 15, 14]",5,[<__main__.DAGTree object at 0x0000021CEA639E80>]
+1073,"[13, 10, 15, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA639A60>, <__main__.DAGTree object at 0x0000021CEA639EE0>]"
+1074,"[13, 11, 15, 13]",6,[<__main__.DAGTree object at 0x0000021CEA639EE0>]
+1075,"[13, 12, 15, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639EE0>, <__main__.DAGTree object at 0x0000021CEA63A000>]"
+1076,"[14, 10, 16, 14]",5,[<__main__.DAGTree object at 0x0000021CEA639E80>]
+1077,"[14, 10, 16, 12]",6,"[<__main__.DAGTree object at 0x0000021CEA639A90>, <__main__.DAGTree object at 0x0000021CEA639F10>]"
+1078,"[14, 11, 16, 13]",6,[<__main__.DAGTree object at 0x0000021CEA639F10>]
+1079,"[14, 12, 16, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639F10>, <__main__.DAGTree object at 0x0000021CEA63A030>]"
+1080,"[12, 12, 16, 16]",4,[<__main__.DAGTree object at 0x0000021CEA639BB0>]
+1081,"[12, 12, 14, 16]",5,"[<__main__.DAGTree object at 0x0000021CEA639C10>, <__main__.DAGTree object at 0x0000021CEA639EB0>]"
+1082,"[12, 12, 14, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639C70>, <__main__.DAGTree object at 0x0000021CEA639D90>]"
+1083,"[12, 13, 14, 15]",6,[<__main__.DAGTree object at 0x0000021CEA639D90>]
+1084,"[12, 14, 14, 16]",6,[<__main__.DAGTree object at 0x0000021CEA639D90>]
+1085,"[13, 12, 15, 16]",5,[<__main__.DAGTree object at 0x0000021CEA639EB0>]
+1086,"[13, 12, 15, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639EE0>, <__main__.DAGTree object at 0x0000021CEA63A000>]"
+1087,"[13, 13, 15, 15]",6,[<__main__.DAGTree object at 0x0000021CEA63A000>]
+1088,"[13, 14, 15, 16]",6,[<__main__.DAGTree object at 0x0000021CEA63A000>]
+1089,"[14, 12, 16, 16]",5,[<__main__.DAGTree object at 0x0000021CEA639EB0>]
+1090,"[14, 12, 16, 14]",6,"[<__main__.DAGTree object at 0x0000021CEA639F10>, <__main__.DAGTree object at 0x0000021CEA63A030>]"
+1091,"[14, 13, 16, 15]",6,[<__main__.DAGTree object at 0x0000021CEA63A030>]
+1092,"[14, 14, 16, 16]",6,[<__main__.DAGTree object at 0x0000021CEA63A030>]

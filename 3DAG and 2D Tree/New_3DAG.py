@@ -1,0 +1,601 @@
+import numpy as np
+import pandas as pd
+import random
+import os
+
+
+class DAGTree:
+    def __init__(self, points=[], depth=0, axis=0, split_value=None, bbox=[], left=None, right=None, middle=None, middle_child=False, parent=[], cutoff=1):
+        self.left = left
+        self.right = right
+        self.middle = middle
+        self.parent = parent
+        self.data_size = len(points)
+        self.middle_child = middle_child
+        self.cutoff = cutoff
+        self.depth = depth
+        self.axis = axis
+        self.split_value = split_value
+
+        if axis == 0:   #sorts by x values
+            points.sort()
+        else:           #sorts by y values
+            points.sort(key=lambda x: x[1])
+        self.points = points
+
+        #set bbox (mainly used at the first creation of DAGTree)
+        if len(bbox) == 0:
+            self.bbox = self.find_bbox(bbox)
+        else:
+            self.bbox = bbox
+
+        # if self.data_size > self.cutoff:
+            # self.split()
+        if self.parent == []:
+            self.split()
+
+
+    #To String Method
+    def __str__(self):
+        if self.split_value != None:
+            if self.axis == 0:
+                return f"Split Node: x = {self.split_value[self.axis]}, Level: {self.depth}, BBOX: {self.bbox}"#, Left: {self.left}, Right: {self.right}"
+            else:
+                return f"Split Node: y = {self.split_value[self.axis]}, Level: {self.depth}, BBOX: {self.bbox}"#, Left: {self.left}, Right: {self.right}"
+        else:
+            return f"{self.points}"
+
+
+
+    #BBOX Method
+    def find_bbox(self,bbox):
+        for item in self.points:
+            if len(bbox) == 0:
+                bbox=[item[0], item[1], item[0], item[1]]
+                #this sets the x min and max as the first x value and the same for the y min and max
+            if bbox[0] > item[0]:       #xmin
+                bbox[0] = item[0]
+            if bbox[1] > item[1]:       #ymin
+                bbox[1] = item[1]
+            if bbox[2] <= item[0]:       #xmax
+                bbox[2] = item[0]+1 #add 1 for [) type notation    
+            if bbox[3] <= item[1]:       #ymax
+                bbox[3] = item[1]+1 #add 1 for [) type notation   
+        return bbox
+
+
+
+    #Splitting Method
+    def split(self):
+        #sort points based on next level
+        if self.axis == 0:  #x axis
+            self.points.sort()
+        else:
+            self.points.sort(key=lambda x: x[1])
+
+
+        # print(f"Mid Axis on axis {self.axis}: {self.points[(len(self.points)//2)][self.axis]}")   #-1 to be left heavy
+        self.split_value = self.points[(len(self.points)//2)]   #this gives the split axis
+
+        #Split data points into the left and right children
+        right, left, middle = [], [], []
+        for item in self.points:
+            if item[self.axis] < self.split_value[self.axis]:       #if point (of axis) is less than split value, go left
+                left.append(item)
+            else:                                                   #if point (of axis) is greater than or equal to split value, go right
+                right.append(item)
+
+        # #Splitting points for middle child
+        # print(f"Left: {left}")
+        # print(f"Right: {right}")
+        # print(f"Depth: {self.depth}")
+
+        #need to check if all data points are going to one side, if so we need to stop
+        if len(left) == 0 or len(right) == 0:
+            return
+
+        left_median = left[(len(left)//2)]  #median will always round up
+        right_median = right[(len(right)//2)]   #median will always round up
+        # print(f"Left Median: {left_median}\nRight Median: {right_median}")
+
+        for item in self.points:
+            if item[self.axis] >= left_median[self.axis] and item[self.axis] < right_median[self.axis]:
+                middle.append(item)
+        #need to check if middle bbox ends up equalling the right or the left childs bbox
+        # print(f"Middle: {middle}\n")
+
+        #Making the children
+        if self.axis == 0:  #x axis
+            i=0
+            for item in left:
+                if item[self.axis] != left[0][self.axis]:
+                    break
+                else:
+                    i+=1
+                    if i == len(left)-1:   #checking if every number in points list is on the same axis, if so we must stop
+                        return
+            result = self.connect(q_bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]])   #will result a list, 0 will be True or False (if need to be conencted) and 1 will be the node (if found)
+            if result[0] == False:
+                self.left = DAGTree(left, depth=self.depth+1, axis=1, bbox=[self.bbox[0], self.bbox[1], self.split_value[self.axis], self.bbox[3]], parent=[self], cutoff=self.cutoff, middle_child=self.middle_child)
+            else:
+                self.left = result[1]
+                result[1].parent.append(self)
+
+            i=0
+            for item in right:
+                if item[self.axis] != right[0][self.axis]:
+                    break
+                else:
+                    i+=1
+                    if i == len(right)-1:   #checking if every number in points list is on the same axis, if so we must stop
+                        return
+            result = self.connect(q_bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]])
+            if result[0] == False:
+                self.right = DAGTree(right, depth=self.depth+1, axis=1, bbox=[self.split_value[self.axis], self.bbox[1], self.bbox[2], self.bbox[3]], parent=[self], cutoff=self.cutoff, middle_child=self.middle_child)
+            else:
+                self.right = result[1]
+                result[1].parent.append(self)
+
+            i=0
+            for item in middle:
+                if item[self.axis] != middle[0][self.axis]:
+                    break
+                else:
+                    i+=1
+                    if i == len(middle)-1:   #checking if every number in points list is on the same axis, if so we must stop
+                        return
+            result = self.connect(q_bbox=[left_median[self.axis], self.bbox[1], right_median[self.axis], self.bbox[3]])
+            if result [0] == False:
+                self.middle = DAGTree(middle, depth=self.depth+1, axis=1, bbox=[left_median[self.axis], self.bbox[1], right_median[self.axis], self.bbox[3]], parent=[self], middle_child=True, cutoff=self.cutoff)
+            else:
+                self.middle = result[1]
+                result[1].parent.append(self)
+
+        else:               #y axis
+            i=0
+            for item in left:
+                if item[self.axis] != left[0][self.axis]:
+                    break
+                else:
+                    i+=1
+                    if i == len(left)-1:   #checking if every number in points list is on the same axis, if so we must stop
+                        return
+            result = self.connect(q_bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]])
+            if result[0] == False:
+                self.left = DAGTree(left, depth=self.depth+1, axis=0, bbox=[self.bbox[0], self.bbox[1], self.bbox[2], self.split_value[self.axis]], parent=[self], cutoff=self.cutoff, middle_child=self.middle_child)
+            else:
+                self.left = result[1]
+                result[1].parent.append(self)
+
+            i=0
+            for item in right:
+                if item[self.axis] != right[0][self.axis]:
+                    break
+                else:
+                    i+=1
+                    if i == len(right)-1:   #checking if every number in points list is on the same axis, if so we must stop
+                        return
+            result = self.connect(q_bbox=[self.bbox[0],self.split_value[self.axis],self.bbox[2],self.bbox[3]])
+            if result[0] == False:
+                self.right = DAGTree(right, depth=self.depth+1, axis=0, bbox=[self.bbox[0],self.split_value[self.axis],self.bbox[2],self.bbox[3]], parent=[self], cutoff=self.cutoff, middle_child=self.middle_child)
+            else:
+                self.right = result[1]
+                result[1].parent.append(self)
+
+            i=0
+            for item in middle:
+                if item[self.axis] != middle[0][self.axis]:
+                    break
+                else:
+                    i+=1
+                    if i == len(middle)-1:   #checking if every number in points list is on the same axis, if so we must stop
+                        return
+            result = self.connect(q_bbox=[self.bbox[0],left_median[self.axis],self.bbox[2],right_median[self.axis]])
+            if result[0] == False:
+                self.middle = DAGTree(middle, depth=self.depth+1, axis=0, bbox=[self.bbox[0],left_median[self.axis],self.bbox[2],right_median[self.axis]], parent=[self], middle_child=True, cutoff=self.cutoff)
+            else:
+                self.middle = result[1]
+                result[1].parent.append(self)
+
+        self.points=None
+
+        if self.left.data_size > self.cutoff and self.left.points != None:
+            # print("Going Left")
+            self.left.split()
+        if self.middle.data_size > self.cutoff and self.middle.points != None:
+            # print("Going Middle")
+            self.middle.split()
+        if self.right.data_size > self.cutoff and self.right.points != None:
+            # print("Going Right")
+            self.right.split()
+
+
+
+    #SRC, middle
+    def SRC_middle(self, q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops=False, num_hops=0):
+        if self.middle != None:
+            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
+                return self.middle.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
+
+        if self.left != None:
+            if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:
+                return self.left.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
+
+        if self.right != None:
+            if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                return self.right.SRC_middle(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1)
+        if inc_num_hops == False:
+            return self
+        else:
+            return [self, num_hops]
+
+
+
+    #SRC, exhaustive
+    def SRC_exhaustive(self, q_xmin, q_ymin, q_xmax, q_ymax, best=None):
+        if self.bbox[0] <= q_xmin and self.bbox[1] <= q_ymin and self.bbox[2] >= q_xmax and self.bbox[3] >= q_ymax or (best == None and best.depth < self.depth):
+            best = self
+
+        if self.left != None and (self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax):
+            temp = self.left.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if temp != None and (best == None or temp.depth > best.depth):
+                best = temp
+
+        if self.middle != None and (self.middle.bbox[0] <= q_xmin or self.middle.bbox[2] >= q_xmax or self.middle.bbox[1] <= q_ymin or self.middle.bbox[3] >= q_ymax):
+            temp = self.middle.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if temp != None and (best == None or temp.depth > best.depth):
+                best = temp
+
+        if self.right != None and (self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin):
+            temp = self.right.SRC_exhaustive(q_xmin, q_ymin, q_xmax, q_ymax, best)
+            if temp != None and (best == None or temp.depth > best.depth):
+                best = temp
+
+        return best
+
+
+
+    #SRC, random
+    def SRC_random(self, q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops=False, num_hops=0, seed=None):
+        if seed != None:
+            random.seed(seed)
+
+        child_list = []
+
+        if self.left != None:
+            if self.left.bbox[2] >= q_xmax and self.left.bbox[3] >= q_ymax:
+                child_list.append(self.left)
+
+        if self.middle != None:
+            if self.middle.bbox[0] <= q_xmin and self.middle.bbox[2] >= q_xmax and self.middle.bbox[1] <= q_ymin and self.middle.bbox[3] >= q_ymax:     #we want to go down the middle first because it has the widest search
+                child_list.append(self.middle)
+
+        if self.right != None:
+            if self.right.bbox[0] <= q_xmin and self.right.bbox[1] <= q_ymin:
+                child_list.append(self.right)
+
+        if len(child_list) == 0:
+            return self
+        else:
+            return child_list[random.randint(0,(len(child_list)-1))].SRC_random(q_xmin, q_ymin, q_xmax, q_ymax, inc_num_hops, num_hops+1, seed)
+
+
+
+    #BRC, linear
+    def linear_BRC(self, q_xmin, q_ymin, q_xmax, q_ymax):
+        #Only traverse right and left
+        #Go as deep as possible for left and right
+        #Return/Get all points
+        nodes = self.get_leaf_linear(points_list=[], query=[q_xmin, q_ymin, q_xmax, q_ymax])
+        return nodes
+
+
+
+    #Linear BRC helper
+    def get_leaf_linear(self,points_list=[], all_leaf=False, query=[]):
+        if self.points != None:
+            if all_leaf == True:
+                points_list.append(self)
+            else:
+                for item in self.points:
+                    if item[0] >= query[0] and item[0] <= query[2] and item[1] >= query[1] and item[1] <= query[3]:
+                        points_list.append(item)
+        if self.left != None:
+            self.left.get_leaf_linear(points_list, all_leaf, query)
+        if self.right != None:
+            self.right.get_leaf_linear(points_list, all_leaf, query)
+        return points_list
+
+
+
+    #Connect Method, to relink nodes that have already been made
+    def connect(self, q_bbox=[]):
+        pTmp = self
+        while pTmp.parent != []:
+            pTmp = pTmp.parent[0]   #this finds the top root node every time
+        res = pTmp.connect_helper(q_bbox=q_bbox)
+        if res != None:
+            # print(f"Found {res.bbox}")
+            return [True, res]
+        else:
+            return [False, res]
+
+
+
+    #The searching algorithm for the connect method
+    def connect_helper(self, q_bbox=[], best=None):
+        # if self.bbox[0] <= q_bbox[0] and self.bbox[1] <= q_bbox[1] and self.bbox[2] >= q_bbox[2] and self.bbox[3] >= q_bbox[3] or (best == None and best.depth < self.depth):
+        #     best = self
+        if self.bbox[0] == q_bbox[0] and self.bbox[1] == q_bbox[1] and self.bbox[2] == q_bbox[2] and self.bbox[3] == q_bbox[3]:
+            best = self
+
+        if self.left != None and (self.left.bbox[2] >= q_bbox[2] and self.left.bbox[3] >= q_bbox[3]):
+            best = self.left.connect_helper(q_bbox, best)
+
+        if self.middle != None and (self.middle.bbox[0] <= q_bbox[0] or self.middle.bbox[2] >= q_bbox[2] or self.middle.bbox[1] <= q_bbox[1] or self.middle.bbox[3] >= q_bbox[3]):
+            best = self.middle.connect_helper(q_bbox, best)
+
+        if self.right != None and (self.right.bbox[0] <= q_bbox[0] and self.right.bbox[1] <= q_bbox[1]):
+            best = self.right.connect_helper(q_bbox, best)
+
+        return best
+
+
+
+    #Gets all nodes
+    def get_all_nodes(self, node_df=pd.DataFrame(columns=['BBOX','Depth','parent'])):
+        node_df.loc[len(node_df)] = [self.bbox, self.depth, self.parent]
+        if self.left != None:
+            self.left.get_all_nodes(node_df)
+        if self.middle != None:
+            self.middle.get_all_nodes(node_df)
+        if self.right != None:
+            self.right.get_all_nodes(node_df)
+
+        return node_df
+
+
+### General Use Methods ###
+def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium=False, large=False, SRC_exhaustive=False, SRC_middle=False, SRC_random=False, BRC=False, save=True, query_list=None):
+    if seed != None:
+        random.seed(seed)
+    if path == None:
+        things = os.listdir('3DAG and 2D Tree/')
+
+        if things.__contains__('Saved Queries') == False:
+            os.mkdir("Saved Queries")
+        if name == None or type(name) != str:
+            path = f"3DAG and 2D Tree/Saved Queries/temp {len(os.listdir('3DAG and 2D Tree/Saved Queries'))+1}.csv"
+        elif type(name) == str:
+            path = f"3DAG and 2D Tree/Saved Queries/{name}.csv"
+    else:
+        path = path+f"/{name}.csv"
+    i=0
+    if query_list == None:
+        if small == False and medium == False and large == False:
+            return print("Need to set small, medium, or large to True")
+        if small == True:
+            coeff_num = int((tree.bbox[2]-tree.bbox[0])*0.1)
+        if medium == True:
+            coeff_num = int((tree.bbox[2]-tree.bbox[0])*0.2)
+        if large == True:
+            coeff_num = int((tree.bbox[2]-tree.bbox[0])*0.3)
+
+        while i < num:
+            # #this is for semi random query box generation
+            # xmin = random.randint(tree.bbox[0],tree.bbox[2]-coeff_num)
+            # xmax = random.randint(xmin+1,xmin+coeff_num)
+            # ymin = random.randint(tree.bbox[1],tree.bbox[3]-coeff_num)
+            # ymax = random.randint(ymin+1,ymin+coeff_num)
+
+            #this is for square query generation
+            xmin = random.randint(tree.bbox[0],tree.bbox[2]-coeff_num)
+            xmax = xmin + coeff_num
+            ymin = random.randint(tree.bbox[0],tree.bbox[2]-coeff_num)
+            ymax = ymin + coeff_num
+
+
+            #Arranges the queries xmins and ymins
+            if xmin > xmax:
+                a = xmax
+                xmax = xmin
+                xmin = a
+            if ymin > ymax:
+                a = ymax
+                ymax = ymin
+                ymin = a
+
+            #This limits the possible query ranges to the actual boundery box of the data set
+            if xmin < tree.bbox[0]:
+                xmin = tree.bbox[0]
+
+            if xmax > tree.bbox[2]:
+                xmax = tree.bbox[2]
+
+            if ymin < tree.bbox[1]:
+                ymin = tree.bbox[1]
+
+            if ymax > tree.bbox[3]:
+                ymax = tree.bbox[3]
+            
+            if ymax < tree.bbox[1]:
+                ymax = tree.bbox[1]
+
+            #we need a default searching method
+            if SRC_exhaustive == False and SRC_middle == False and SRC_random == False and BRC == False:
+                SRC_exhaustive = True
+
+            if SRC_exhaustive == True:
+                node = tree.SRC_exhaustive(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax)
+            elif SRC_middle == True:
+                node = tree.SRC_middle(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax, inc_num_hops=True)
+            elif SRC_random == True:
+                node = tree.SRC_random(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax)
+            elif BRC == True:
+                node = tree.linear_BRC(q_xmin=xmin, q_ymin=ymin, q_xmax=xmax, q_ymax=ymax)
+
+            if i == 0 and path != None:          # I feel like if I didn't use pandas, or atleast used it at the end to write to the csv file, this would possibly go faster
+                if node == None:
+                    pass
+
+                #make these switch statements
+                if small == True:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Small","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_middle == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Small","Depth","# Hops","BBoxes","Data Size"], index=None)
+                    elif SRC_random == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Small","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Small","Points","# Of Points"], index=None)
+                elif medium == True:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Medium","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_middle == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Medium","Depth","# Hops","BBoxes","Data Size"], index=None)
+                    elif SRC_random == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Medium","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Medium","Points","# Of Points"], index=None)
+                elif large == True:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Large","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_middle == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Large","Depth","# Hops","BBoxes","Data Size"], index=None)
+                    elif SRC_random == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Large","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Large","Points","# Of Points"], index=None)
+                else:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query","Points","# Of Points"], index=None)
+
+            else:
+                if SRC_exhaustive == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size
+                elif SRC_middle == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size
+                elif SRC_random == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size
+                elif BRC == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node,len(node)
+            i+=1
+
+        if save == True:
+            try:
+                df = pd.read_csv(path)
+                temp.to_csv(path,mode='w',columns=None,index=None)
+            except Exception:
+                temp.to_csv(path,mode='a',columns=None,index=None)
+        else:
+            return print(temp)
+
+    else:   #we have a query list
+        for item in query_list:
+            xmin = item[0]
+            ymin = item[1]
+            xmax = item[2]
+            ymax = item[3]
+
+            if SRC_exhaustive == True:
+                node = tree.SRC_exhaustive(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3])
+            elif SRC_middle == True:
+                node = tree.SRC_middle(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3], inc_num_hops=True)
+            elif SRC_random == True:
+                node = tree.SRC_random(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3])
+            elif BRC == True:
+                node = tree.linear_BRC(q_xmin=item[0], q_ymin=item[1], q_xmax=item[2], q_ymax=item[3])
+
+            if i == 0 and path != None:          # I feel like if I didn't use pandas, or atleast used it at the end to write to the csv file, this would possibly go faster
+                if node == None:
+                    pass
+
+                #make these switch statements
+                if small == True:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Small","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_middle == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Small","Depth","# Hops","BBoxes","Data Size"], index=None)
+                    elif SRC_random == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Small","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Small","Points","# Of Points"], index=None)
+                elif medium == True:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Medium","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_middle == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Medium","Depth","# Hops","BBoxes","Data Size"], index=None)
+                    elif SRC_random == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Medium","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Medium","Points","# Of Points"], index=None)
+                elif large == True:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Large","Depth","BBoxes","Data Size"], index=None)
+                    elif SRC_middle == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_middle Query: Large","Depth","# Hops","BBoxes","Data Size"], index=None)
+                    elif SRC_random == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_random Query: Large","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Large","Points","# Of Points"], index=None)
+                else:
+                    if SRC_exhaustive == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query","Depth","BBoxes","Data Size"], index=None)
+                    elif BRC == True:
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query","Points","# Of Points"], index=None)
+
+            else:
+                if SRC_exhaustive == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size
+                elif SRC_middle == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size
+                elif SRC_random == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size
+                elif BRC == True:
+                    temp.loc[i] = [xmin,ymin,xmax,ymax],node,len(node)
+            i+=1
+
+        if save == True:
+            try:
+                df = pd.read_csv(path)
+                temp.to_csv(path,mode='w',columns=None,index=None)
+            except Exception:
+                temp.to_csv(path,mode='a',columns=None,index=None)
+        else:
+            return print(temp)
+
+            
+            
+
+            
+
+            
+
+
+    
+
+
+#For creating queries use corner method
+
+# points = []
+# for i in range(16):
+#     for j in range(16):
+#         points.append((i,j))
+
+# print(f"# of points: {len(points)}")
+# tree = DAGTree(points, cutoff=4, axis=0)
+# nodes = tree.get_all_nodes()
+# nodes.to_csv('3DAG and 2D Tree/16x16 with connectivity tree.csv')
+
+
+# node = tree.SRC_exhaustive(q_xmin=6, q_ymin=0, q_xmax=10, q_ymax=4)
+# print(node)
+# print(f"Tree: {tree}")
+# save_query(tree=tree, num=1000, seed=0, large=True, save=True, SRC_random=True, name="16x16 Random Large - 1000")
+
+# node_df = tree.get_all_nodes()
+# pd.set_option('display.max_rows', None)
+# pd.set_option('display.max_columns', None)
+# node_df.to_csv('16x16(left-middle-right).csv')
