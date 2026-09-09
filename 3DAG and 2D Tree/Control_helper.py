@@ -1,5 +1,7 @@
 from genericpath import exists
 
+from flask.cli import F
+
 import New_3DAG
 import KDTree_2D
 import numpy as np 
@@ -293,7 +295,41 @@ def L2norm(path=None, show=False):
 
     print("\t\tFinished L2 Norm\n")
 
+
+
+def accuracy(path=None):
+    #need to get SRC and BRC
+    BRC_path = path+'BRC/'
+    SRC_folders=[]
+    for item in os.listdir(path):
+        if item.__contains__('SRC'):
+            SRC_folders.append(path+item+'/')
+
+    BRC_files=[]
+    for item in os.listdir(BRC_path):
+        if item.__contains__('.csv'):
+            BRC_files.append(BRC_path+item)     #will always be order of large, medium, small
+
+    BRC_large = pd.read_csv(BRC_files[0])['Num Of Points']
+    BRC_medium = pd.read_csv(BRC_files[1])['Num Of Points']
+    BRC_small = pd.read_csv(BRC_files[2])['Num Of Points']
+
     
+    for i in range(len(SRC_folders)):
+        num_list=[]
+        for item in os.listdir(SRC_folders[i]):
+            if item.__contains__('.csv'):
+                SRC_num = pd.read_csv(SRC_folders[i]+item)['Data Size']
+                num_list.append(SRC_num.sum()/BRC_large.sum())
+        with open(SRC_folders[i]+"Average.txt", 'w') as file:
+            for item in num_list:
+                file.write(str(item)+'\n')
+        file.close()
+
+                
+
+
+
 
 def __main__(num=10, dataset=None, seed=None, rng=None, points=None):
     if points == None:
@@ -327,55 +363,62 @@ def __main__(num=10, dataset=None, seed=None, rng=None, points=None):
     os.makedirs(path+"/KD/SRC",exist_ok=True)
     os.makedirs(path+"/KD/BRC",exist_ok=True)
 
+    # ret = DAGTREE.get_all_nodes()
+    # ret.to_csv(path+'/DAG/all_nodes.csv')
 
-    print("\tStarting Small Queries...")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",small=True,save=True, name=f"DAG {dataset} SRC_exhaustive Small {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",small=True,save=True, name=f"DAG {dataset} SRC_middle Small {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",small=True,save=True, name=f"DAG {dataset} SRC_random Small {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_leftright=True,path=path+"/DAG/SRC Left and Right",small=True,save=True, name=f"DAG {dataset} SRC_leftright Small {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",small=True,save=True, name=f"DAG {dataset} BRC Small {num}")
-    KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Small {num}")
-    KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Small {num}")
+    # print("\tStarting Small Queries...")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",small=True,save=True, name=f"DAG {dataset} SRC_exhaustive Small {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",small=True,save=True, name=f"DAG {dataset} SRC_middle Small {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",small=True,save=True, name=f"DAG {dataset} SRC_random Small {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_leftright=True,path=path+"/DAG/SRC Left and Right",small=True,save=True, name=f"DAG {dataset} SRC_leftright Small {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",small=True,save=True, name=f"DAG {dataset} BRC Small {num}")
+    # KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Small {num}")
+    # KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Small {num}")
 
-    print("\tStarting Medium Queries...")
-    DAG_queries, KD_queries = make_queries(DAGTREE,num=num,seed=seed,medium=True)
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",medium=True,save=True, name=f"DAG {dataset} SRC_exhaustive Medium {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",medium=True,save=True, name=f"DAG {dataset} SRC_middle Medium {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",medium=True,save=True, name=f"DAG {dataset} SRC_random Medium {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Left and Right",medium=True,save=True, name=f"DAG {dataset} SRC_leftright Medium {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",medium=True,save=True, name=f"DAG {dataset} BRC Medium {num}")
-    KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Medium {num}")
-    KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Medium {num}")
+    # print("\tStarting Medium Queries...")
+    # DAG_queries, KD_queries = make_queries(DAGTREE,num=num,seed=seed,medium=True)
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",medium=True,save=True, name=f"DAG {dataset} SRC_exhaustive Medium {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",medium=True,save=True, name=f"DAG {dataset} SRC_middle Medium {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",medium=True,save=True, name=f"DAG {dataset} SRC_random Medium {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Left and Right",medium=True,save=True, name=f"DAG {dataset} SRC_leftright Medium {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",medium=True,save=True, name=f"DAG {dataset} BRC Medium {num}")
+    # KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Medium {num}")
+    # KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Medium {num}")
 
-    print("\tStarting Large Queries...\n")
-    DAG_queries, KD_queries = make_queries(DAGTREE,num=num,seed=seed,large=True)
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",large=True,save=True, name=f"DAG {dataset} SRC_exhaustive Large {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",large=True,save=True, name=f"DAG {dataset} SRC_middle Large {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",large=True,save=True, name=f"DAG {dataset} SRC_random Large {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Left and Right",large=True,save=True, name=f"DAG {dataset} SRC_leftright Large {num}")
-    New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",large=True,save=True, name=f"DAG {dataset} BRC Large {num}")
-    KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Large {num}")
-    KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Large {num}")
+    # print("\tStarting Large Queries...\n")
+    # DAG_queries, KD_queries = make_queries(DAGTREE,num=num,seed=seed,large=True)
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_exhaustive=True,path=path+"/DAG/SRC Exhaustive",large=True,save=True, name=f"DAG {dataset} SRC_exhaustive Large {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Middle",large=True,save=True, name=f"DAG {dataset} SRC_middle Large {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_random=True,path=path+"/DAG/SRC Random",large=True,save=True, name=f"DAG {dataset} SRC_random Large {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,SRC_middle=True,path=path+"/DAG/SRC Left and Right",large=True,save=True, name=f"DAG {dataset} SRC_leftright Large {num}")
+    # New_3DAG.save_query(tree=DAGTREE,query_list=DAG_queries,BRC=True,path=path+"/DAG/BRC",large=True,save=True, name=f"DAG {dataset} BRC Large {num}")
+    # KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,SRC=True,path=path+"/KD/SRC",save=True,name=f"KD {dataset} SRC Large {num}")
+    # KDTree_2D.save_query(tree=KDTREE,query_list=KD_queries,BRC=True,path=path+"/KD/BRC",save=True,name=f"KD {dataset} BRC Large {num}")
 
-    stat_graph(path=path+"/DAG/SRC Exhaustive/",title=f"DAG Exh {dataset}")
-    stat_graph(path=path+"/DAG/SRC Middle/",title=f"DAG Mid {dataset}")
-    stat_graph(path=path+"/DAG/SRC Random/", title=f"DAG Rand {dataset}")
-    stat_graph(path=path+"/DAG/SRC Left and Right/",title=f"DAG L&R {dataset}")
-    stat_graph(path=path+"/DAG/BRC/", title=f"DAG BRC {dataset}")
+    # stat_graph(path=path+"/DAG/SRC Exhaustive/",title=f"DAG Exh {dataset}")
+    # stat_graph(path=path+"/DAG/SRC Middle/",title=f"DAG Mid {dataset}")
+    # stat_graph(path=path+"/DAG/SRC Random/", title=f"DAG Rand {dataset}")
+    # stat_graph(path=path+"/DAG/SRC Left and Right/",title=f"DAG L&R {dataset}")
+    # stat_graph(path=path+"/DAG/BRC/", title=f"DAG BRC {dataset}")
 
-    stat_graph(path=path+"/KD/SRC/", title=f"KD SRC {dataset}")
-    stat_graph(path=path+"/KD/BRC/", title=f"KD BRC {dataset}")
+    # stat_graph(path=path+"/KD/SRC/", title=f"KD SRC {dataset}")
+    # stat_graph(path=path+"/KD/BRC/", title=f"KD BRC {dataset}")
 
-    L2norm(path=path+"/DAG/SRC Exhaustive/")
-    L2norm(path=path+"/DAG/SRC Middle/")
-    L2norm(path=path+"/DAG/SRC Random/")
-    L2norm(path=path+"/DAG/SRC Left and Right/")
-    L2norm(path=path+"/KD/SRC/")
+    # L2norm(path=path+"/DAG/SRC Exhaustive/")
+    # L2norm(path=path+"/DAG/SRC Middle/")
+    # L2norm(path=path+"/DAG/SRC Random/")
+    # L2norm(path=path+"/DAG/SRC Left and Right/")
+    # L2norm(path=path+"/KD/SRC/")
+    
 
-    lvl_diff(DAGpath=path+"/DAG/SRC Exhaustive/", KDpath=path+"/KD/")
-    lvl_diff(DAGpath=path+"/DAG/SRC Middle/", KDpath=path+"/KD/")
-    lvl_diff(DAGpath=path+"/DAG/SRC Random/", KDpath=path+"/KD/")
-    lvl_diff(DAGpath=path+"/DAG/SRC Left and Right/", KDpath=path+"/KD/")
+    # lvl_diff(DAGpath=path+"/DAG/SRC Exhaustive/", KDpath=path+"/KD/")
+    # lvl_diff(DAGpath=path+"/DAG/SRC Middle/", KDpath=path+"/KD/")
+    # lvl_diff(DAGpath=path+"/DAG/SRC Random/", KDpath=path+"/KD/")
+    # lvl_diff(DAGpath=path+"/DAG/SRC Left and Right/", KDpath=path+"/KD/")
+
+    accuracy(path=path+"/DAG/")
+    accuracy(path=path+"/KD/")
+
 
     print(f"\nFinished {dataset} - {num}\n\n\n")
 

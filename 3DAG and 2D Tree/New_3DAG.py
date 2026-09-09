@@ -546,7 +546,7 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                     elif SRC_leftright == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_leftright Query: Small","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif BRC == True:
-                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Small","Points","# Of Points"], index=None)
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Small","Points","Num Of Points"], index=None)
                 elif medium == True:
                     if SRC_exhaustive == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Medium","Depth","BBoxes","Data Size"], index=None)
@@ -557,7 +557,7 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                     elif SRC_leftright == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_leftright Query: Medium","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif BRC == True:
-                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Medium","Points","# Of Points"], index=None)
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Medium","Points","Num Of Points"], index=None)
                 elif large == True:
                     if SRC_exhaustive == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query: Large","Depth","BBoxes","Data Size"], index=None)
@@ -568,12 +568,12 @@ def save_query(tree, num=1, seed=None, path=None, name=None, small=False, medium
                     elif SRC_leftright == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node[0].depth,node[1],node[0].bbox,node[0].data_size]], columns=["SRC_leftright Query: Large","Depth","# Hops","BBoxes","Data Size"], index=None)
                     elif BRC == True:
-                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Large","Points","# Of Points"], index=None)
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query: Large","Points","Num Of Points"], index=None)
                 else:
                     if SRC_exhaustive == True:
                         temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node.depth,node.bbox,node.data_size]], columns=["SRC_exhaustive Query","Depth","BBoxes","Data Size"], index=None)
                     elif BRC == True:
-                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query","Points","# Of Points"], index=None)
+                        temp = pd.DataFrame([[[xmin,ymin,xmax,ymax],node,len(node)]], columns=["BRC Query","Points","Num Of Points"], index=None)
 
             else:
                 if SRC_exhaustive == True:

@@ -246,7 +246,7 @@ def make_points(num=1, sprout=None, aRang=0, bRang=100):
     return temp
 
 
-def save_query(tree,num=1,path=None,SRC=True,BRC=False,save=True,show=False,query_list=[],name=None):
+def save_query(tree,num=1,path=None,SRC=False,BRC=False,save=True,show=False,query_list=[],name=None):
     if path == None:
         things = os.listdir('3DAG and 2D Tree/')
         
@@ -275,7 +275,7 @@ def save_query(tree,num=1,path=None,SRC=True,BRC=False,save=True,show=False,quer
 
         elif BRC == True:
             if i == 0:
-                temp = pd.DataFrame(columns=["BRC Query","Data Size"], index=None)       #removed "Points"
+                temp = pd.DataFrame(columns=["BRC Query","Num Of Points"], index=None)       #removed "Points"
             temp.loc[i] = [[query_list[i]],len(node)]
     
     if save == True:
